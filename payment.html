@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán</title>
+    <link rel="stylesheet" href="/CSS/payment.css">
+</head>
+<body>
+    <div class="container">
+        <div class="order-info">
+            <h2>Thông tin đơn hàng</h2>
+            <p><strong>Nhà cung cấp:</strong> MoMo</p>
+            <p><strong>Mã đơn hàng:</strong> 4924</p>
+            <p><strong>Mô tả:</strong> Thanh toán qua MoMo</p>
+            <p><strong>Số tiền:</strong> <span class="price">10.000đ</span></p>
+            <div class="timer">
+                Đơn hàng sẽ hết hạn sau: <span id="countdown">08:31</span>
+            </div>
+            <a href="services.html" class="back">Quay về</a>
+        </div>
+
+        <div class="payment-methods">
+            <h2>Chọn phương thức thanh toán</h2>
+
+            <div class="payment-option" id="momo">
+                <img src="momo.png" alt="MoMo">
+                <span>Thanh toán qua MoMo</span>
+            </div>
+
+            <div class="payment-option" id="zalopay">
+                <img src="zalopay.png" alt="ZaloPay">
+                <span>Thanh toán qua ZaloPay</span>
+            </div>
+
+            <div class="payment-option" id="napas">
+                <img src="napas.png" alt="Napas">
+                <span>Thanh toán qua thẻ ngân hàng</span>
+            </div>
+
+            <div id="payment-form">
+                <input type="text" placeholder="Số thẻ" id="card-number">
+                <input type="text" placeholder="Tên chủ thẻ" id="card-holder">
+                <input type="text" placeholder="Ngày phát hành (MM/YY)" id="expiry">
+                <button id="pay-btn">Thanh Toán</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

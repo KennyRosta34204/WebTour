@@ -1,0 +1,153 @@
+/* Định dạng nền */
+body {
+    background: url('https://media.istockphoto.com/id/1308544682/vi/anh/b%C3%A3i-bi%E1%BB%83n-nhi%E1%BB%87t-%C4%91%E1%BB%9Bi-v%C3%A0o-m%E1%BB%99t-ng%C3%A0y-n%E1%BA%AFng-%C4%91%E1%BA%B9p.jpg?s=612x612&w=0&k=20&c=y_J4w1FbuWVtBVYRHB8hHt34Ip6BstiIoJfZwBZm2MI=') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+/* Khung đăng ký */
+.register-container {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 420px;
+    text-align: center;
+    backdrop-filter: blur(3px);
+    position: relative;
+    top: -50px; /* Đẩy lên trên nhiều hơn */
+}
+
+h2 {
+    margin-bottom: 7px;
+    color: #333;
+    font-size: 19px;
+}
+
+/* Giảm cỡ chữ toàn bộ */
+body, input, button {
+    font-size: 14px;
+}
+
+/* Ô nhập liệu nhỏ hơn */
+.input-group {
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 12px;
+}
+
+/* Phần ngăn cách "Hoặc" */
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 10px 0;
+    font-size: 11px;
+    color: #777;
+}
+
+.separator::before,
+.separator::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+}
+
+.separator span {
+    padding: 0 8px;
+}
+
+/* Các nút đăng nhập mạng xã hội */
+.social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Tăng khoảng cách giữa các nút */
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    background: white;
+    padding: 12px 20px; /* Giữ padding đồng nhất */
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 180px; /* Đảm bảo chiều rộng đồng nhất */
+}
+
+.social-btn img {
+    margin-right: 5px;
+    width: 20px;
+    height: 20px;
+}
+
+/* Nút Facebook */
+.facebook {
+    color: #1877f2;
+    border-color: #1877f2;
+}
+
+.facebook:hover {
+    background: #1877f2;
+    color: white;
+}
+
+/* Nút Google */
+.google {
+    color: #db4437;
+    border-color: #db4437;
+}
+
+.google:hover {
+    background: #db4437;
+    color: white;
+}
+
+/* Nút gửi */
+.btn-submit {
+    width: 100%; /* Chiều rộng tối đa */
+    padding: 12px; /* Tăng chiều cao */
+    background: blue;
+    color: white;
+    border: none;
+    border-radius: 6px; /* Bo góc mượt hơn */
+    cursor: pointer;
+    font-size: 14px; /* Chữ to hơn */
+    margin-top: 10px; /* Khoảng cách trên */
+    text-align: center;
+    font-weight: bold;
+    max-width: 450px; /* Giữ giới hạn chiều rộng */
+}
+
+/* Khi hover, nút sẽ nổi bật hơn */
+.btn-submit:hover {
+    background: darkblue;
+    transform: scale(1.02); /* Hiệu ứng phóng to nhẹ */
+}
+
+/* Chuyển sang Đăng nhập */
+.switch-auth {
+    margin-top: 8px;
+    font-size: 11px;
+}

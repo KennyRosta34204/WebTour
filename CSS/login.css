@@ -1,0 +1,165 @@
+/* Định dạng nền */
+body {
+    background: url('https://media.istockphoto.com/id/1308544682/vi/anh/b%C3%A3i-bi%E1%BB%83n-nhi%E1%BB%87t-%C4%91%E1%BB%9Bi-v%C3%A0o-m%E1%BB%99t-ng%C3%A0y-n%E1%BA%AFng-%C4%91%E1%BA%B9p.jpg?s=612x612&w=0&k=20&c=y_J4w1FbuWVtBVYRHB8hHt34Ip6BstiIoJfZwBZm2MI=')
+    no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+/* Khung đăng nhập */
+.register-container {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 450px;
+    text-align: center;
+    backdrop-filter: blur(8px);
+}
+
+h2 {
+    font-size: 23px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Ô nhập liệu */
+.input-group {
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.input-group label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+/* Mắt hiển thị mật khẩu */
+.password-wrapper {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* Link quên mật khẩu */
+.forgot-password {
+    display: block;
+    text-align: left;
+    font-size: 12px;
+    color: blue;
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Nút đăng nhập */
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background: blue;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-submit:hover {
+    background: darkblue;
+}
+
+/* Phần "Hoặc" */
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 15px 0;
+    font-size: 12px;
+    color: #777;
+}
+
+.separator::before,
+.separator::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+}
+
+.separator span {
+    padding: 0 10px;
+}
+
+/* Nút đăng nhập mạng xã hội */
+.social-buttons {
+    display: flex;
+    flex-direction: column; /* Chuyển sang dạng dọc */
+    align-items: center;
+    gap: 10px; /* Tạo khoảng cách giữa các nút */
+    margin-top: 20px;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    background: white;
+    padding: 12px 15px; /* Tăng chiều cao */
+    border-radius: 6px;
+    font-size: 16px; /* Tăng kích thước chữ */
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%; /* Nút dài hơn */
+    max-width: 300px; /* Đặt giới hạn chiều dài */
+}
+
+.social-btn img {
+    margin-right: 10px;
+    width: 20px; /* Tăng kích thước icon */
+    height: 20px;
+}
+
+/* Nút Facebook */
+.facebook {
+    color: #1877f2;
+    border-color: #1877f2;
+}
+
+.facebook:hover {
+    background: #1877f2;
+    color: white;
+}
+
+/* Nút Google */
+.google {
+    color: #db4437;
+    border-color: #db4437;
+}
+
+.google:hover {
+    background: #db4437;
+    color: white;
+}
