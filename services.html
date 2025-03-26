@@ -17,10 +17,19 @@
     </a>
         <h1 class="title">Khám Phá Các Tour Du Lịch Hấp Dẫn</h1>
         <p>Đặt tour ngay hôm nay để trải nghiệm những điểm đến tuyệt vời nhất!</p>
-        <div class="search-bar">
-            <input type="text" placeholder="Tìm kiếm tour du lịch...">
-            <button>Tìm kiếm</button>
-        </div>
+        <div class="search-container">
+            <div class="search-container">
+                <div class="search-container">
+                    <div class="search-bar">
+                        <input type="text" id="searchInput" placeholder="Nhập địa điểm..." onkeyup="showSuggestions()">
+                        <button id="searchBtn" onclick="searchTours()">Tìm kiếm</button>
+                    </div>
+                    <ul id="suggestions-list" class="suggestions-list"></ul>
+                    <div id="search-results" class="search-results"></div>                                    
+            <div id="search-results" class="search-results"></div>
+        </div>        
+        <ul id="suggestions-list"></ul> <!-- Danh sách gợi ý -->
+        
     </header>
 
     <!-- Danh sách tour -->
@@ -224,6 +233,16 @@
                 <a href="tour-detail.html?id=dao-nam-du" class="btn">Xem chi tiết</a>
             </div>
         </div>
+        <div class="tour-item">
+            <img src="https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2022/10/19/1106757/Hang-Son-Doong.jpeg" alt="Hang Sơn Đoòng">
+            <div class="tour-info">
+                <h2>Hang Sơn Đoòng, Quảng Bình</h2>
+                <p>Hang động lớn nhất thế giới với hệ sinh thái độc đáo và khung cảnh hùng vĩ.</p>
+                <p class="price">Giá: 3.000.000 VNĐ</p>
+                <a href="tour-detail.html?id=hang-son-doong" class="btn">Xem chi tiết</a>
+            </div>
+        </div>
+        
     </section>
 
     <!-- Footer -->
@@ -232,4 +251,50 @@
     </footer>
 
 </body>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("searchInput");
+    const searchButton = document.getElementById("searchBtn");
+    const tourItems = document.querySelectorAll(".tour-item");
+
+    // Hàm tìm kiếm tour
+    function searchTours() {
+        const query = searchInput.value.toLowerCase().trim(); // Lấy giá trị nhập vào & loại bỏ khoảng trắng 2 đầu
+
+        let hasResult = false; // Kiểm tra xem có kết quả phù hợp không
+
+        tourItems.forEach(item => {
+            const tourName = item.querySelector(".tour-info h2").textContent.toLowerCase();
+            if (tourName.includes(query)) {
+                item.style.display = "block"; // Hiện tour phù hợp
+                hasResult = true;
+            } else {
+                item.style.display = "none"; // Ẩn tour không phù hợp
+            }
+        });
+
+        // Nếu không có kết quả, hiển thị thông báo
+        const noResultMessage = document.getElementById("noResultMessage");
+        if (!hasResult) {
+            noResultMessage.style.display = "block";
+        } else {
+            noResultMessage.style.display = "none";
+        }
+    }
+
+    // Bắt sự kiện khi nhấn nút "Tìm kiếm"
+    searchButton.addEventListener("click", searchTours);
+
+    // Bắt sự kiện khi nhấn Enter trong ô input
+    searchInput.addEventListener("keyup", function (event) {
+        if (event.key === "Enter") {
+            searchTours();
+        }
+    });
+});
+
+
+
+
+</script>
 </html>
