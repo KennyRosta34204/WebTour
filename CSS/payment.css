@@ -78,7 +78,7 @@ h2 {
 }
 
 /* Nút Thanh Toán */
-button {
+#payment-button {
     display: block;
     width: 100%;
     max-width: 200px;
@@ -93,11 +93,177 @@ button {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    margin: 0 auto;
+    margin: 0 auto 20px;
 }
 
-button:hover {
+#payment-button:hover {
     background: linear-gradient(135deg, #5a4ab5, #4a3a9d);
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+#payment-button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Container mã QR */
+#qrcode-container {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+#qrcode-container h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 18px;
+}
+
+#qrcode-container p {
+    margin: 0 0 15px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+#qrcode {
+    margin: 0 auto 15px;
+}
+
+#qrcode canvas {
+    max-width: 200px;
+}
+
+#open-zalopay {
+    color: #6a5acd;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+#open-zalopay:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    h2 {
+        font-size: 24px;
+        padding: 10px;
+        width: 90%;
+    }
+
+    #tour-info {
+        padding: 15px;
+    }
+
+    #tour-info p {
+        font-size: 14px;
+    }
+
+    #tour-image {
+        height: 150px;
+    }
+
+    #payment-button {
+        max-width: 180px;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    #qrcode-container {
+        padding: 15px;
+    }
+
+    #qrcode-container h3 {
+        font-size: 16px;
+    }
+
+    #qrcode-container p {
+        font-size: 12px;
+    }
+}
+.chatbot-container {
+    width: 350px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    font-family: Arial, sans-serif;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #fff;
+}
+
+.chatbot-header {
+    background: #26C281;
+    color: white;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chatbot-header .close-btn {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.chatbot-body {
+    padding: 15px;
+    height: 300px;
+    overflow-y: auto;
+    background: #f9f9f9;
+}
+
+.chatbot-message {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.chatbot-message .icon {
+    background: #26C281;
+    border-radius: 50%;
+    padding: 8px;
+    color: white;
+    margin-right: 10px;
+}
+
+.chatbot-message .message {
+    background: #fff;
+    padding: 10px 15px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.chatbot-input {
+    border-top: 1px solid #ddd;
+    display: flex;
+    padding: 10px;
+    background: #fff;
+}
+
+.chatbot-input input {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    outline: none;
+}
+
+.chatbot-input button {
+    background: #26C281;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
 }
