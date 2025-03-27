@@ -3,50 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thanh Toán</title>
-    <link rel="stylesheet" href="/CSS/payment.css">
+    <title>Thanh Toán ZaloPay</title>
+    <link rel="stylesheet" href="css/payment.css">
+    <!-- Thêm thư viện qrcode để tạo mã QR -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <link rel="stylesheet" href="css/chatbox.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <script src="js/chatbox.js"></script>
+    <style>
+        #payment-button {
+            background-color: #6a1b9a;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        #payment-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #qrcode-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        #qrcode-container h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        #qrcode-container p {
+            margin: 0 0 10px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        #qrcode {
+            text-align: center;
+        }
+        #qrcode canvas {
+            max-width: 200px;
+        }
+
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="order-info">
-            <h2>Thông tin đơn hàng</h2>
-            <p><strong>Nhà cung cấp:</strong> MoMo</p>
-            <p><strong>Mã đơn hàng:</strong> 4924</p>
-            <p><strong>Mô tả:</strong> Thanh toán qua MoMo</p>
-            <p><strong>Số tiền:</strong> <span class="price">10.000đ</span></p>
-            <div class="timer">
-                Đơn hàng sẽ hết hạn sau: <span id="countdown">08:31</span>
-            </div>
-            <a href="services.html" class="back">Quay về</a>
-        </div>
+    <h2>Thanh Toán Tour Du Lịch</h2>
 
-        <div class="payment-methods">
-            <h2>Chọn phương thức thanh toán</h2>
-
-            <div class="payment-option" id="momo">
-                <img src="momo.png" alt="MoMo">
-                <span>Thanh toán qua MoMo</span>
-            </div>
-
-            <div class="payment-option" id="zalopay">
-                <img src="zalopay.png" alt="ZaloPay">
-                <span>Thanh toán qua ZaloPay</span>
-            </div>
-
-            <div class="payment-option" id="napas">
-                <img src="napas.png" alt="Napas">
-                <span>Thanh toán qua thẻ ngân hàng</span>
-            </div>
-
-            <div id="payment-form">
-                <input type="text" placeholder="Số thẻ" id="card-number">
-                <input type="text" placeholder="Tên chủ thẻ" id="card-holder">
-                <input type="text" placeholder="Ngày phát hành (MM/YY)" id="expiry">
-                <button id="pay-btn">Thanh Toán</button>
-            </div>
-        </div>
+    <div id="tour-info">
+        <img id="tour-image" src="" alt="Hình ảnh tour" width="300">
+        <p><strong>Tên tour:</strong> <span id="tour-name"></span></p>
+        <p><strong>Giá tiền:</strong> <span id="tour-price"></span> VND</p>
+        <p><strong>Tên người dùng:</strong> <span id="user-name"></span></p>
+        <p><strong>Email:</strong> <span id="user-email"></span></p>
+        <p><strong>Số điện thoại:</strong> <span id="user-phone"></span></p>
     </div>
 
-    <script src="script.js"></script>
+    <button id="payment-button" onclick="createOrder()">Thanh Toán</button>
+    <div id="qrcode-container" style="display: none;">
+        <h3>Quét mã QR để thanh toán qua ZaloPay</h3>
+        <p>Vui lòng mở ứng dụng ZaloPay và quét mã QR bên dưới để hoàn tất thanh toán.</p>
+        <div id="qrcode"></div>
+        <a id="open-zalopay" href="#" target="_blank">Mở ZaloPay để thanh toán (nếu không quét được mã QR)</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const tourData = JSON.parse(localStorage.getItem("selectedTour"));
+            if (!tourData || !tourData.product_id) {
+                alert("Không có tour nào được chọn hoặc thiếu thông tin tour!");
+                window.location.href = "services.html"; // Chuyển hướng về trang danh sách tour
+                return;
+            }
+
+            console.log("Dữ liệu tourData:", tourData);
+
+            // Hiển thị thông tin tour
+            document.getElementById("tour-name").textContent = tourData.title || "Không có thông tin";
+            
+            // Định dạng giá tiền
+            const price = parseInt(tourData.price.replace(/\D/g, '')) || 0;
+            document.getElementById("tour-price").textContent = price.toLocaleString('vi-VN');
+
+            // Hiển thị thông tin người dùng
+            document.getElementById("user-name").textContent = tourData.name || "Không có thông tin";
+            document.getElementById("user-email").textContent = tourData.email || "Không có thông tin";
+            document.getElementById("user-phone").textContent = tourData.phone || "Không có thông tin";
+
+            // Hiển thị hình ảnh tour
+            const tourImage = document.getElementById("tour-image");
+            const defaultImage = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80";
+            tourImage.src = tourData.image || defaultImage;
+            tourImage.onerror = function() {
+                console.error("Không tải được ảnh:", tourData.image);
+                this.src = defaultImage;
+            };
+        });
+
+        async function createOrder() {
+            const paymentButton = document.getElementById("payment-button");
+            const qrCodeContainer = document.getElementById("qrcode-container");
+            paymentButton.disabled = true;
+            paymentButton.textContent = "Đang xử lý...";
+
+            const tourData = JSON.parse(localStorage.getItem("selectedTour"));
+            if (!tourData) {
+                alert("Không có dữ liệu tour!");
+                paymentButton.disabled = false;
+                paymentButton.textContent = "Thanh Toán";
+                return;
+            }
+
+            try {
+                // Kiểm tra product_id
+                const product_id = tourData.product_id;
+                if (!product_id) {
+                    throw new Error("Không tìm thấy product_id trong dữ liệu tour");
+                }
+
+                // Kiểm tra thông tin người dùng
+                const userInfo = {
+                    name: tourData.name || "Khách hàng",
+                    email: tourData.email || "khachhang@example.com",
+                    phone: tourData.phone || "0123456789"
+                };
+
+                if (!userInfo.name || !userInfo.email || !userInfo.phone) {
+                    throw new Error("Thông tin người dùng không đầy đủ. Vui lòng kiểm tra lại!");
+                }
+
+                console.log("📤 Gửi yêu cầu tạo đơn hàng:", { product_id, userInfo });
+
+                const response = await fetch("http://localhost:5500/create-order", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ product_id, userInfo })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Lỗi từ server: ${errorData.error || "Không xác định"}`);
+                }
+
+                const result = await response.json();
+                console.log("📩 Phản hồi từ backend:", result);
+
+                if (result.order_url) {
+                    console.log("✅ Tạo đơn hàng thành công! Hiển thị mã QR ZaloPay...");
+                    // Hiển thị mã QR
+                    const qrCodeDiv = document.getElementById("qrcode");
+                    qrCodeDiv.innerHTML = ""; // Xóa mã QR cũ (nếu có)
+                    QRCode.toCanvas(result.order_url, { width: 200 }, function (error, canvas) {
+                        if (error) {
+                            console.error("Lỗi khi tạo mã QR:", error);
+                            throw new Error("Không thể tạo mã QR!");
+                        }
+                        qrCodeDiv.appendChild(canvas);
+                    });
+
+                    // Hiển thị container chứa mã QR
+                    qrCodeContainer.style.display = "block";
+
+                    // Cập nhật liên kết mở ZaloPay
+                    const openZaloPayLink = document.getElementById("open-zalopay");
+                    openZaloPayLink.href = result.order_url;
+
+                    // Cập nhật nút thanh toán
+                    paymentButton.textContent = "Thanh Toán Lại";
+                } else {
+                    throw new Error(result.error || "Tạo đơn hàng thất bại!");
+                }
+            } catch (error) {
+                console.error("❌ Lỗi hệ thống:", error.message);
+                alert(`Lỗi: ${error.message}`);
+                paymentButton.disabled = false;
+                paymentButton.textContent = "Thanh Toán";
+            }
+        }
+    </script>
+    <!-- Thêm chatbox -->
+<button class="chatbot-toggler">
+    <span class="material-symbols-rounded"><img src="img/logo-KTX.png" alt="Chat"></span>
+    <span class="material-symbols-outlined">close</span>
+</button>
+<div class="chatbot">
+    <header class="chat-header">
+        <h2>Chatbot</h2>
+        <span class="close-btn material-symbols-outlined">close</span>
+    </header>
+    <ul class="chatbox">
+        <li class="chat incoming">
+            <span class="material-symbols-outlined">smart_toy</span>
+            <p>Hi there 👋<br>How can I help you today?</p>
+        </li>
+    </ul>
+    <div class="chat-input">
+        <textarea placeholder="Enter a message..." spellcheck="false" required></textarea>
+        <span id="send-btn" class="material-symbols-rounded">send</span>
+    </div>
+</div>
 </body>
 </html>

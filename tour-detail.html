@@ -7,10 +7,15 @@
     <link rel="stylesheet" href="css/tour-detail.css">
     <script src="https://kit.fontawesome.com/d63bdcadb6.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Thêm thư viện lazysizes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
+    <link rel="stylesheet" href="css/chatbox.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <script src="js/chatbox.js"></script>
 
 </head>
 <body>
-
     <!-- Nút quay lại -->
     <a href="services.html" class="back-btn">
         <i class="fa-solid fa-arrow-left"></i> Quay lại
@@ -21,11 +26,12 @@
     </header>
 
     <section class="tour-details">
-        <img id="tour-image" src="" alt="Ảnh chính của tour">
+        <img id="tour-image" class="lazyload" data-src="" alt="Ảnh chính của tour">
         <p id="tour-description">Thông tin chi tiết về tour...</p>
     
         <h3>Thư viện ảnh</h3>
         <div class="gallery" id="tour-gallery"></div>
+        <p id="gallery-error" style="color: red; display: none;">Một số ảnh không tải được.</p>
     
         <h3>Lịch trình tour:</h3>
         <div class="itinerary-container" id="tour-itinerary"></div>
@@ -40,39 +46,9 @@
         <p id="tour-price"></p>
     
         <a href="#" class="btn" id="book-now">Đặt ngay</a>
-        
-        
     </section>
     
     <script>
-        document.getElementById("book-now").addEventListener("click", function(event) {
-        event.preventDefault();
-
-        if (tourId && tours[tourId]) {
-            Swal.fire({
-                title: "Xác nhận đặt tour",
-                text: `Bạn muốn đặt tour "${tours[tourId].title}" với giá ${tours[tourId].price}?`,
-                imageUrl: tours[tourId].image,
-                imageWidth: 400,
-                imageAlt: "Ảnh tour",
-                showCancelButton: true,
-                confirmButtonText: "Xác nhận",
-                cancelButtonText: "Hủy",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Lưu thông tin tour
-                    localStorage.setItem("selectedTour", JSON.stringify({
-                        title: tours[tourId].title,
-                        price: tours[tourId].price,
-                        id: tourId
-                    }));
-
-                    // Chuyển sang trang thanh toán
-                    window.location.href = "payment.html";
-                }
-            });
-        }
-    });
         // Dữ liệu tour mở rộng với lịch trình chi tiết
         const tours = {
             "ha-long-bay": {
@@ -996,99 +972,209 @@
                     "https://moitruongdulich.vn/wp-content/uploads/2025/02/13.2.-Dao-choi-kham-pha-quan-dao-Nam-Du-2-1024x576.jpg",
                     "https://luhanhvietnam.com.vn/du-lich/vnt_upload/news/08_2022/mon-hai-san-ngon-o-nam-du-nhum.jpg"
                 ]
-            },
-            "hang-son-doong": {
-            "title": "Hang Sơn Đoòng, Quảng Bình",
-            "image": "https://www.bambooairways.com/documents/20122/1165110/du-lich-hang-son-doong-1.jpeg/0244dbb2-ea2a-2f61-5e67-6088ca9efe3d?t=1695027512192",
-            "description": "Hang Sơn Đoòng là hang động lớn nhất thế giới, nổi bật với hệ sinh thái độc đáo, những thạch nhũ khổng lồ và dòng sông ngầm tuyệt đẹp.",
-            "itinerary": [
-        {
-            "day": "Ngày 1",
-            "activities": [
-                "Khởi hành từ Đồng Hới - Di chuyển đến Phong Nha",
-                "Tham quan trung tâm Phong Nha - Kẻ Bàng",
-                "Nghỉ ngơi và chuẩn bị cho hành trình khám phá hang động",
-                "Dùng bữa tối tại khách sạn"
-            ]
-        },
-        {
-            "day": "Ngày 2",
-            "activities": [
-                "Xuất phát đến cửa hang Sơn Đoòng",
-                "Khám phá hang Én - Một trong những hang động lớn nhất Việt Nam",
-                "Tiến vào Sơn Đoòng - Ngắm nhìn hệ sinh thái trong hang",
-                "Dựng trại và ngủ qua đêm trong hang"
-            ]
-        },
-        {
-            "day": "Ngày 3",
-            "activities": [
-                "Tiếp tục hành trình khám phá hang động",
-                "Chiêm ngưỡng 'Vườn Địa Đàng' bên trong Sơn Đoòng",
-                "Băng qua dòng sông ngầm và vách núi đá vôi",
-                "Trở về điểm xuất phát và kết thúc hành trình"
-            ]
+            }
+        };
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+    // Lấy ID từ URL
+    const params = new URLSearchParams(window.location.search);
+    const tourId = params.get("id");
+
+    let tourData = null;
+
+    // Lấy chi tiết tour từ API
+    async function fetchTourDetails() {
+        try {
+            const response = await fetch(`http://localhost:5500/tour/${tourId}`);
+            if (!response.ok) {
+                throw new Error("Lỗi khi lấy chi tiết tour");
+            }
+            tourData = await response.json();
+            console.log("Dữ liệu tour từ API:", tourData);
+            displayTourDetails(tourData);
+        } catch (error) {
+            console.error("Lỗi:", error.message);
+            document.querySelector(".tour-details").innerHTML = "<p>Không tìm thấy tour này!</p>";
         }
-    ],
-    "transport": "Xe du lịch từ Đồng Hới + Đi bộ trekking",
-    "hotel": "Lều trại trong hang (hành trình thám hiểm)",
-    "price": "3.000.000 VNĐ",
-    "gallery": [
-        "https://www.bambooairways.com/documents/20122/1165110/du-lich-hang-son-doong-1.jpeg/0244dbb2-ea2a-2f61-5e67-6088ca9efe3d?t=1695027512192",
-        "https://q-xx.bstatic.com/xdata/images/hotel/max500/219540055.jpg?k=dc7f1ed81ee6a2b374d02a2189c380ac19d447e3c1bd176c6e925057fc5eb583&o=",
-        "https://www.bambooairways.com/documents/20122/1165110/du-lich-hang-son-doong-4.jpg/e0e845d1-6ac0-f444-da6b-7844c39bd6b4?t=1695027833364",
-        "https://bluediamondretreat.com/wp-content/uploads/2024/08/mon-chay-1024x683.jpg"
-    ]
-}
-    
-        // Lấy ID từ URL
-        const params = new URLSearchParams(window.location.search);
-        const tourId = params.get("id");
-    
-        // Hiển thị nội dung tương ứng
-        if (tourId && tours[tourId]) {
-            document.getElementById("tour-title").textContent = tours[tourId].title;
-            document.getElementById("tour-image").src = tours[tourId].image;
-            document.getElementById("tour-description").textContent = tours[tourId].description;
-            document.getElementById("tour-price").textContent = "Giá: " + tours[tourId].price;
-            document.getElementById("tour-transport").textContent = tours[tourId].transport;
-            document.getElementById("tour-hotel").textContent = tours[tourId].hotel;
-    
-            // Lịch trình chi tiết
-            const itineraryContainer = document.getElementById("tour-itinerary");
-            tours[tourId].itinerary.forEach(day => {
+    }
+
+    // Hiển thị chi tiết tour
+    function displayTourDetails(tour) {
+        // Cập nhật tiêu đề
+        document.getElementById("tour-title").textContent = tour.title;
+
+        // Cập nhật ảnh chính
+        const tourImage = document.getElementById("tour-image");
+        if (tour.image && isValidURL(tour.image)) {
+            tourImage.setAttribute('data-src', tour.image);
+            tourImage.classList.add("lazyload");
+        } else {
+            tourImage.style.display = "none"; // Không hiển thị nếu URL không hợp lệ
+            console.error(`Không tải được ảnh chính: ${tour.image}`);
+        }
+
+        // Cập nhật mô tả
+        document.getElementById("tour-description").textContent = tour.description || "Không có mô tả.";
+
+        // Cập nhật giá
+        document.getElementById("tour-price").textContent = `Giá: ${parseInt(tour.price.replace(/\D/g, '')).toLocaleString('vi-VN')} VNĐ`;
+
+        // Cập nhật thông tin di chuyển và khách sạn
+        document.getElementById("tour-transport").textContent = tour.transport || "Không có thông tin";
+        document.getElementById("tour-hotel").textContent = tour.hotel || "Không có thông tin";
+
+        // Lịch trình chi tiết
+        const itineraryContainer = document.getElementById("tour-itinerary");
+        let itinerary = [];
+        if (tour.itinerary) {
+            try {
+                itinerary = typeof tour.itinerary === "string" ? JSON.parse(tour.itinerary) : tour.itinerary;
+            } catch (error) {
+                console.error("Lỗi khi parse itinerary:", error);
+                itinerary = [];
+            }
+        }
+
+        if (itinerary.length > 0) {
+            itinerary.forEach(day => {
                 const dayDiv = document.createElement("div");
                 dayDiv.classList.add("itinerary-day");
-    
+
                 const dayTitle = document.createElement("h4");
                 dayTitle.textContent = day.day;
                 dayDiv.appendChild(dayTitle);
-    
+
                 const activitiesList = document.createElement("ul");
                 day.activities.forEach(activity => {
                     const li = document.createElement("li");
                     li.textContent = activity;
                     activitiesList.appendChild(li);
                 });
-    
+
                 dayDiv.appendChild(activitiesList);
                 itineraryContainer.appendChild(dayDiv);
             });
-    
-            // Thư viện ảnh
-            const galleryDiv = document.getElementById("tour-gallery");
-            tours[tourId].gallery.forEach(imgSrc => {
-                const img = document.createElement("img");
-                img.src = imgSrc;
-                img.alt = "Ảnh Hội An";
-                galleryDiv.appendChild(img);
-            });
-    
         } else {
-            document.querySelector(".tour-details").innerHTML = "<p>Không tìm thấy tour này!</p>";
+            itineraryContainer.innerHTML = "<p>Không có lịch trình chi tiết.</p>";
         }
-    </script>
-    
 
+        // Thư viện ảnh
+        const galleryDiv = document.getElementById("tour-gallery");
+        const galleryError = document.getElementById("gallery-error");
+        let gallery = [];
+        if (tour.gallery && Array.isArray(tour.gallery)) {
+            gallery = tour.gallery;
+        }
+
+        let hasError = false;
+        if (gallery.length > 0) {
+            gallery.forEach(imgSrc => {
+                if (isValidURL(imgSrc)) {
+                    const img = document.createElement("img");
+                    img.classList.add("lazyload");
+                    img.setAttribute('data-src', imgSrc);
+                    img.alt = "Ảnh tour";
+                    img.onerror = () => {
+                        console.error(`Không tải được ảnh: ${imgSrc}`);
+                        img.style.display = "none"; // Ẩn ảnh nếu không tải được
+                        hasError = true;
+                        galleryError.style.display = "block";
+                    };
+                    galleryDiv.appendChild(img);
+                }
+            });
+        } else {
+            galleryDiv.innerHTML = "<p>Không có ảnh trong thư viện.</p>";
+        }
+    }
+
+    // Xử lý đặt tour
+    document.getElementById("book-now").addEventListener("click", function(event) {
+        event.preventDefault();
+
+        if (!tourData) {
+            alert("Tour không tồn tại!");
+            return;
+        }
+
+        Swal.fire({
+            title: "Xác nhận đặt tour",
+            html: `
+                <p>Bạn muốn đặt tour "<strong>${tourData.title}</strong>" với giá <strong>${tourData.price}</strong>?</p>
+                <input type="text" id="user-name" placeholder="Nhập tên của bạn" required>
+                <input type="email" id="user-email" placeholder="Nhập email của bạn" required>
+                <input type="tel" id="user-phone" placeholder="Nhập số điện thoại" required>
+            `,
+            imageUrl: tourData.image && isValidURL(tourData.image) ? tourData.image : null,
+            imageWidth: 400,
+            imageAlt: "Ảnh tour",
+            showCancelButton: true,
+            confirmButtonText: "Xác nhận",
+            cancelButtonText: "Hủy",
+            preConfirm: () => {
+                const name = document.getElementById("user-name").value;
+                const email = document.getElementById("user-email").value;
+                const phone = document.getElementById("user-phone").value;
+                if (!name || !email || !phone) {
+                    Swal.showValidationMessage("Vui lòng nhập đầy đủ tên, email và số điện thoại!");
+                }
+                return { name, email, phone };
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const tourImage = tourData.image && isValidURL(tourData.image) ? tourData.image : null;
+                console.log("Lưu image vào localStorage:", tourImage);
+
+                localStorage.setItem("selectedTour", JSON.stringify({
+                    product_id: tourData.id,
+                    title: tourData.title,
+                    price: tourData.price,
+                    image: tourImage,
+                    name: result.value.name,
+                    email: result.value.email,
+                    phone: result.value.phone
+                }));
+
+                window.location.href = "payment.html";
+            }
+        });
+    });
+
+    // Hàm kiểm tra URL hợp lệ
+    function isValidURL(string) {
+        try {
+            new URL(string);
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
+
+    // Gọi hàm lấy chi tiết tour khi trang được tải
+    fetchTourDetails();
+});
+    </script>
+    <!-- Thêm chatbox -->
+<button class="chatbot-toggler">
+    <span class="material-symbols-rounded"><img src="img/logo-KTX.png" alt="Chat"></span>
+    <span class="material-symbols-outlined">close</span>
+</button>
+<div class="chatbot">
+    <header class="chat-header">
+        <h2>Chatbot</h2>
+        <span class="close-btn material-symbols-outlined">close</span>
+    </header>
+    <ul class="chatbox">
+        <li class="chat incoming">
+            <span class="material-symbols-outlined">smart_toy</span>
+            <p>Hi there 👋<br>How can I help you today?</p>
+        </li>
+    </ul>
+    <div class="chat-input">
+        <textarea placeholder="Enter a message..." spellcheck="false" required></textarea>
+        <span id="send-btn" class="material-symbols-rounded">send</span>
+    </div>
+</div>
 </body>
 </html>

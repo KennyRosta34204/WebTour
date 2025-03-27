@@ -92,6 +92,20 @@ closeBtn.addEventListener("click", () => document.body.classList.remove("show-ch
 chatbotToggler.addEventListener("click", () => document.body.classList.toggle("show-chatbot"));
 
 /*payment */
+fetch("http://localhost:3000/api/zalopay", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ amount: 100000, description: "Thanh toán đơn hàng" })
+})
+.then(response => response.json())
+.then(data => {
+    console.log("Kết quả từ backend:", data);
+})
+.catch(error => console.error("Lỗi khi gọi API:", error));
+
+
 document.querySelectorAll(".payment-option").forEach(option => {
     option.addEventListener("click", function () {
         document.getElementById("payment-form").style.display = "block";

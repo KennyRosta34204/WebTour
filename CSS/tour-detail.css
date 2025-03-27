@@ -3,13 +3,17 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
 }
 
 /* Background toàn trang */
 body {
     background: url('https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/canh-dep-40.jpg') no-repeat center center fixed;
     background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* Nút quay lại */
@@ -17,42 +21,50 @@ body {
     position: fixed;
     top: 20px;
     left: 20px;
-    background: rgba(255, 255, 255, 0.6);
-    padding: 10px 15px;
-    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px 20px;
+    border-radius: 25px;
     text-decoration: none;
     font-size: 14px;
     color: #333;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    transition: 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
 }
 
 .back-btn:hover {
-    background: rgba(255, 255, 255, 0.8);
-    transform: scale(1.05);
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Header */
 .header {
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
+    color: #fff;
     padding: 20px;
     text-align: center;
-    border-radius: 10px;
+    border-radius: 15px;
     margin: 20px auto;
     width: 80%;
+    max-width: 1000px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    font-size: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 /* Bố cục trang chi tiết */
 .tour-details {
-    background: rgba(255, 255, 255, 0.3);  /* Màu trắng trong suốt */
-    backdrop-filter: blur(10px);  /* Làm mờ nội dung */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
     padding: 30px;
     max-width: 900px;
     margin: 30px auto;
-    border-radius: 10px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* Ảnh tour chính */
@@ -60,26 +72,32 @@ body {
     width: 100%;
     height: 400px;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 15px;
     margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.tour-details img:hover {
+    transform: scale(1.02);
 }
 
 /* Mô tả */
 .tour-details p {
     font-size: 16px;
     color: #fff;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);  /* Đổ bóng giúp dễ đọc */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     margin-bottom: 20px;
+    line-height: 1.6;
 }
 
 /* Thư viện ảnh */
 .gallery {
     display: flex;
-    gap: 10px;
+    gap: 15px;
     justify-content: center;
     flex-wrap: wrap;
-    margin-bottom: 20px;
-    margin-top: 20px;
+    margin: 20px 0;
 }
 
 .gallery img {
@@ -87,12 +105,13 @@ body {
     height: 140px;
     object-fit: cover;
     border-radius: 10px;
-    transition: transform 0.3s;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
 }
 
 .gallery img:hover {
     transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 /* Lịch trình tour */
@@ -102,81 +121,179 @@ body {
 }
 
 .itinerary-day {
-    background: rgba(255, 255, 255, 0.3); /* Màu trắng trong suốt */
-    backdrop-filter: blur(5px); /* Làm mờ nền */
-    padding: 15px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    padding: 20px;
     border-radius: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.itinerary-day:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
 .itinerary-day h4 {
     color: #007bff;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .itinerary-day ul {
     padding-left: 20px;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .itinerary-day ul li {
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-size: 15px;
+    line-height: 1.5;
 }
 
 /* Card Thông tin di chuyển & Khách sạn */
 .transport-hotel-card {
-    background: rgba(255, 255, 255, 0.3); /* Làm mờ nội dung */
+    background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(5px);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     margin-top: 20px;
     text-align: left;
     color: #fff;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); 
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+}
+
+.transport-hotel-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 .transport-hotel-card h3 {
     color: #ffcc00;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 .transport-hotel-card p {
     font-size: 16px;
-    margin: 5px 0;
-    color: rgba(0, 0, 0, 0.5);
+    margin: 8px 0;
+    color: #fff;
 }
 
 /* Giá tour */
 .tour-details h3 {
     margin-top: 20px;
     color: #ffcc00;
+    font-size: 22px;
+    font-weight: 600;
 }
 
 .tour-details p#tour-price {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
     color: #ff5722;
-    margin: 10px 0;
+    margin: 15px 0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 /* Nút đặt tour */
 .btn {
     display: inline-block;
-    padding: 12px;
-    background: #28a745;
-    color: white;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: #fff;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 25px;
     font-size: 16px;
-    width: 100%;
+    font-weight: 600;
     text-transform: uppercase;
-    transition: 0.3s;
+    transition: all 0.3s ease;
     margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .btn:hover {
-    background: #218838;
-    transform: scale(1.05);
+    background: linear-gradient(135deg, #218838, #1e7e34);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
+/* Tùy chỉnh giao diện popup của SweetAlert2 */
+.swal2-popup {
+    border-radius: 15px;
+    padding: 20px;
+    background: #f9f9f9;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.swal2-title {
+    font-size: 24px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.swal2-html-container {
+    font-size: 16px;
+    color: #555;
+}
+
+.swal2-html-container p {
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+.swal2-html-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+    background: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.swal2-html-container input:focus {
+    outline: none;
+    border-color: #6a5acd;
+    box-shadow: 0 0 5px rgba(106, 90, 205, 0.3);
+}
+
+.swal2-confirm {
+    background-color: #6a5acd !important;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+    transition: background-color 0.3s ease !important;
+}
+
+.swal2-confirm:hover {
+    background-color: #5a4ab5 !important;
+}
+
+.swal2-cancel {
+    background-color: #ccc !important;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+    transition: background-color 0.3s ease !important;
+}
+
+.swal2-cancel:hover {
+    background-color: #bbb !important;
+}
+
+.swal2-image {
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
