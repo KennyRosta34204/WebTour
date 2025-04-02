@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" type="image/png" href="img/logo-KTX.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <title>Giới Thiệu</title>
+    <script src="js/main.js"></script>
+</head>
+<body>
+    <div class="navigation">
+        <input type="checkbox" class="navigation_checkbox" id="navigation_menu">
+        <label for="navigation_menu" class="navigation_button">
+            <span class="navigation_icon">&nbsp;</span>
+        </label>
+        <div class="navigation_background">&nbsp;</div>
+        <nav class="navigation_nav"> 
+            <ul class="navigation_list">
+                <li class="navigation_items" id="nav-auth">
+                    <a href="register.html" id="auth-link" class="navigation_links">Đăng nhập / Đăng ký</a>
+                </li>
+                <li id="nav-user" style="display: none;">
+                    <span id="user-name"></span>
+                    <a id="logout-link" href="#">Đăng xuất</a>
+                </li>
+                <li class="navigation_items"> <a href="index.html" class="navigation_links"><span></span>Trang chủ</a></li>
+                <li class="navigation_items"> <a href="about.html" class="navigation_links"><span></span>Giới thiệu</a></li>
+                <li class="navigation_items"> <a href="services.html" class="navigation_links">Dịch vụ</a></li>
+                <li class="navigation_items"> <a href="contact.html" class="navigation_links"><span></span>Liên hệ</a></li>
+            </ul>
+        </nav>
+    </div>
+    <main>
+        <section class="section-about" id="About">
+            <div class="u-text-center margin-bottom-big">
+                <h2 class="heading-secondary">Khám phá thế giới theo cách của riêng bạn</h2>
+            </div>
+            <div class="row">
+                <div class="col-1-of-2">
+                    <h3 class="heading-teriatery margin-bottom-small">BẠN SẼ PHẢI LÒNG DU LỊCH</h3>
+                    <p class="paragraph margin-bottom-medium">Hãy để chúng tôi đưa bạn đến những vùng đất mới, nơi bạn sẽ được trải nghiệm những điều kỳ diệu và khám phá những nền văn hóa độc đáo. Từ những bãi biển cát trắng trải dài đến những đỉnh núi hùng vĩ, từ những thành phố cổ kính đến những khu rừng nhiệt đới hoang sơ, mỗi chuyến đi đều là một cuộc phiêu lưu đầy cảm xúc.</p>
+                    <h3 class="heading-teriatery margin-bottom-small">NHỮNG CHUYẾN ĐI CHƯA TỪNG CÓ</h3>
+                    <p class="paragraph margin-bottom-medium">Chúng tôi cam kết mang đến cho bạn những trải nghiệm du lịch tuyệt vời nhất, với các dịch vụ chất lượng cao, lịch trình linh hoạt và đội ngũ hướng dẫn viên chuyên nghiệp, nhiệt tình. Bạn sẽ được tận hưởng những khoảnh khắc đáng nhớ và tạo nên những kỷ niệm khó quên trong suốt hành trình.</p>
+                    <a href="#" class="btn-text">Tìm hiểu thêm. &rarr;</a>
+                </div>
+                <div class="col-1-of-2">
+                    <div class="composition">
+                        <img srcset="img/hcm1.jpg 1000w,img/nat-1.jpg 300w" sizes="(max-width:900px)18vw,(max-width:600px)24vw,300px" alt="Photo 1" class="composition_photo composition_photo--p1">
+                        <img srcset="img/hcm2.jpg 1000w,img/nat-2.jpg 300w" sizes="(max-width:900px)18vw,(max-width:600px)24vw,300px" alt="Photo 2" class="composition_photo composition_photo--p2">
+                        <img srcset="img/hcm3.jpg 1000w,img/nat-3.jpg 300w" sizes="(max-width:900px)18vw,(max-width:600px)24vw,300px" alt="Photo 3" class="composition_photo composition_photo--p3">
+                    </div>
+                </div>
+            </div>
+            <div class="row"></div>
+        </section>
+    </main>
+</body>
+</html>

@@ -343,4 +343,50 @@ i {
     top: 0; /* Hiệu ứng khi menu được mở */
     transform: rotate(-45deg); /* Hiệu ứng khi menu được mở */
 }
+.main-nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px 0;
+    z-index: 100;
+    border-radius: 5px;
+}
 
+.main-nav a {
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+    margin: 0 100px; /* Tăng margin để chữ xa nhau hơn */
+    margin-left: 10px;
+    font-size: 17px;
+    font-family: Arial, sans-serif;
+    padding: 5px 10px;
+    border-radius: 0;
+    transition: border-radius 0.3s ease;
+}
+
+.main-nav a:hover {
+    background-color: #ff7d26;
+    color: black;
+    border-radius: 5px;
+}
+
+.title {
+    margin-top: 35px; /* Điều chỉnh giá trị này để chữ sát xuống hơn */
+}
+
+nav.navbar{
+  padding-bottom: 7px; /* chỉnh số này, càng nhỏ chữ càng sát lên*/
+}
+.main-nav i { /* Định dạng icon */
+    margin-left: auto; /* Đẩy icon sang phải */
+    margin-right: 20px; /* Khoảng cách từ icon đến lề phải */
+    font-size: 20px; /* Kích thước icon */
+    color: white; /* Màu icon */
+}
