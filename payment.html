@@ -70,31 +70,18 @@
         <a id="open-zalopay" href="#" target="_blank">Mở ZaloPay để thanh toán (nếu không quét được mã QR)</a>
     </div>
 
-    <!-- Thêm chatbox -->
-    <button class="chatbot-toggler">
-        <span class="material-symbols-rounded"><img src="img/logo-KTX.png" alt="Chat"></span>
-        <span class="material-symbols-outlined">close</span>
-    </button>
-    <div class="chatbot">
-        <header class="chat-header">
-            <h1>Chatbot</h1>
-            <span class="close-btn material-symbols-outlined">close</span>
-        </header>
-        <ul class="chatbox">
-            <li class="chat incoming">
-                <span class="material-symbols-outlined">smart_toy</span>
-                <p>Hi there 👋<br>How can I help you today?</p>
-            </li>
-        </ul>
-        <div class="chat-input">
-            <textarea placeholder="Enter a message..." spellcheck="false" required></textarea>
-            <span id="send-btn" class="material-symbols-rounded">send</span>
-        </div>
-    </div>
-
     <script>
-        // Hiển thị thông tin tour
+        // **Bước 3: Đảm bảo người dùng phải đăng nhập trước khi thanh toán**
         document.addEventListener("DOMContentLoaded", function() {
+            // Kiểm tra trạng thái đăng nhập
+            const user_id = localStorage.getItem("user_id");
+            if (!user_id) {
+                alert("Bạn cần đăng nhập để thực hiện thanh toán!");
+                window.location.href = "login.html"; // Chuyển hướng đến trang đăng nhập
+                return;
+            }
+
+            // Tiếp tục hiển thị thông tin tour
             const tourData = JSON.parse(localStorage.getItem("selectedTour"));
             if (!tourData || !tourData.product_id) {
                 alert("Không có tour nào được chọn hoặc thiếu thông tin tour!");
@@ -182,7 +169,7 @@
             }
         });
 
-        // Hàm tạo đơn hàng
+        // **Bước 2: Lấy user_id từ localStorage khi tạo đơn hàng**
         async function createOrder() {
             const paymentButton = document.getElementById("payment-button");
             const qrCodeContainer = document.getElementById("qrcode-container");
@@ -215,12 +202,18 @@
                     throw new Error("Thông tin người dùng không đầy đủ. Vui lòng kiểm tra lại!");
                 }
 
-                console.log("📤 Gửi yêu cầu tạo đơn hàng:", { product_id, userInfo });
+                // Lấy user_id từ localStorage
+                const user_id = localStorage.getItem("user_id");
+                if (!user_id) {
+                    throw new Error("Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục!");
+                }
+
+                console.log("📤 Gửi yêu cầu tạo đơn hàng:", { product_id, userInfo, user_id });
 
                 const response = await fetch("http://localhost:5500/create-order", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ product_id, userInfo })
+                    body: JSON.stringify({ product_id, userInfo, user_id }) // Thêm user_id vào body
                 });
 
                 if (!response.ok) {
@@ -263,21 +256,20 @@
                 paymentButton.textContent = "Thanh Toán";
             }
         }
-  // Chèn chatbox vào trang
-  fetch('chatbox-component.html')
-      .then(response => response.text())
-      .then(data => {
-          document.getElementById('chatbox-container').innerHTML = data;
-          // Sau khi chèn, tải lịch sử trò chuyện
-          loadChatHistory();
-          // Khôi phục trạng thái hiển thị của chatbox
-          const isChatbotOpen = localStorage.getItem('chatbotOpen') === 'true';
-          if (isChatbotOpen) {
-              document.body.classList.add('show-chatbot');
-          }
-      });
+
+        // Chèn chatbox vào trang
+        fetch('chatbox-component.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('chatbox-container').innerHTML = data;
+                // Sau khi chèn, tải lịch sử trò chuyện
+                loadChatHistory();
+                // Khôi phục trạng thái hiển thị của chatbox
+                const isChatbotOpen = localStorage.getItem('chatbotOpen') === 'true';
+                if (isChatbotOpen) {
+                    document.body.classList.add('show-chatbot');
+                }
+            });
     </script>
-    <!-- Bỏ script.js vì logic chatbox đã được di chuyển vào đây -->
-     
 </body>
 </html>
