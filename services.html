@@ -6,6 +6,11 @@
     <title>Dịch Vụ Du Lịch</title>
     <link rel="stylesheet" href="css/services.css">
     <script src="https://kit.fontawesome.com/d63bdcadb6.js" crossorigin="anonymous"></script>
+    <!-- Thêm thư viện lazysizes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
+    <link rel="stylesheet" href="css/chatbox.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
 </head>
 <body>
     <div class="navigation">
@@ -49,286 +54,121 @@
             <a href="contact.html">Liên hệ</a>
             <i class="fa-solid fa-user"></i>
           </nav>
+
+        <!-- Nút Home -->
+        <a href="index.html" class="home-btn">
+            <i class="fa-solid fa-house"></i>
+        </a>
         <h1 class="title">Khám Phá Các Tour Du Lịch Hấp Dẫn</h1>
         <p>Đặt tour ngay hôm nay để trải nghiệm những điểm đến tuyệt vời nhất!</p>
-        <div class="search-container">
-            <div class="search-container">
-                <div class="search-container">
-                    <div class="search-bar">
-                        <input type="text" id="searchInput" placeholder="Nhập địa điểm..." onkeyup="showSuggestions()">
-                        <button id="searchBtn" onclick="searchTours()">Tìm kiếm</button>
-                    </div>
-                    <ul id="suggestions-list" class="suggestions-list"></ul>
-                    <div id="search-results" class="search-results"></div>                                    
-            <div id="search-results" class="search-results"></div>
-        </div>        
-        <ul id="suggestions-list"></ul> <!-- Danh sách gợi ý -->
-        
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Tìm kiếm tour du lịch..." onkeyup="searchTours()">
+            <button onclick="searchTours()">Tìm kiếm</button>
+        </div>
     </header>
 
     <!-- Danh sách tour -->
-    <section class="tour-list">
-        <div class="tour-item">
-            <img src="https://vcdn1-dulich.vnecdn.net/2023/07/12/HL1-9875-1689130357.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=mN2YMaNq5Vgj_oi6A_s91Q" alt="Vịnh Hạ Long">
-            <div class="tour-info">
-                <h2>Vịnh Hạ Long, Quảng Ninh</h2>
-                <p>Di sản thiên nhiên thế giới với hàng nghìn đảo đá vôi hùng vĩ.</p>
-                <p class="price">Giá: 5.000.000 VNĐ</p>
-                <a href="tour-detail.html?id=ha-long-bay" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://bqn.1cdn.vn/2022/04/04/images.baoquangnam.vn-storage-newsportal-2022-4-4-125513-_b1.jpg" alt="Hội An">
-            <div class="tour-info">
-                <h2>Phố cổ Hội An, Quảng Nam</h2>
-                <p>Di sản văn hóa thế giới với những ngôi nhà cổ và đèn lồng rực rỡ.</p>
-                <p class="price">Giá: 4.000.000 VNĐ</p>
-                <a href="tour-detail.html?id=hoi-an" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://tourism.danang.vn/wp-content/uploads/2023/02/cau-rong-da-nang.jpeg" alt="Đà Nẵng">
-            <div class="tour-info">
-                <h2>Đà Nẵng</h2>
-                <p>Thành phố đáng sống nhất Việt Nam với Cầu Rồng và bãi biển Mỹ Khê.</p>
-                <p class="price">Giá: 4.500.000 VNĐ</p>
-                <a href="tour-detail.html?id=da-nang" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://www.bambooairways.com/documents/20122/1165110/dia-diem-du-lich-hue-4.jpg/358a6a0a-9492-e630-9fda-5fd2222d34f1?t=1694774986511" alt="Huế">
-            <div class="tour-info">
-                <h2>Huế</h2>
-                <p>Khám phá kinh thành Huế, lăng tẩm và sông Hương thơ mộng.</p>
-                <p class="price">Giá: 3.800.000 VNĐ</p>
-                <a href="tour-detail.html?id=hue" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://cdn.media.dulich24.com.vn/bai-viet/ngo-ngang-truoc-thien-nhien-tuyet-mi-cua-sa-pa-46110816/canh-dep-tuyet-mi-o-sa-pa.jpg" alt="Sapa">
-            <div class="tour-info">
-                <h2>Sapa, Lào Cai</h2>
-                <p>Khám phá vùng núi Tây Bắc với ruộng bậc thang và đỉnh Fansipan.</p>
-                <p class="price">Giá: 4.500.000 VNĐ</p>
-                <a href="tour-detail.html?id=sapa" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://vcdn1-dulich.vnecdn.net/2022/05/12/Hanoi2-1652338755-3632-1652338809.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=NxMN93PTvOTnHNryMx3xJw" alt="Hà Nội">
-            <div class="tour-info">
-                <h2>Hà Nội</h2>
-                <p>Thủ đô nghìn năm văn hiến với phố cổ và ẩm thực đặc sắc.</p>
-                <p class="price">Giá: 3.500.000 VNĐ</p>
-                <a href="tour-detail.html?id=ha-noi" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://image.nhandan.vn/w800/Uploaded/2025/igpcvcvjntc8510/2023_02_08/trang-an-5882.jpg.webp" alt="Ninh Bình">
-            <div class="tour-info">
-                <h2>Ninh Bình</h2>
-                <p>Thắng cảnh Tràng An, Tam Cốc - Bích Động và Hang Múa.</p>
-                <p class="price">Giá: 3.800.000 VNĐ</p>
-                <a href="tour-detail.html?id=ninh-binh" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://image.nhandan.vn/w800/Uploaded/2025/vjrejwkjx/2023_12_04/11-trung-tam-tp-da-lat-1252.jpg.webp" alt="Đà Lạt">
-            <div class="tour-info">
-                <h2>Đà Lạt, Lâm Đồng</h2>
-                <p>Thành phố ngàn hoa với không khí mát mẻ quanh năm.</p>
-                <p class="price">Giá: 4.500.000 VNĐ</p>
-                <a href="tour-detail.html?id=da-lat" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://media.vietnamarchi.vn/upload/userfiles/images/tin-tuc/240301/image003.jpg" alt="Phú Quốc">
-            <div class="tour-info">
-                <h2>Phú Quốc, Kiên Giang</h2>
-                <p>Thiên đường nghỉ dưỡng với biển xanh và bãi cát trắng.</p>
-                <p class="price">Giá: 6.000.000 VNĐ</p>
-                <a href="tour-detail.html?id=phu-quoc" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://ik.imagekit.io/tvlk/blog/2021/11/dia-diem-du-lich-can-tho-cover.jpg" alt="Cần Thơ">
-            <div class="tour-info">
-                <h2>Cần Thơ</h2>
-                <p>Khám phá chợ nổi Cái Răng, vườn trái cây và văn hóa sông nước.</p>
-                <p class="price">Giá: 3.500.000 VNĐ</p>
-                <a href="tour-detail.html?id=can-tho" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-        <div class="tour-item">
-            <img src="https://vcdn1-dulich.vnecdn.net/2022/04/03/MuiNeVNExpress3075891542181990-8691-6492-1648974014.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=E-1Y-hG3RxXRjUXHFvKQ6Q" alt="Mũi Né">
-            <div class="tour-info">
-                <h2>Mũi Né, Bình Thuận</h2>
-                <p>Thiên đường biển với đồi cát bay và làng chài ven biển.</p>
-                <p class="price">Giá: 3.200.000 VNĐ</p>
-                <a href="tour-detail.html?id=mui-ne" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://bariavungtautourism.com.vn/wp-content/uploads/2023/12/kinh-nghiem-du-lich-vung-tau-1.jpg" alt="Vũng Tàu">
-            <div class="tour-info">
-                <h2>Vũng Tàu</h2>
-                <p>Bãi biển gần Sài Gòn, nổi tiếng với Hải Đăng và Bãi Sau.</p>
-                <p class="price">Giá: 2.800.000 VNĐ</p>
-                <a href="tour-detail.html?id=vung-tau" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://baria-vungtau.dcs.vn/portal/editor/images/Anh%20Bai%20Viet/2024/72-1684551104-92955090-2798049513642425-7351022881440006144-n.jpg" alt="Côn Đảo">
-            <div class="tour-info">
-                <h2>Côn Đảo, Bà Rịa - Vũng Tàu</h2>
-                <p>Khám phá đảo hoang sơ, bãi biển trong xanh và di tích lịch sử.</p>
-                <p class="price">Giá: 6.500.000 VNĐ</p>
-                <a href="tour-detail.html?id=con-dao" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="img/ba-na-hill.jpg" alt="Bà Nà Hills">
-            <div class="tour-info">
-                <h2>Bà Nà Hills, Đà Nẵng</h2>
-                <p>Khám phá Cầu Vàng, làng Pháp và khí hậu se lạnh tuyệt vời.</p>
-                <p class="price">Giá: 4.200.000 VNĐ</p>
-                <a href="tour-detail.html?id=ba-na-hills" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://sakos.vn/wp-content/uploads/2023/10/bvcl.1cdn.vn-2023-03-01-_anh-1-thac-ban-doc-2.jpg" alt="Thác Bản Giốc">
-            <div class="tour-info">
-                <h2>Thác Bản Giốc, Cao Bằng</h2>
-                <p>Thác nước hùng vĩ nhất Việt Nam, giáp biên giới Trung Quốc.</p>
-                <p class="price">Giá: 4.000.000 VNĐ</p>
-                <a href="tour-detail.html?id=thac-ban-gioc" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://nld.mediacdn.vn/291774122806476800/2024/11/18/dong-phong-nha-ke-bang-dep-den-choang-ngop-17319168370561406931222.jpg" alt="Phong Nha - Kẻ Bàng">
-            <div class="tour-info">
-                <h2>Vườn quốc gia Phong Nha - Kẻ Bàng, Quảng Bình</h2>
-                <p>Khám phá hệ thống hang động đẹp nhất thế giới.</p>
-                <p class="price">Giá: 5.500.000 VNĐ</p>
-                <a href="tour-detail.html?id=phong-nha-ke-bang" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://vcdn1-dulich.vnecdn.net/2024/08/06/CT-8620-1722936588.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=99voZV8ZwUhzpuyPS6cP5g" alt="Vườn quốc gia Cát Tiên">
-            <div class="tour-info">
-                <h2>Vườn quốc gia Cát Tiên, Đồng Nai</h2>
-                <p>Điểm đến lý tưởng cho du lịch sinh thái và khám phá thiên nhiên.</p>
-                <p class="price">Giá: 3.200.000 VNĐ</p>
-                <a href="tour-detail.html?id=vuon-quoc-gia-cat-tien" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://vuonquocgiabavi.com.vn/wp-content/uploads/2021/06/z2557528690355_d0480c344186d5f13348b3373ffb13fb-scaled.jpg" alt="Ba Vì">
-            <div class="tour-info">
-                <h2>Vườn quốc gia Ba Vì trong Hà Nội</h2>
-                <p>Điểm dã ngoại nổi tiếng với khí hậu mát mẻ quanh năm.</p>
-                <p> </p>
-                <p class="price">Giá: 2.500.000 VNĐ</p>
-                <a href="tour-detail.html?id=vuon-quoc-gia-ba-vi" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://cdn.tgdd.vn/Files/2021/07/03/1365341/kinh-nghiem-du-lich-dao-ly-son-quang-ngai-an-gi-choi-gi-202201111237117341.jpeg" alt="Đảo Lý Sơn">
-            <div class="tour-info">
-                <h2>Đảo Lý Sơn, Quảng Ngãi</h2>
-                <p>Hòn đảo đẹp với cánh đồng tỏi và bãi biển hoang sơ.</p>
-                <p class="price">Giá: 4.800.000 VNĐ</p>
-                <a href="tour-detail.html?id=dao-ly-son" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-
-        <div class="tour-item">
-            <img src="https://vcdn1-dulich.vnecdn.net/2024/07/02/NDT1-1785-1719909908.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=_DROJuNqUnJipbUpHCfVHQ" alt="Đảo Nam Du">
-            <div class="tour-info">
-                <h2>Đảo Nam Du, Kiên Giang</h2>
-                <p>Hệ thống đảo nhỏ tuyệt đẹp với nước biển xanh trong.</p>
-                <p class="price">Giá: 4.500.000 VNĐ</p>
-                <a href="tour-detail.html?id=dao-nam-du" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-        <div class="tour-item">
-            <img src="https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2022/10/19/1106757/Hang-Son-Doong.jpeg" alt="Hang Sơn Đoòng">
-            <div class="tour-info">
-                <h2>Hang Sơn Đoòng, Quảng Bình</h2>
-                <p>Hang động lớn nhất thế giới với hệ sinh thái độc đáo và khung cảnh hùng vĩ.</p>
-                <p class="price">Giá: 3.000.000 VNĐ</p>
-                <a href="tour-detail.html?id=hang-son-doong" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-        
+    <section class="tour-list" id="tour-list">
+        <!-- Danh sách tour sẽ được hiển thị động từ JavaScript -->
     </section>
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2024 KTX. Tất cả các quyền được bảo lưu.</p>
+        <p>© 2024 KTX. Tất cả các quyền được bảo lưu.</p>
     </footer>
 
-</body>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const searchInput = document.getElementById("searchInput");
-    const searchButton = document.getElementById("searchBtn");
-    const tourItems = document.querySelectorAll(".tour-item");
+    <!-- Thêm chatbox -->
+    <button class="chatbot-toggler">
+        <span class="material-symbols-rounded"><img src="img/logo-KTX.png" alt="Chat"></span>
+        <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="chatbot">
+        <header class="chat-header">
+            <h2>Chatbot</h2>
+            <span class="close-btn material-symbols-outlined">close</span>
+        </header>
+        <ul class="chatbox">
+            <li class="chat incoming">
+                <span class="material-symbols-outlined">smart_toy</span>
+                <p>Hi there 👋<br>How can I help you today?</p>
+            </li>
+        </ul>
+        <div class="chat-input">
+            <textarea placeholder="Enter a message..." spellcheck="false" required></textarea>
+            <span id="send-btn" class="material-symbols-rounded">send</span>
+        </div>
+    </div>
 
-    // Hàm tìm kiếm tour
-    function searchTours() {
-        const query = searchInput.value.toLowerCase().trim(); // Lấy giá trị nhập vào & loại bỏ khoảng trắng 2 đầu
+    <script>
+        let allTours = [];
+        const defaultImage = 'https://placehold.co/300x200?text=Ảnh+Tour+Du+Lịch';
 
-        let hasResult = false; // Kiểm tra xem có kết quả phù hợp không
-
-        tourItems.forEach(item => {
-            const tourName = item.querySelector(".tour-info h2").textContent.toLowerCase();
-            if (tourName.includes(query)) {
-                item.style.display = "block"; // Hiện tour phù hợp
-                hasResult = true;
-            } else {
-                item.style.display = "none"; // Ẩn tour không phù hợp
+        // Lấy danh sách tour từ backend
+        async function fetchTours() {
+            try {
+                const response = await fetch("http://localhost:5500/tours");
+                if (!response.ok) {
+                    throw new Error("Lỗi khi lấy danh sách tour");
+                }
+                const tours = await response.json();
+                allTours = tours;
+                console.log("Danh sách tour từ API:", tours);
+                displayTours(tours);
+            } catch (error) {
+                console.error("Lỗi:", error.message);
+                document.getElementById("tour-list").innerHTML = "<p style='text-align: center; color: #555;'>Không thể tải danh sách tour. Vui lòng thử lại sau!</p>";
             }
-        });
-
-        // Nếu không có kết quả, hiển thị thông báo
-        const noResultMessage = document.getElementById("noResultMessage");
-        if (!hasResult) {
-            noResultMessage.style.display = "block";
-        } else {
-            noResultMessage.style.display = "none";
         }
-    }
 
-    // Bắt sự kiện khi nhấn nút "Tìm kiếm"
-    searchButton.addEventListener("click", searchTours);
-
-    // Bắt sự kiện khi nhấn Enter trong ô input
-    searchInput.addEventListener("keyup", function (event) {
-        if (event.key === "Enter") {
-            searchTours();
+        // Hiển thị danh sách tour
+        function displayTours(tours) {
+            const tourList = document.getElementById("tour-list");
+            if (tours.length === 0) {
+                tourList.innerHTML = "<p style='text-align: center; color: #555;'>Không tìm thấy tour nào phù hợp với từ khóa của bạn!</p>";
+                return;
+            }
+            tourList.innerHTML = tours.map(tour => `
+                <div class="tour-item">
+                    <img class="lazyload" data-src="${tour.image || defaultImage}" alt="${tour.title}" onerror="this.onerror=null; this.src='${defaultImage}'; console.error('Không tải được ảnh: ${tour.image}');">
+                    <div class="tour-info">
+                        <h2>${tour.title}</h2>
+                        <p>${tour.description}</p>
+                        <p class="price">Giá: ${parseInt(tour.price.replace(/\D/g, '')).toLocaleString('vi-VN')} VNĐ</p>
+                        <a href="tour-detail.html?id=${tour.id}" class="btn">Xem chi tiết</a>
+                    </div>
+                </div>
+            `).join("");
         }
-    });
-});
 
+        // Tìm kiếm tour
+        function searchTours() {
+            const searchInput = document.getElementById("search-input").value.toLowerCase();
+            const filteredTours = allTours.filter(tour => 
+                tour.title.toLowerCase().includes(searchInput) || 
+                tour.description.toLowerCase().includes(searchInput)
+            );
+            displayTours(filteredTours);
+        }
 
-
-
-</script>
+        // Gọi hàm fetchTours khi trang được tải
+        fetchTours();
+    </script>
+    <script>
+        // Chèn chatbox vào trang
+        fetch('chatbox-component.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('chatbox-container').innerHTML = data;
+                // Sau khi chèn, tải lịch sử trò chuyện
+                loadChatHistory();
+                // Khôi phục trạng thái hiển thị của chatbox
+                const isChatbotOpen = localStorage.getItem('chatbotOpen') === 'true';
+                if (isChatbotOpen) {
+                    document.body.classList.add('show-chatbot');
+                }
+            });
+      </script>
+    <script src="script.js"></script> <!-- Di chuyển xuống cuối body -->
+    
+</body>
 </html>
