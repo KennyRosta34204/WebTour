@@ -8,6 +8,33 @@
     <script src="https://kit.fontawesome.com/d63bdcadb6.js" crossorigin="anonymous"></script>
 </head>
 <body>
+    <div class="navigation">
+        <input type="checkbox" class="navigation_checkbox" id="navigation_menu">
+
+        <label for="navigation_menu" class="navigation_button">
+            <span class="navigation_icon">&nbsp;</span>
+        </label>
+
+        <div class="navigation_background">&nbsp;</div>
+
+        <nav class="navigation_nav"> 
+            <ul class="navigation_list">
+                <li class="navigation_items" id="nav-auth">
+                    <a href="register.html" id="auth-link" class="navigation_links">Đăng nhập / Đăng ký</a>
+                </li>
+                <li id="nav-user" style="display: none;">
+                    <span id="user-name"></span>
+                    <a id="logout-link" href="#">Đăng xuất</a>
+                </li>
+                <li class="navigation_items"> <a href="#Home" class="navigation_links"><span></span>Trang chủ</a></li>
+                <li class="navigation_items"> <a href="#About" class="navigation_links"><span></span>Giới thiệu</a></li>
+                <li class="navigation_items"> 
+                    <a href="services.html" class="navigation_links">Dịch vụ</a>
+                </li>
+                <li class="navigation_items"> <a href="#" class="navigation_links"><span></span>Liên hệ</a></li>
+            </ul>
+        </nav>
+    </div>
     <!-- Header -->
     <header class="header">
         
