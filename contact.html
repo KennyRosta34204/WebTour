@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" type="image/png" href="img/logo-KTX.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <title>Liên Hệ</title>
+    <script src="js/main.js"></script>
+</head>
+<body>
+    <div class="navigation">
+        <input type="checkbox" class="navigation_checkbox" id="navigation_menu">
+        <label for="navigation_menu" class="navigation_button">
+            <span class="navigation_icon">&nbsp;</span>
+        </label>
+        <div class="navigation_background">&nbsp;</div>
+        <nav class="navigation_nav"> 
+            <ul class="navigation_list">
+                <li class="navigation_items" id="nav-auth">
+                    <a href="register.html" id="auth-link" class="navigation_links">Đăng nhập / Đăng ký</a>
+                </li>
+                <li id="nav-user" style="display: none;">
+                    <span id="user-name"></span>
+                    <a id="logout-link" href="#">Đăng xuất</a>
+                </li>
+                <li class="navigation_items"> <a href="index.html" class="navigation_links"><span></span>Trang chủ</a></li>
+                <li class="navigation_items"> <a href="about.html" class="navigation_links"><span></span>Giới thiệu</a></li>
+                <li class="navigation_items"> <a href="services.html" class="navigation_links">Dịch vụ</a></li>
+                <li class="navigation_items"> <a href="contact.html" class="navigation_links"><span></span>Liên hệ</a></li>
+            </ul>
+        </nav>
+    </div>
+    <footer class="footer" id="contact">
+        <div class="footer_logo-box">
+            <picture class="footer_logo">
+                <source srcset="img/logo-footer1.png 2x" media="(max-width:37.5rem)">
+                <img srcset="img/logo-KTX.png 2x" alt="Full logo">
+            </picture>
+        </div>
+        <div class="row">
+            <div class="col-1-of-2">
+                <div class="footer_navigation">
+                </div>
+                <div class="contact-section"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+                    <div class="contact-box">
+                        <h3>Liên hệ với chúng tôi</h3>
+                        <label>Tin nhắn:</label>
+                        <textarea placeholder="Nhập tin nhắn của bạn"></textarea>
+                        <div class="contact-info">
+                            <p><i class="fas fa-phone"></i>19001886</p>
+                            <p><i class="fas fa-envelope"></i>dulichvietnam@gmail.com</p>
+                            <p><i class="fas fa-map-marker-alt"></i> QL1A, Tan Chanh Hiep, Quận 12, TP HCM </p>
+                            <p>Chúng tôi sẽ trả lời bạn sớm nhất có thể</p>
+                        </div>
+                        <button>Gửi tin nhắn </button>
+                    </div>
+                </div> </div>
+            <div class="col-1-of-2">
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
