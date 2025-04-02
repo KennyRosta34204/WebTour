@@ -1,0 +1,23 @@
+<button class="chatbot-toggler">
+    <span class="material-symbols-rounded"><img src="img/logo-KTX.png" alt="Chat"></span>
+    <span class="material-symbols-outlined">close</span>
+</button>
+<div class="chatbot">
+    <header class="chat-header">
+        <h2>Chatbot</h2>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <button onclick="clearChatHistory()" style="background-color: #dc3545; color: #fff; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 14px;">Xóa lịch sử</button>
+            <span class="close-btn material-symbols-outlined">close</span>
+        </div>
+    </header>
+    <ul class="chatbox">
+        <li class="chat incoming">
+            <span class="material-symbols-outlined">smart_toy</span>
+            <p>Hi there 👋<br>How can I help you today?</p>
+        </li>
+    </ul>
+    <div class="chat-input">
+        <textarea placeholder="Enter a message..." spellcheck="false" required></textarea>
+        <span id="send-btn" class="material-symbols-rounded">send</span>
+    </div>
+</div>

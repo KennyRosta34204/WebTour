@@ -69,1132 +69,202 @@
     </div>
     
     <script>
-        // Dữ liệu tour mở rộng với lịch trình chi tiết
-        const tours = {
-            "ha-long-bay": {
-                title: "Vịnh Hạ Long, Quảng Ninh",
-                image: "https://vcdn1-dulich.vnecdn.net/2023/07/12/HL1-9875-1689130357.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=mN2YMaNq5Vgj_oi6A_s91Q",
-                description: "Vịnh Hạ Long là di sản thiên nhiên thế giới, nổi bật với những hòn đảo đá vôi kỳ vĩ, nước biển xanh trong và các hang động tuyệt đẹp.",
-                itinerary: [
-                    { day: "Ngày 1", activities: ["Khởi hành từ Hà Nội lúc 7h sáng", "Đến Hạ Long, nhận phòng khách sạn", "Ăn trưa với hải sản tươi sống", "Du thuyền trên Vịnh Hạ Long", "Tham quan Hang Sửng Sốt", "Dùng bữa tối trên tàu", "Ngủ đêm trên du thuyền"] },
-                    { day: "Ngày 2", activities: ["Dậy sớm ngắm bình minh trên vịnh", "Chèo thuyền kayak", "Tham quan Đảo Ti Tốp", "Trải nghiệm câu mực ban đêm", "Nghỉ đêm tại khách sạn"] },
-                    { day: "Ngày 3", activities: ["Ăn sáng tại khách sạn", "Tự do tắm biển", "Trả phòng, khởi hành về Hà Nội"] }
-                ],
-                transport: "Xe du lịch + Du thuyền",
-                hotel: "Khách sạn 4 sao tại trung tâm Hạ Long",
-                price: "5.000.000 VNĐ",
-                gallery: [
-                    "https://www.wyndhamhalong.com/uploads/blog/2016/T11/B%C3%A3i-t%E1%BA%AFm-Tu%E1%BA%A7n-Ch%C3%A2u.jpeg",
-                    "https://halongtourism.net/wp-content/uploads/2021/01/khach-san-muong-thanh-luxuru-ha-long-3.jpg",
-                    "https://www.dulichhalong.net/wp-content/uploads/2013/07/lang-chai-Vung-Vieng2.jpg",
-                    "https://statics.vinpearl.com/ha-long-cuisine-thumb_1652861515.jpg"
-                ]
-            },
-            "hoi-an": {
-                title: "Phố cổ Hội An, Quảng Nam",
-                image: "https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/08/hoi-an-quang-nam-vntrip.jpg",
-                description: "Hội An là di sản văn hóa thế giới, nổi tiếng với những ngôi nhà cổ, đèn lồng rực rỡ, chợ đêm sầm uất và bãi biển đẹp.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Xuất phát từ Đà Nẵng lúc 8h sáng",
-                            "Tham quan Chùa Cầu Nhật Bản",
-                            "Khám phá nhà cổ Tấn Ký, Hội quán Quảng Đông",
-                            "Ăn trưa với cao lầu - đặc sản Hội An",
-                            "Dạo phố cổ, ngắm đèn lồng, mua sắm quà lưu niệm",
-                            "Thưởng thức ẩm thực chợ đêm",
-                            "Nghỉ đêm tại khách sạn 4 sao"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Tham quan rừng dừa Bảy Mẫu - Trải nghiệm đi thuyền thúng",
-                            "Tham gia lớp học làm đèn lồng truyền thống",
-                            "Thưởng thức mì Quảng đặc sản",
-                            "Tắm biển An Bàng hoặc Cửa Đại",
-                            "Kết thúc hành trình - Trở về Đà Nẵng"
-                        ] 
-                    }
-                ],
-                transport: "Xe du lịch Đà Nẵng - Hội An",
-                hotel: "Khách sạn 4 sao tại trung tâm phố cổ",
-                price: "3.800.000 VNĐ",
-                gallery: [
-                    "https://hoiana.com/wp-content/uploads/2025/01/pho-co-hoi-an-17.webp",
-                    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/525337542.jpg?k=c18348cfe7b471c6970e09696378298c9722a8fbdc01b6eed0a1fd6175b49e42&o=&hp=1",
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Hoi_An_%28I%29.jpg/1200px-Hoi_An_%28I%29.jpg",
-                    "https://lh4.googleusercontent.com/SpjHrxB0PJZz4TZK1DlB7xZtbGK2uB-TZGrtVL8PxYvHjUlWz-o9TE3gx5PIrY-3OEBF7tjR1t2a91ROEXlfk0OqMUq1Zpj1hjtmJEgNR-kKAfgdyeuVGQ0E7-1R5BCOfUQqL_eN492s1TGBceVIa89vl_meeVGQLxr0RhPuEBH0ZVDhuTCd6TyWfA"
-                ]
-            },
-            "da-nang": {
-            title: "Đà Nẵng - Thành phố đáng sống",
-            image: "https://tourism.danang.vn/wp-content/uploads/2023/02/cau-rong-da-nang.jpeg",
-            description: "Đà Nẵng là thành phố du lịch hàng đầu Việt Nam với bãi biển đẹp, danh lam thắng cảnh nổi tiếng và nền ẩm thực phong phú.",
-            itinerary: [
-                { 
-                    day: "Ngày 1", 
-                    activities: [
-                        "Đến Đà Nẵng - Nhận phòng khách sạn",
-                        "Tham quan Bán đảo Sơn Trà, chùa Linh Ứng",
-                        "Thưởng thức đặc sản Đà Nẵng - Bánh tráng cuốn thịt heo",
-                        "Dạo biển Mỹ Khê, ngắm hoàng hôn",
-                        "Tham quan Cầu Rồng và Cầu Tình Yêu",
-                        "Xem cầu Rồng phun lửa vào cuối tuần"
-                    ] 
-                },
-                { 
-                    day: "Ngày 2", 
-                    activities: [
-                        "Tham quan Bà Nà Hills - Làng Pháp, Cầu Vàng",
-                        "Trải nghiệm Fantasy Park - khu vui chơi giải trí lớn nhất Đông Nam Á",
-                        "Ăn trưa buffet tại nhà hàng trên Bà Nà Hills",
-                        "Tham quan Ngũ Hành Sơn",
-                        "Đi dạo phố cổ Hội An vào buổi tối",
-                        "Trở về Đà Nẵng nghỉ ngơi"
-                    ] 
-                },
-                { 
-                    day: "Ngày 3", 
-                    activities: [
-                        "Mua sắm tại chợ Hàn",
-                        "Tham quan bảo tàng điêu khắc Chăm",
-                        "Thưởng thức Mì Quảng, Bún chả cá đặc sản",
-                        "Tự do tắm biển Mỹ Khê trước khi kết thúc tour"
-                    ] 
-                }
-            ],
-            transport: "Máy bay + Xe du lịch",
-            hotel: "Khách sạn 4 sao ven biển Mỹ Khê",
-            price: "4.500.000 VNĐ",
-            gallery: [
-                    "https://duonggiahotel.vn/wp-content/uploads/2023/10/khach-san-da-nang-thue-theo-gio-0.jpg",
-                    "https://nestahotel.com.vn/uploads/content/Hotels/Danang/Overview%201.jpg",
-                    "https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1200,h_630/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/u4zmjt3qgcdpretgka8v/Hoi%20An%20City%20Tour%20and%20Coconut%20Basket%20Boat%20Tour%20from%20Da%20Nang.jpg",
-                    "https://static.vinwonders.com/production/da-nang-food-thumb-1.jpg"
-                ],
-            },
-            "hue": {
-            title: "Cố đô Huế - Di sản văn hóa thế giới",
-            image: "https://www.bambooairways.com/documents/20122/1165110/dia-diem-du-lich-hue-4.jpg/358a6a0a-9492-e630-9fda-5fd2222d34f1?t=1694774986511",
-            description: "Huế là kinh đô của triều Nguyễn, nổi tiếng với quần thể di tích, lăng tẩm, cung điện cổ kính, sông Hương thơ mộng và ẩm thực cung đình đặc sắc.",
-            itinerary: [
-                { 
-                    day: "Ngày 1", 
-                    activities: [
-                        "Đến Huế - Nhận phòng khách sạn",
-                        "Tham quan Đại Nội Huế: Ngọ Môn, Điện Thái Hòa, Cung Diên Thọ",
-                        "Khám phá chợ Đông Ba - Mua sắm đặc sản Huế",
-                        "Ăn tối với món bún bò Huế trứ danh",
-                        "Dạo thuyền trên sông Hương - Nghe ca Huế",
-                        "Nghỉ đêm tại khách sạn 4 sao"
-                    ] 
-                },
-                { 
-                    day: "Ngày 2", 
-                    activities: [
-                        "Tham quan Lăng Minh Mạng, Lăng Khải Định, Lăng Tự Đức",
-                        "Tham quan chùa Thiên Mụ - Biểu tượng của Huế",
-                        "Trải nghiệm làm nón lá, vẽ tranh trên nón Huế",
-                        "Ăn trưa với bánh bèo, bánh nậm, bánh lọc",
-                        "Chiều tự do tham quan phố đi bộ Nguyễn Đình Chiểu",
-                        "Nghỉ đêm tại khách sạn"
-                    ] 
-                },
-                { 
-                    day: "Ngày 3", 
-                    activities: [
-                        "Tham quan đồi Vọng Cảnh - Check-in cảnh đẹp Huế",
-                        "Mua sắm đặc sản mè xửng, tôm chua Huế",
-                        "Tham quan biển Lăng Cô trước khi kết thúc tour",
-                        "Trả phòng khách sạn - Tạm biệt Huế"
-                    ] 
-                }
-            ],
-            transport: "Xe du lịch hoặc máy bay",
-            hotel: "Khách sạn 4 sao ven sông Hương",
-            price: "3.800.000 VNĐ",
-            gallery: [
-                    "https://file.huengaynay.vn/data2/image/news/2021/20211217/origin/471639790731.jpg",
-                    "https://www.huonggianghotel.com.vn/wp-content/uploads/2018/06/DSC_4563-HDR2_1600x1068-1.jpg",
-                    "https://phongnhalocals.com/wp-content/uploads/2023/03/hue-dragon-boat-tour-on-the-perfume-river-phong-nha-locals-2.jpg",
-                    "https://www.vietnam-immi.org.vn/storage/posts/376/featured_image/CNGUgSCsMLNnyNf3UTGhNkJCjAYJWC7KXxZtlgOK.jpg"
-                ]
-            },
-            "sapa": {
-            title: "Sapa - Thành phố trong sương",
-            image: "https://cdn.media.dulich24.com.vn/bai-viet/ngo-ngang-truoc-thien-nhien-tuyet-mi-cua-sa-pa-46110816/canh-dep-tuyet-mi-o-sa-pa.jpg",
-            description: "Sapa là điểm đến lý tưởng với khí hậu mát mẻ, những thửa ruộng bậc thang tuyệt đẹp, đỉnh Fansipan hùng vĩ và nền văn hóa đặc sắc của đồng bào dân tộc.",
-            itinerary: [
-                { 
-                    day: "Ngày 1", 
-                    activities: [
-                        "Xuất phát từ Hà Nội - Di chuyển bằng tàu hỏa hoặc xe khách",
-                        "Đến Sapa - Nhận phòng khách sạn",
-                        "Tham quan bản Cát Cát - Trải nghiệm cuộc sống của người H’Mông",
-                        "Thưởng thức đặc sản cá hồi, thắng cố Sapa",
-                        "Dạo quanh trung tâm thị trấn Sapa, check-in Nhà thờ đá",
-                        "Nghỉ đêm tại khách sạn 4 sao"
-                    ] 
-                },
-                { 
-                    day: "Ngày 2", 
-                    activities: [
-                        "Chinh phục đỉnh Fansipan - 'Nóc nhà Đông Dương'",
-                        "Trải nghiệm cáp treo Fansipan - ngắm toàn cảnh dãy Hoàng Liên Sơn",
-                        "Tham quan Thác Bạc - Suối Vàng",
-                        "Ăn trưa tại nhà hàng địa phương",
-                        "Khám phá chợ Sapa, mua sắm đồ thổ cẩm, đặc sản núi rừng",
-                        "Nghỉ đêm tại khách sạn"
-                    ] 
-                },
-                { 
-                    day: "Ngày 3", 
-                    activities: [
-                        "Tham quan đèo Ô Quy Hồ - Một trong tứ đại đỉnh đèo Việt Nam",
-                        "Chụp ảnh tại cầu kính Rồng Mây",
-                        "Thưởng thức café trên đỉnh đèo",
-                        "Trả phòng khách sạn - Lên xe trở về Hà Nội"
-                    ] 
-                }
-            ],
-            transport: "Tàu hỏa hoặc xe khách",
-            hotel: "Khách sạn 4 sao tại trung tâm thị trấn Sapa",
-            price: "4.200.000 VNĐ",
-            gallery: [
-                    "https://images.vietnamtourism.gov.vn/vn/images/2018/SaPa2.jpg",
-                    "https://scontent.iocvnpt.com/resources/portal//Images/LCI/kimphuong/khachsan/Lacasa%20sapa%20hotel/img_4570_cp-1-640x427_293128360.jpg",
-                    "https://dng.vn/images/joomlart/blog/6.jpg",
-                    "https://file.hstatic.net/1000115147/article/cpfoods-dac_san_lao_cai-8-1-2023_8f598b9e0c35466e97c2e5a30075f981.jpg"
-                ]
-            },
-            "ninh-binh": {
-            title: "Ninh Bình - Vịnh Hạ Long trên cạn",
-            image: "https://image.nhandan.vn/w800/Uploaded/2025/igpcvcvjntc8510/2023_02_08/trang-an-5882.jpg.webp",
-            description: "Ninh Bình là điểm đến nổi tiếng với cảnh quan thiên nhiên tuyệt đẹp, những dãy núi đá vôi trùng điệp, hang động kỳ bí và các di tích lịch sử lâu đời.",
-            itinerary: [
-                { 
-                    day: "Ngày 1", 
-                    activities: [
-                        "Xuất phát từ Hà Nội - Di chuyển bằng xe du lịch",
-                        "Tham quan chùa Bái Đính - Ngôi chùa lớn nhất Đông Nam Á",
-                        "Thưởng thức đặc sản dê núi Ninh Bình",
-                        "Khám phá khu du lịch Tràng An - Lênh đênh trên thuyền ngắm núi non hùng vĩ",
-                        "Tham quan Hang Sáng, Hang Tối, Hang Nấu Rượu",
-                        "Nghỉ đêm tại khách sạn 4 sao"
-                    ] 
-                },
-                { 
-                    day: "Ngày 2", 
-                    activities: [
-                        "Tham quan Tam Cốc - Bích Động, ngắm cảnh sắc thiên nhiên tuyệt đẹp",
-                        "Trải nghiệm đạp xe quanh làng quê yên bình",
-                        "Thưởng thức cơm cháy Ninh Bình - Đặc sản địa phương",
-                        "Tham quan cố đô Hoa Lư, tìm hiểu lịch sử triều đại Đinh - Lê",
-                        "Chụp ảnh tại Hang Múa - Ngắm toàn cảnh Ninh Bình từ trên cao"
-                    ] 
-                },
-                { 
-                    day: "Ngày 3", 
-                    activities: [
-                        "Khám phá Vườn Quốc gia Cúc Phương - Rừng nguyên sinh lâu đời",
-                        "Tham quan Động Người Xưa, Cây Chò Ngàn Năm",
-                        "Ăn trưa với món cá nướng sông Hoàng Long",
-                        "Trả phòng khách sạn - Lên xe trở về Hà Nội"
-                    ] 
-                }
-            ],
-            transport: "Xe du lịch từ Hà Nội",
-            hotel: "Khách sạn 4 sao tại trung tâm Ninh Bình",
-            price: "3.500.000 VNĐ",
-            gallery: [
-                    "https://ezcloud.vn/wp-content/uploads/2023/07/homestay-ninh-binh-view-dep.webp",
-                    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/166397400.jpg?k=f350e4f97a2961c069262831d1759bee18517b75cbd9ceed71c96912560735b2&o=&hp=1",
-                    "https://media.tacdn.com/media/attractions-splice-spp-674x446/09/f1/f3/6b.jpg",
-                    "https://hanoiexploretravel.com/wp-content/uploads/2020/07/rice-crust-in-ninh-binh.jpg"
-                ]
-            },
-            "ha-noi": {
-            title: "Hà Nội - Thủ đô nghìn năm văn hiến",
-            image: "https://vcdn1-dulich.vnecdn.net/2022/05/12/Hanoi2-1652338755-3632-1652338809.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=NxMN93PTvOTnHNryMx3xJw",
-            description: "Hà Nội - Trái tim của Việt Nam, nổi tiếng với 36 phố phường, hồ Hoàn Kiếm, văn hóa lâu đời và ẩm thực đặc sắc.",
-            itinerary: [
-                { 
-                    day: "Ngày 1", 
-                    activities: [
-                        "Xuất phát đến Hà Nội - Nhận phòng khách sạn",
-                        "Tham quan Lăng Chủ tịch Hồ Chí Minh, Phủ Chủ tịch",
-                        "Tham quan Chùa Một Cột - Biểu tượng văn hóa Hà Nội",
-                        "Ăn trưa với phở Hà Nội chính gốc",
-                        "Dạo quanh hồ Hoàn Kiếm, thăm đền Ngọc Sơn",
-                        "Khám phá phố cổ Hà Nội - 36 phố phường",
-                        "Thưởng thức ẩm thực đường phố: bún chả, bánh cuốn, cà phê trứng"
-                    ] 
-                },
-                { 
-                    day: "Ngày 2", 
-                    activities: [
-                        "Tham quan Văn Miếu - Quốc Tử Giám",
-                        "Khám phá Bảo tàng Dân tộc học Việt Nam",
-                        "Thưởng thức bún đậu mắm tôm - đặc sản Hà Nội",
-                        "Dạo quanh Hồ Tây, check-in chùa Trấn Quốc",
-                        "Xem múa rối nước tại Nhà hát Thăng Long",
-                        "Mua sắm tại chợ Đồng Xuân"
-                    ] 
-                },
-                { 
-                    day: "Ngày 3", 
-                    activities: [
-                        "Tham quan Hoàng Thành Thăng Long",
-                        "Khám phá cầu Long Biên - Biểu tượng lịch sử Hà Nội",
-                        "Mua đặc sản cốm làng Vòng, ô mai Hàng Đường",
-                        "Thưởng thức bữa trưa với chả cá Lã Vọng",
-                        "Trả phòng khách sạn - Kết thúc tour"
-                    ] 
-                }
-            ],
-            transport: "Máy bay hoặc xe khách",
-            hotel: "Khách sạn 4 sao tại trung tâm Hà Nội",
-            price: "4.000.000 VNĐ",
-            gallery: [
-                "https://smiletravel.com.vn/wp-content/uploads/2023/05/Ho-Guomm-12.jpg",
-                "https://cf.bstatic.com/xdata/images/hotel/max1024x768/234762091.jpg?k=45540c95d66e3278d194a4a35994dd3491811d644b2a6cb3e3da1b187dfa7d06&o=&hp=1",
-                "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/28/8e/f1/76/caption.jpg?w=500&h=400&s=1",
-                "https://sunhouse.com.vn/pic/news/images/image-20211229181528-1.jpeg"
-                ]
-            },
-            "da-lat": {
-                title: "Đà Lạt - Thành phố ngàn hoa",
-                image: "https://image.nhandan.vn/w800/Uploaded/2025/vjrejwkjx/2023_12_04/11-trung-tam-tp-da-lat-1252.jpg.webp",
-                description: "Đà Lạt nổi tiếng với khí hậu mát mẻ, thiên nhiên thơ mộng, những đồi thông xanh ngát và nền ẩm thực độc đáo.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Khởi hành từ TP.HCM/Hà Nội - Di chuyển bằng xe hoặc máy bay",
-                            "Đến Đà Lạt - Nhận phòng khách sạn",
-                            "Tham quan Quảng Trường Lâm Viên - Check-in biểu tượng hoa dã quỳ",
-                            "Khám phá Hồ Xuân Hương - Đi dạo & ngắm cảnh",
-                            "Dùng bữa tối với lẩu gà lá é - Đặc sản Đà Lạt",
-                            "Dạo chợ đêm Đà Lạt, thưởng thức khoai nướng & sữa đậu nành"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Tham quan Thung Lũng Tình Yêu",
-                            "Khám phá Đồi chè Cầu Đất - Trải nghiệm check-in tuyệt đẹp",
-                            "Thưởng thức cà phê tại một quán trên đồi",
-                            "Tham quan Nhà thờ Con Gà - Công trình kiến trúc cổ kính",
-                            "Khám phá Langbiang - Check-in trên đỉnh núi cao nhất Đà Lạt",
-                            "Ăn tối với buffet rau Đà Lạt"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 3", 
-                        activities: [
-                            "Dạo quanh Thiền Viện Trúc Lâm & Hồ Tuyền Lâm",
-                            "Tham quan Thác Datanla - Trải nghiệm máng trượt siêu tốc",
-                            "Mua sắm đặc sản Đà Lạt: dâu tây, hồng sấy, atiso",
-                            "Khởi hành về lại TP.HCM/Hà Nội"
-                        ] 
-                    }
-                ],
-                transport: "Xe du lịch hoặc máy bay",
-                hotel: "Khách sạn 4 sao tại trung tâm Đà Lạt",
-                price: "3.900.000 VNĐ",
-                gallery: [
-                    "https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2018/06/doi-che-cau-dat-da-lat.jpg",
-                    "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2b/ab/71/f0/caption.jpg?w=900&h=-1&s=1",
-                    "https://previews.123rf.com/images/paktaotik2/paktaotik21902/paktaotik2190200159/116336513-swan-boats-on-the-than-tho-lake-in-dalat-lam-dong-province-vietnam-enjoyed-strolls-as-the-area-s.jpg",
-                    "https://static.vinwonders.com/production/banh-uot-long-ga-da-lat-1.jpg"
-                ]
-            },
-            "phu-quoc": {
-                title: "Phú Quốc - Đảo ngọc thiên đường",
-                image: "https://media.vietnamarchi.vn/upload/userfiles/images/tin-tuc/240301/image003.jpg",
-                description: "Phú Quốc là hòn đảo lớn nhất Việt Nam, nổi tiếng với bãi biển tuyệt đẹp, khu nghỉ dưỡng cao cấp và các hoạt động vui chơi giải trí phong phú.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Khởi hành từ TP.HCM/Hà Nội - Di chuyển bằng máy bay",
-                            "Đến Phú Quốc - Nhận phòng khách sạn",
-                            "Tắm biển Bãi Sao - Một trong những bãi biển đẹp nhất Phú Quốc",
-                            "Khám phá Sunset Sanato - Check-in hoàng hôn tuyệt đẹp",
-                            "Dùng bữa tối với hải sản tươi sống",
-                            "Tham quan chợ đêm Phú Quốc"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Tham quan VinWonders & Safari Phú Quốc",
-                            "Trải nghiệm cáp treo Hòn Thơm - Ngắm cảnh biển từ trên cao",
-                            "Khám phá làng chài Hàm Ninh - Thưởng thức ghẹ hấp tươi ngon",
-                            "Tắm biển & thư giãn tại resort",
-                            "Thưởng thức đặc sản gỏi cá trích & rượu sim Phú Quốc"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 3", 
-                        activities: [
-                            "Tham quan Nhà thùng nước mắm Phú Quốc",
-                            "Mua sắm đặc sản: ngọc trai, hồ tiêu, rượu sim",
-                            "Dạo quanh Dinh Cậu - Biểu tượng linh thiêng của đảo",
-                            "Khởi hành về lại TP.HCM/Hà Nội"
-                        ] 
-                    }
-                ],
-                transport: "Máy bay + Xe du lịch",
-                hotel: "Resort 5 sao tại bãi Trường, Phú Quốc",
-                price: "6.500.000 VNĐ",
-                gallery: [
-                    "https://gcs.tripi.vn/public-tripi/tripi-feed/img/472188yro/phu-quoc-thuoc-tinh-kien-giang-nam-o-mien-nam-cua-viet-nam-va-noi-tieng-voi-bai-bien-dep-va-nganh-cong-nghiep-du-lich-phat-trien",
-                    "https://ohdidi.vn/uploads/static/HOMES/Kien%20giang/m-hotel-phu-quoc/m-hotel-01.jpg",
-                    "https://static.wixstatic.com/media/cae13e_f742730bd81c4831b1f732d0906ced28~mv2.jpg/v1/crop/x_385,y_0,w_805,h_616/fill/w_640,h_490,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/cae13e_f742730bd81c4831b1f732d0906ced28~mv2.jpg",
-                    "https://ik.imagekit.io/tvlk/blog/2022/05/dac-san-kien-giang-7.jpg?tr=q-70,c-at_max,w-500,h-300,dpr-2"
-                ]
-            },
-            "can-tho": {
-                title: "Cần Thơ - Vùng đất Tây Đô",
-                image: "https://ik.imagekit.io/tvlk/blog/2021/11/dia-diem-du-lich-can-tho-cover.jpg",
-                description: "Cần Thơ là thủ phủ miền Tây với chợ nổi Cái Răng, những vườn trái cây trĩu quả và nền văn hóa sông nước đặc sắc.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Khởi hành từ TP.HCM - Di chuyển bằng xe du lịch",
-                            "Đến Cần Thơ - Nhận phòng khách sạn",
-                            "Tham quan Nhà cổ Bình Thủy - Kiến trúc độc đáo",
-                            "Đi dạo Bến Ninh Kiều - Ngắm hoàng hôn trên sông Hậu",
-                            "Dùng bữa tối với đặc sản lẩu mắm miền Tây",
-                            "Khám phá chợ đêm Tây Đô"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Tham quan chợ nổi Cái Răng - Trải nghiệm văn hóa mua bán trên sông",
-                            "Thưởng thức hủ tiếu miền Tây ngay trên ghe thuyền",
-                            "Tham quan vườn trái cây Mỹ Khánh - Hái và thưởng thức trái cây tươi",
-                            "Khám phá Thiền viện Trúc Lâm Phương Nam",
-                            "Ăn trưa với cá lóc nướng trui - Đặc sản Cần Thơ",
-                            "Dạo quanh cầu Cần Thơ về đêm"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 3", 
-                        activities: [
-                            "Tham quan Làng Du Lịch Ông Đề - Trải nghiệm chèo xuồng ba lá",
-                            "Mua sắm đặc sản Cần Thơ: bánh tét lá cẩm, kẹo dừa",
-                            "Ăn trưa và khởi hành về lại TP.HCM"
-                        ] 
-                    }
-                ],
-                transport: "Xe du lịch từ TP.HCM",
-                hotel: "Khách sạn 4 sao ven sông Hậu",
-                price: "3.200.000 VNĐ",
-                gallery: [
-                    "https://dulichviet.com.vn/images/bandidau/du-lich-can-tho-mien-tay-song-nuoc-voi-nhung-diem-den-thu-vi.jpg",
-                    "https://images.trvl-media.com/lodging/101000000/100060000/100054700/100054601/e34f941d.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill",
-                    "https://canthorivertour.com/upload/admin/maphome.jpg",
-                    "https://www.tnktravel.com/wp-content/uploads/2023/05/M%C6%B0%E1%BB%9Di-Xi%E1%BB%81m-Pancakes-Can-Tho.jpeg"
-                ]
-            },
-            "mui-ne": {
-                title: "Mũi Né - Thiên đường biển Bình Thuận",
-                image: "https://vcdn1-dulich.vnecdn.net/2022/04/03/MuiNeVNExpress3075891542181990-8691-6492-1648974014.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=E-1Y-hG3RxXRjUXHFvKQ6Q",
-                description: "Mũi Né là điểm đến tuyệt vời với bờ biển dài, cát trắng, đồi cát đỏ và nền ẩm thực biển phong phú.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Khởi hành từ TP.HCM - Di chuyển bằng xe du lịch",
-                            "Đến Mũi Né - Nhận phòng khách sạn",
-                            "Tham quan Làng Chài Mũi Né - Trải nghiệm cuộc sống ngư dân",
-                            "Tắm biển tại bãi biển Hòn Rơm",
-                            "Ăn tối hải sản tại nhà hàng ven biển",
-                            "Dạo phố đi bộ Nguyễn Đình Chiểu"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Tham quan Đồi Cát Bay - Trải nghiệm trượt cát thú vị",
-                            "Khám phá Suối Tiên - Dòng suối nước đỏ độc đáo",
-                            "Ăn trưa với lẩu thả đặc sản Bình Thuận",
-                            "Tham quan Tháp Chàm Poshanu - Kiến trúc Chăm cổ kính",
-                            "Ngắm hoàng hôn trên Bàu Trắng",
-                            "Nghỉ ngơi tại resort 4 sao ven biển"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 3", 
-                        activities: [
-                            "Dạo biển buổi sáng, ngắm bình minh",
-                            "Mua sắm đặc sản: nước mắm Phan Thiết, hải sản khô",
-                            "Ăn trưa và khởi hành về lại TP.HCM"
-                        ] 
-                    }
-                ],
-                transport: "Xe du lịch từ TP.HCM",
-                hotel: "Resort 4 sao ven biển Mũi Né",
-                price: "3.500.000 VNĐ",
-                gallery: [
-                    "https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2018/02/anh21.png",
-                    "https://cf.bstatic.com/xdata/images/hotel/max1024x768/500463821.jpg?k=69b78b0a1e5c0e89c83da7e4f2045217dfd5b710f56140c852c07cc4b2949c69&o=&hp=1",
-                    "https://bizweb.dktcdn.net/thumb/grande/100/342/038/products/lang-chai-mui-ne.jpg?v=1575628231163",
-                    "https://vietnam.travel/sites/default/files/inline-images/su-kien-the-lost-recipes-2.png"
-                ]
-            },
-            "vung-tau": {
-                title: "Vũng Tàu - Thành phố biển xinh đẹp",
-                image: "https://bariavungtautourism.com.vn/wp-content/uploads/2023/12/kinh-nghiem-du-lich-vung-tau-1.jpg",
-                description: "Vũng Tàu là điểm đến quen thuộc với biển xanh, cát trắng, ngọn hải đăng nổi tiếng và những món ăn hải sản hấp dẫn.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Khởi hành từ TP.HCM - Di chuyển bằng xe du lịch",
-                            "Đến Vũng Tàu - Nhận phòng khách sạn",
-                            "Tham quan Tượng Chúa Kitô trên đỉnh núi Nhỏ",
-                            "Tắm biển tại Bãi Sau",
-                            "Thưởng thức hải sản tươi sống tại nhà hàng ven biển",
-                            "Dạo phố đêm Vũng Tàu - Thưởng thức bánh khọt đặc sản"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Tham quan Hải đăng Vũng Tàu - Check-in toàn cảnh thành phố",
-                            "Khám phá Khu du lịch Hồ Mây Park - Trải nghiệm cáp treo",
-                            "Ăn trưa với lẩu cá đuối nổi tiếng",
-                            "Tham quan Bạch Dinh - Công trình kiến trúc thời Pháp",
-                            "Dạo biển và mua sắm đặc sản tại chợ Xóm Lưới",
-                            "Nghỉ ngơi tại resort ven biển"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 3", 
-                        activities: [
-                            "Tham quan Đồi Con Heo - Ngắm cảnh bình minh tuyệt đẹp",
-                            "Tắm biển sáng sớm tại Bãi Trước",
-                            "Mua sắm đặc sản: bánh bông lan trứng muối, khô mực",
-                            "Ăn trưa và khởi hành về lại TP.HCM"
-                        ] 
-                    }
-                ],
-                transport: "Xe du lịch từ TP.HCM",
-                hotel: "Khách sạn 4 sao gần Bãi Sau, Vũng Tàu",
-                price: "3.800.000 VNĐ",
-                gallery: [
-                    "https://sodl.baria-vungtau.gov.vn/portal/widget/widget_133366762102229738.jpg",
-                    "https://salatour.com/wp-content/uploads/2022/01/khac-san-vung-tau.png",
-                    "https://vcdn1-english.vnecdn.net/2021/05/21/20200617121643img6910-16215654-2750-6319-1621565586.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=0bXk0OmYDVGFFwSyMN1bwg",
-                    "https://en-ittpa.baria-vungtau.gov.vn/portal/editor/images/trang2612.jpg"
-                ]
-            },
-            "con-dao": {
-                title: "Côn Đảo - Thiên đường hoang sơ",
-                image: "https://baria-vungtau.dcs.vn/portal/editor/images/Anh%20Bai%20Viet/2024/72-1684551104-92955090-2798049513642425-7351022881440006144-n.jpg",
-                description: "Côn Đảo là một trong những điểm đến hoang sơ và đẹp nhất Việt Nam, nổi bật với bãi biển trong xanh, thiên nhiên nguyên sơ và di tích lịch sử quan trọng.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Khởi hành từ TP.HCM - Di chuyển bằng máy bay hoặc tàu cao tốc",
-                            "Đến Côn Đảo - Nhận phòng khách sạn",
-                            "Tham quan Nhà tù Côn Đảo - Tìm hiểu lịch sử",
-                            "Viếng mộ chị Võ Thị Sáu tại Nghĩa trang Hàng Dương",
-                            "Tắm biển tại Bãi Đầm Trầu - Bãi biển đẹp nhất Côn Đảo",
-                            "Ăn tối hải sản và nghỉ ngơi tại khách sạn"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Khám phá Hòn Bảy Cạnh - Lặn biển ngắm san hô",
-                            "Tham quan rừng nguyên sinh và trải nghiệm trekking",
-                            "Ăn trưa với đặc sản Côn Đảo",
-                            "Tham quan Miếu bà Phi Yến - Công trình văn hóa tín ngưỡng",
-                            "Thưởng thức hải sản tại nhà hàng ven biển",
-                            "Ngắm hoàng hôn tại Mũi Cá Mập"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 3", 
-                        activities: [
-                            "Dạo biển buổi sáng tại Bãi Nhát",
-                            "Mua sắm đặc sản: hải sản khô, mứt hạt bàng",
-                            "Ăn trưa và khởi hành về lại TP.HCM"
-                        ] 
-                    }
-                ],
-                transport: "Máy bay hoặc tàu cao tốc",
-                hotel: "Resort 4 sao ven biển Côn Đảo",
-                price: "4.500.000 VNĐ",
-                gallery: [
-                    "https://condao.com.vn/uploads/news/2023_03/toan-canh-thi-tran-con-dao_1.jpg",
-                    "https://eholiday.vn/wp-content/uploads/2023/09/Orson-Resort-Con-Dao-executive-deluxe.jpg",
-                    "https://cms.vietnamcoracle.com/wp-content/uploads/2024/04/20240409_064823-scaled.jpg",
-                    "https://khamphadisan.com.vn/wp-content/uploads/2017/02/tom-hum-con-dao.jpg"
-                ]
-            },
-            "ba-na-hills": {
-                title: "Bà Nà Hills - Thiên đường nghỉ dưỡng",
-                image: "https://banahills.sunworld.vn/wp-content/uploads/2024/04/DJI_0004-1-scaled.jpg",
-                description: "Bà Nà Hills là khu du lịch nổi tiếng với cảnh sắc tuyệt đẹp, khí hậu mát mẻ quanh năm và những công trình kiến trúc ấn tượng như Cầu Vàng.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Khởi hành từ Đà Nẵng - Di chuyển bằng xe du lịch",
-                            "Đến Bà Nà Hills - Đi cáp treo dài nhất thế giới",
-                            "Tham quan Cầu Vàng - Check-in với đôi bàn tay khổng lồ",
-                            "Khám phá khu làng Pháp cổ kính",
-                            "Ăn trưa buffet tại nhà hàng trên đỉnh Bà Nà",
-                            "Trải nghiệm khu vui chơi Fantasy Park",
-                            "Thưởng thức trà chiều trên đỉnh núi",
-                            "Nghỉ đêm tại khách sạn Mercure Bà Nà Hills"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Ngắm bình minh trên Bà Nà Hills",
-                            "Tham quan chùa Linh Ứng - Tượng Phật cao 27m",
-                            "Khám phá Vườn Hoa Le Jardin D’Amour",
-                            "Trải nghiệm tàu hỏa leo núi",
-                            "Thưởng thức bữa trưa tại nhà hàng ven núi",
-                            "Tự do tham quan và chụp ảnh",
-                            "Khởi hành về lại Đà Nẵng"
-                        ] 
-                    }
-                ],
-                transport: "Xe du lịch từ Đà Nẵng",
-                hotel: "Khách sạn Mercure Bà Nà Hills",
-                price: "4.200.000 VNĐ",
-                gallery: [
-                    "https://cdn3.ivivu.com/2024/04/sun-world-ba-na-hills-ivivu45.jpg",
-                    "https://tourbanahills.vn/wp-content/uploads/2019/05/phong-khach-san-ba-na-hills.jpg",
-                    "https://bizweb.dktcdn.net/thumb/1024x1024/100/467/049/products/rung-dua-7-mau-2.jpg?v=1687149762027",
-                    "https://tourbana.vn/uploads/11-2019/gia-ve-buffet-ba-na-hill2.jpg"
-                ]
-            },
-            "thac-ban-gioc": {
-                title: "Thác Bản Giốc - Tuyệt tác thiên nhiên",
-                image: "https://sakos.vn/wp-content/uploads/2023/10/bvcl.1cdn.vn-2023-03-01-_anh-1-thac-ban-doc-2.jpg",
-                description: "Thác Bản Giốc là một trong những thác nước đẹp nhất thế giới, nổi bật với làn nước trong xanh, cảnh quan hùng vĩ và thiên nhiên hoang sơ.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Khởi hành từ Hà Nội - Di chuyển bằng xe du lịch",
-                            "Dừng chân tại Hồ Ba Bể - Thưởng ngoạn phong cảnh thiên nhiên",
-                            "Ăn trưa tại nhà hàng địa phương",
-                            "Đến Cao Bằng - Nhận phòng khách sạn",
-                            "Tự do tham quan thành phố Cao Bằng",
-                            "Ăn tối với đặc sản địa phương"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Khởi hành đến Thác Bản Giốc - Check-in tại thác nước lớn nhất Đông Nam Á",
-                            "Tham quan Động Ngườm Ngao - Hang động kỳ vĩ của Cao Bằng",
-                            "Ăn trưa tại nhà hàng ven thác",
-                            "Khám phá Chùa Phật Tích Trúc Lâm Bản Giốc",
-                            "Dạo thuyền trên sông Quây Sơn - Ngắm toàn cảnh thác từ xa",
-                            "Nghỉ đêm tại khách sạn gần thác"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 3", 
-                        activities: [
-                            "Dậy sớm ngắm bình minh trên thác",
-                            "Mua sắm đặc sản Cao Bằng: hạt dẻ Trùng Khánh, bánh khảo",
-                            "Ăn trưa và khởi hành về lại Hà Nội"
-                        ] 
-                    }
-                ],
-                transport: "Xe du lịch từ Hà Nội",
-                hotel: "Khách sạn 4 sao gần Thác Bản Giốc",
-                price: "3.800.000 VNĐ",
-                gallery: [
-                    "https://vj-prod-website-cms.s3.ap-southeast-1.amazonaws.com/w1-1715749803275.jpg",
-                    "https://scontent.iocvnpt.com/resources/portal/Images/CBG/truongdai/Hotel/Kim%20Dong%20Hotel/16.jpg_636596332133891797.jpg",
-                    "https://sinhtour.vn/wp-content/uploads/2021/09/tour-cao-bang-2-ngay-1-dem-9.webp",
-                    "https://i.vietgiaitri.com/2024/5/19/len-non-nuoc-cao-bang-ngam-ve-dep-doc-nhat-vo-nhi-cua-nui-mat-than-72d-7167195.jpg"
-                ]
-            },
-            "phong-nha-ke-bang": {
-                title: "Vườn quốc gia Phong Nha - Kẻ Bàng, Quảng Bình",
-                image: "https://nld.mediacdn.vn/291774122806476800/2024/11/18/dong-phong-nha-ke-bang-dep-den-choang-ngop-17319168370561406931222.jpg",
-                description: "Phong Nha - Kẻ Bàng là di sản thiên nhiên thế giới với hệ thống hang động kỳ vĩ, rừng nguyên sinh và cảnh quan thiên nhiên tuyệt đẹp.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Khởi hành từ Hà Nội - Di chuyển bằng xe du lịch hoặc máy bay",
-                            "Đến Quảng Bình - Nhận phòng khách sạn",
-                            "Tham quan Động Phong Nha - Hang động nước dài nhất Đông Nam Á",
-                            "Thưởng thức ẩm thực Quảng Bình",
-                            "Dạo chơi quanh trung tâm Đồng Hới",
-                            "Nghỉ đêm tại khách sạn 4 sao"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Khám phá Động Thiên Đường - Hang động đẹp nhất thế giới",
-                            "Trải nghiệm zipline và chèo kayak trên sông Chày - Hang Tối",
-                            "Ăn trưa tại nhà hàng địa phương",
-                            "Tham quan suối Moọc - Thư giãn giữa thiên nhiên",
-                            "Thưởng thức hải sản tươi ngon ven biển",
-                            "Tự do nghỉ ngơi và khám phá Đồng Hới về đêm"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 3", 
-                        activities: [
-                            "Dậy sớm ngắm bình minh tại biển Nhật Lệ",
-                            "Tham quan tượng đài Mẹ Suốt",
-                            "Mua sắm đặc sản Quảng Bình: bánh lọc, khoai deo",
-                            "Ăn trưa và khởi hành về lại Hà Nội"
-                        ] 
-                    }
-                ],
-                transport: "Xe du lịch hoặc máy bay",
-                hotel: "Khách sạn 4 sao tại trung tâm Đồng Hới",
-                price: "4.500.000 VNĐ",
-                gallery: [
-                    "https://mia.vn/media/uploads/blog-du-lich/vuon-quoc-gia-phong-nha-ke-bang-quang-binh-va-ve-dep-xung-tam-di-san-the-gioi-2-1653437278.jpg",
-                    "https://q-xx.bstatic.com/xdata/images/hotel/max500/584793186.jpg?k=3c3d947e8079fbaab74a510e2d0ac0aae65e385f4fbec32870b344e4208d7d8d&o=",
-                    "https://baoquangbinh.vn/dataimages/202409/original/images792386_PN_1.jpg",
-                    "https://qbtravel.vn/wp-content/uploads/2021/08/dac-san-phong-nha-ca-tram-song-son-quang-binh.jpg"
-                ]
-            },
-            "vuon-quoc-gia-cat-tien": {
-                title: "Vườn quốc gia Cát Tiên, Đồng Nai",
-                image: "https://vcdn1-dulich.vnecdn.net/2024/08/06/CT-8620-1722936588.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=99voZV8ZwUhzpuyPS6cP5g",
-                description: "Vườn quốc gia Cát Tiên là khu bảo tồn thiên nhiên nổi tiếng với hệ động thực vật phong phú, rừng nguyên sinh và các hoạt động khám phá thiên nhiên thú vị.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Khởi hành từ TP.HCM - Di chuyển bằng xe du lịch",
-                            "Đến Vườn quốc gia Cát Tiên - Nhận phòng nghỉ",
-                            "Tham quan Trung tâm Cứu hộ Gấu và Linh trưởng",
-                            "Ăn trưa tại nhà hàng trong rừng",
-                            "Khám phá rừng nguyên sinh bằng xe đạp hoặc xe jeep",
-                            "Tự do nghỉ ngơi và thư giãn giữa thiên nhiên",
-                            "Ăn tối và trải nghiệm xem động vật hoang dã ban đêm"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Dậy sớm ngắm bình minh và nghe tiếng chim hót",
-                            "Tham quan Bàu Sấu - Khu bảo tồn cá sấu tự nhiên",
-                            "Ăn trưa tại nhà hàng địa phương",
-                            "Khám phá Thác Trời và Thác Dựng",
-                            "Thưởng thức ẩm thực dân dã Đồng Nai",
-                            "Nghỉ đêm tại khu nghỉ dưỡng sinh thái"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 3", 
-                        activities: [
-                            "Tham quan cây Tung cổ thụ 500 năm tuổi",
-                            "Chèo thuyền trên sông Đồng Nai - Ngắm cảnh thiên nhiên",
-                            "Ăn trưa và khởi hành về lại TP.HCM"
-                        ] 
-                    }
-                ],
-                transport: "Xe du lịch từ TP.HCM",
-                hotel: "Khu nghỉ dưỡng sinh thái trong Vườn quốc gia Cát Tiên",
-                price: "3.600.000 VNĐ",
-                gallery: [
-                    "https://afamilycdn.com/150157425591193600/2023/10/29/nct-2229-1658040528-1698599856871379016956.jpg",
-                    "https://q-xx.bstatic.com/xdata/images/hotel/max500/463000481.jpg?k=6d9a19a6e23da2c8a9b90b3d102f71fbb8bf422337df09ac221858aca5f9b1c1&o=",
-                    "https://orchardresort.vn/wp-content/uploads/2019/12/bau-sau-2.jpg",
-                    "https://www.yong.vn/Content/images/foods/canh-luc-binh-vuon-quoc-gia-nam-cat-tien.jpg"
-                ]
-            },
-            "vuon-quoc-gia-ba-vi": {
-                title: "Vườn quốc gia Ba Vì, Hà Nội",
-                image: "https://vuonquocgiabavi.com.vn/wp-content/uploads/2021/06/z2557528690355_d0480c344186d5f13348b3373ffb13fb-scaled.jpg",
-                description: "Vườn quốc gia Ba Vì là địa điểm lý tưởng để khám phá thiên nhiên hoang sơ, tận hưởng không khí trong lành và tham gia các hoạt động leo núi, trekking.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Khởi hành từ Hà Nội - Di chuyển bằng xe du lịch",
-                            "Đến Vườn quốc gia Ba Vì - Nhận phòng tại khu nghỉ dưỡng",
-                            "Tham quan Nhà thờ cổ Ba Vì - Công trình kiến trúc độc đáo",
-                            "Leo núi khám phá Đỉnh Tản Viên - Ngắm toàn cảnh từ trên cao",
-                            "Ăn trưa tại nhà hàng sinh thái",
-                            "Dạo bộ trong rừng thông và tham quan các con suối tự nhiên",
-                            "Tự do nghỉ ngơi và thư giãn giữa thiên nhiên"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Dậy sớm ngắm bình minh trên núi",
-                            "Khám phá Đền Thượng - Khu di tích tâm linh nổi tiếng",
-                            "Thưởng thức đặc sản Ba Vì: sữa tươi, bánh sữa",
-                            "Tham quan Khu du lịch Ao Vua hoặc Khoang Xanh - Suối Tiên",
-                            "Ăn trưa và khởi hành về lại Hà Nội"
-                        ] 
-                    }
-                ],
-                transport: "Xe du lịch từ Hà Nội",
-                hotel: "Khu nghỉ dưỡng sinh thái tại Ba Vì",
-                price: "2.900.000 VNĐ",
-                gallery: [
-                    "https://wyndhamthanhthuy.vn/wp-content/uploads/2024/06/vuon-quoc-gia-ba-vi-2.jpg",
-                    "https://nhahangdungtien.com/upload_images/images/2024/02/25/GVV02886.jpg",
-                    "https://wyndham-thanhthuy.com/wp-content/uploads/2023/12/khu-du-lich-ao-vua-1.png",
-                    "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/09/13/vuon-quoc-gia-ba-vi-16-1101.jpg"
-                ]
-            },
-            "vuon-quoc-gia-ba-vi": {
-                title: "Vườn quốc gia Ba Vì, Hà Nội",
-                image: "https://cdn3.ivivu.com/2023/07/ba-vi-national-park.jpg",
-                description: "Vườn quốc gia Ba Vì là địa điểm lý tưởng để khám phá thiên nhiên hoang sơ, tận hưởng không khí trong lành và tham gia các hoạt động leo núi, trekking.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Khởi hành từ Hà Nội - Di chuyển bằng xe du lịch",
-                            "Đến Vườn quốc gia Ba Vì - Nhận phòng tại khu nghỉ dưỡng",
-                            "Tham quan Nhà thờ cổ Ba Vì - Công trình kiến trúc độc đáo",
-                            "Leo núi khám phá Đỉnh Tản Viên - Ngắm toàn cảnh từ trên cao",
-                            "Ăn trưa tại nhà hàng sinh thái",
-                            "Dạo bộ trong rừng thông và tham quan các con suối tự nhiên",
-                            "Tự do nghỉ ngơi và thư giãn giữa thiên nhiên"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Dậy sớm ngắm bình minh trên núi",
-                            "Khám phá Đền Thượng - Khu di tích tâm linh nổi tiếng",
-                            "Thưởng thức đặc sản Ba Vì: sữa tươi, bánh sữa",
-                            "Tham quan Khu du lịch Ao Vua hoặc Khoang Xanh - Suối Tiên",
-                            "Ăn trưa và khởi hành về lại Hà Nội"
-                        ] 
-                    }
-                ],
-                transport: "Xe du lịch từ Hà Nội",
-                hotel: "Khu nghỉ dưỡng sinh thái tại Ba Vì",
-                price: "2.900.000 VNĐ",
-                gallery: [
-                    "https://cdn3.ivivu.com/2023/07/ba-vi-forest.jpg",
-                    "https://cdn3.ivivu.com/2023/07/ba-vi-old-church.jpg",
-                    "https://cdn3.ivivu.com/2023/07/ba-vi-sunset.jpg",
-                    "https://cdn3.ivivu.com/2023/07/ba-vi-food.jpg"
-                ]
-            },
-            "dao-ly-son": {
-                title: "Đảo Lý Sơn, Quảng Ngãi",
-                image: "https://cdn.tgdd.vn/Files/2021/07/03/1365341/kinh-nghiem-du-lich-dao-ly-son-quang-ngai-an-gi-choi-gi-202201111237117341.jpeg",
-                description: "Đảo Lý Sơn là một trong những điểm đến hoang sơ tuyệt đẹp, nổi tiếng với bãi biển trong xanh, núi lửa cổ và đặc sản tỏi Lý Sơn.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Khởi hành từ Quảng Ngãi - Di chuyển bằng tàu cao tốc",
-                            "Đến Đảo Lý Sơn - Nhận phòng khách sạn",
-                            "Tham quan Cổng Tò Vò - Kiến trúc tự nhiên độc đáo",
-                            "Khám phá Chùa Hang - Ngôi chùa trong lòng núi",
-                            "Ăn trưa với hải sản tươi sống đặc sản Lý Sơn",
-                            "Tắm biển tại Bãi Sau - Nước trong vắt, cát trắng mịn",
-                            "Dạo chơi chợ đêm Lý Sơn - Thưởng thức đặc sản địa phương"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Dậy sớm ngắm bình minh trên đỉnh Thới Lới",
-                            "Tham quan Hang Câu - Nơi tuyệt vời để check-in",
-                            "Trải nghiệm đi thuyền ra Đảo Bé - Thiên đường biển xanh",
-                            "Ăn trưa với gỏi tỏi Lý Sơn - Món ăn đặc trưng của đảo",
-                            "Lặn ngắm san hô - Chiêm ngưỡng hệ sinh thái biển đa dạng",
-                            "Tham quan Hải Đăng Lý Sơn - Ngắm hoàng hôn từ trên cao",
-                            "Nghỉ ngơi tại khách sạn hoặc homestay ven biển"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 3", 
-                        activities: [
-                            "Thăm quan Đình Làng An Hải - Di tích lịch sử quan trọng",
-                            "Mua sắm đặc sản: tỏi Lý Sơn, rong biển, hải sản khô",
-                            "Ăn trưa và lên tàu trở về đất liền, kết thúc hành trình"
-                        ] 
-                    }
-                ],
-                transport: "Tàu cao tốc từ Quảng Ngãi",
-                hotel: "Khách sạn hoặc homestay ven biển trên đảo",
-                price: "4.000.000 VNĐ",
-                gallery: [
-                    "https://vcdn1-dulich.vnecdn.net/2022/05/31/Nui-lua-Gieng-Tien-9159-165061-9930-1364-1653965072.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=SOQCk5Y7QwRuWJV9epMqUg",
-                    "https://www.vietnambooking.com/wp-content/uploads/2020/11/khach-san-Muong-Thanh-Holiday-Ly-Son-Quang-Ngai-1.jpg",
-                    "https://admin.vov.gov.vn/UploadFolder/KhoTin/Images/UploadFolder/VOVVN/Images/sites/default/files/2024-02/cac_thuyen_dua_chuan_bi_xuat_phat.jpg",
-                    "https://suckhoedoisong.qltns.mediacdn.vn/324455921873985536/2023/3/29/photo-1679457310617-16794573109572020419589-1680058746838-16800587472071381977325.png"
-                ]
-            },
-            "dao-nam-du": {
-                title: "Đảo Nam Du, Kiên Giang",
-                image: "https://vcdn1-dulich.vnecdn.net/2024/07/02/NDT1-1785-1719909908.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=_DROJuNqUnJipbUpHCfVHQ",
-                description: "Đảo Nam Du là thiên đường biển đảo hoang sơ với làn nước trong xanh, những bãi biển tuyệt đẹp và hải sản phong phú.",
-                itinerary: [
-                    { 
-                        day: "Ngày 1", 
-                        activities: [
-                            "Khởi hành từ TP.HCM - Di chuyển đến Rạch Giá",
-                            "Lên tàu cao tốc ra Đảo Nam Du",
-                            "Tham quan Bãi Cây Mến - Bãi biển đẹp nhất Nam Du",
-                            "Ăn trưa tại nhà hàng ven biển",
-                            "Tự do tắm biển và tham gia lặn ngắm san hô",
-                            "Dạo chơi bến cảng Nam Du và thưởng thức hải sản"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 2", 
-                        activities: [
-                            "Chèo thuyền kayak trên biển",
-                            "Tham quan Hải Đăng Nam Du - Check-in toàn cảnh đảo",
-                            "Thưởng thức đặc sản cá xương xanh nướng",
-                            "Tham quan Hòn Ngang, Hòn Mấu - Những hòn đảo hoang sơ tuyệt đẹp",
-                            "Ăn tối với hải sản và BBQ bên bờ biển"
-                        ] 
-                    },
-                    { 
-                        day: "Ngày 3", 
-                        activities: [
-                            "Ngắm bình minh trên đảo",
-                            "Mua sắm hải sản khô đặc sản Nam Du",
-                            "Trả phòng khách sạn - Lên tàu về lại Rạch Giá",
-                            "Khởi hành về TP.HCM"
-                        ] 
-                    }
-                ],
-                transport: "Xe du lịch + Tàu cao tốc",
-                hotel: "Nhà nghỉ ven biển hoặc homestay tại Nam Du",
-                price: "3.500.000 VNĐ",
-                gallery: [
-                    "https://vietqueentravel.vn/upload/2018-12-06/du-lich-dao-nam-du-6.jpg",
-                    "https://vcdn1-dulich.vnecdn.net/2024/07/01/ND2-mobile-5863-1719832135.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=blU7fIdTpiIpwj9NvGxB7w",
-                    "https://moitruongdulich.vn/wp-content/uploads/2025/02/13.2.-Dao-choi-kham-pha-quan-dao-Nam-Du-2-1024x576.jpg",
-                    "https://luhanhvietnam.com.vn/du-lich/vnt_upload/news/08_2022/mon-hai-san-ngon-o-nam-du-nhum.jpg"
-                ]
-            }
-        };
-
 
         document.addEventListener("DOMContentLoaded", () => {
-    // Lấy ID từ URL
-    const params = new URLSearchParams(window.location.search);
-    const tourId = params.get("id");
+            // Lấy ID từ URL
+            const params = new URLSearchParams(window.location.search);
+            const tourId = params.get("id");
 
-    let tourData = null;
+            let tourData = null;
 
-    // Lấy chi tiết tour từ API
-    async function fetchTourDetails() {
-        try {
-            const response = await fetch(`http://localhost:5500/tour/${tourId}`);
-            if (!response.ok) {
-                throw new Error("Lỗi khi lấy chi tiết tour");
+            // Lấy chi tiết tour từ API
+            async function fetchTourDetails() {
+                try {
+                    const response = await fetch(`http://localhost:5500/tour/${tourId}`);
+                    if (!response.ok) {
+                        throw new Error("Lỗi khi lấy chi tiết tour");
+                    }
+                    tourData = await response.json();
+                    console.log("Dữ liệu tour từ API:", tourData);
+                    displayTourDetails(tourData);
+                } catch (error) {
+                    console.error("Lỗi:", error.message);
+                    document.querySelector(".tour-details").innerHTML = "<p>Không tìm thấy tour này!</p>";
+                }
             }
-            tourData = await response.json();
-            console.log("Dữ liệu tour từ API:", tourData);
-            displayTourDetails(tourData);
-        } catch (error) {
-            console.error("Lỗi:", error.message);
-            document.querySelector(".tour-details").innerHTML = "<p>Không tìm thấy tour này!</p>";
-        }
-    }
 
-    // Hiển thị chi tiết tour
-    function displayTourDetails(tour) {
-        // Cập nhật tiêu đề
-        document.getElementById("tour-title").textContent = tour.title;
+            // Hiển thị chi tiết tour
+            function displayTourDetails(tour) {
+                // Cập nhật tiêu đề
+                document.getElementById("tour-title").textContent = tour.title;
 
-        // Cập nhật ảnh chính
-        const tourImage = document.getElementById("tour-image");
-        if (tour.image && isValidURL(tour.image)) {
-            tourImage.setAttribute('data-src', tour.image);
-            tourImage.classList.add("lazyload");
-        } else {
-            tourImage.style.display = "none"; // Không hiển thị nếu URL không hợp lệ
-            console.error(`Không tải được ảnh chính: ${tour.image}`);
-        }
+                // Cập nhật ảnh chính
+                const tourImage = document.getElementById("tour-image");
+                if (tour.image && isValidURL(tour.image)) {
+                    tourImage.setAttribute('data-src', tour.image);
+                    tourImage.classList.add("lazyload");
+                } else {
+                    tourImage.style.display = "none"; // Không hiển thị nếu URL không hợp lệ
+                    console.error(`Không tải được ảnh chính: ${tour.image}`);
+                }
 
-        // Cập nhật mô tả
-        document.getElementById("tour-description").textContent = tour.description || "Không có mô tả.";
+                // Cập nhật mô tả
+                document.getElementById("tour-description").textContent = tour.description || "Không có mô tả.";
 
-        // Cập nhật giá
-        document.getElementById("tour-price").textContent = `Giá: ${parseInt(tour.price.replace(/\D/g, '')).toLocaleString('vi-VN')} VNĐ`;
+                // Cập nhật giá
+                document.getElementById("tour-price").textContent = `Giá: ${parseInt(tour.price.replace(/\D/g, '')).toLocaleString('vi-VN')} VNĐ`;
 
-        // Cập nhật thông tin di chuyển và khách sạn
-        document.getElementById("tour-transport").textContent = tour.transport || "Không có thông tin";
-        document.getElementById("tour-hotel").textContent = tour.hotel || "Không có thông tin";
+                // Cập nhật thông tin di chuyển và khách sạn
+                document.getElementById("tour-transport").textContent = tour.transport || "Không có thông tin";
+                document.getElementById("tour-hotel").textContent = tour.hotel || "Không có thông tin";
 
-        // Lịch trình chi tiết
-        const itineraryContainer = document.getElementById("tour-itinerary");
-        let itinerary = [];
-        if (tour.itinerary) {
-            try {
-                itinerary = typeof tour.itinerary === "string" ? JSON.parse(tour.itinerary) : tour.itinerary;
-            } catch (error) {
-                console.error("Lỗi khi parse itinerary:", error);
-                itinerary = [];
+                // Lịch trình chi tiết
+                const itineraryContainer = document.getElementById("tour-itinerary");
+                let itinerary = [];
+                if (tour.itinerary) {
+                    try {
+                        itinerary = typeof tour.itinerary === "string" ? JSON.parse(tour.itinerary) : tour.itinerary;
+                    } catch (error) {
+                        console.error("Lỗi khi parse itinerary:", error);
+                        itinerary = [];
+                    }
+                }
+
+                if (itinerary.length > 0) {
+                    itinerary.forEach(day => {
+                        const dayDiv = document.createElement("div");
+                        dayDiv.classList.add("itinerary-day");
+
+                        const dayTitle = document.createElement("h4");
+                        dayTitle.textContent = day.day;
+                        dayDiv.appendChild(dayTitle);
+
+                        const activitiesList = document.createElement("ul");
+                        day.activities.forEach(activity => {
+                            const li = document.createElement("li");
+                            li.textContent = activity;
+                            activitiesList.appendChild(li);
+                        });
+
+                        dayDiv.appendChild(activitiesList);
+                        itineraryContainer.appendChild(dayDiv);
+                    });
+                } else {
+                    itineraryContainer.innerHTML = "<p>Không có lịch trình chi tiết.</p>";
+                }
+
+                // Thư viện ảnh
+                const galleryDiv = document.getElementById("tour-gallery");
+                const galleryError = document.getElementById("gallery-error");
+                let gallery = [];
+                if (tour.gallery && Array.isArray(tour.gallery)) {
+                    gallery = tour.gallery;
+                }
+
+                let hasError = false;
+                if (gallery.length > 0) {
+                    gallery.forEach(imgSrc => {
+                        if (isValidURL(imgSrc)) {
+                            const img = document.createElement("img");
+                            img.classList.add("lazyload");
+                            img.setAttribute('data-src', imgSrc);
+                            img.alt = "Ảnh tour";
+                            img.onerror = () => {
+                                console.error(`Không tải được ảnh: ${imgSrc}`);
+                                img.style.display = "none"; // Ẩn ảnh nếu không tải được
+                                hasError = true;
+                                galleryError.style.display = "block";
+                            };
+                            galleryDiv.appendChild(img);
+                        }
+                    });
+                } else {
+                    galleryDiv.innerHTML = "<p>Không có ảnh trong thư viện.</p>";
+                }
             }
-        }
 
-        if (itinerary.length > 0) {
-            itinerary.forEach(day => {
-                const dayDiv = document.createElement("div");
-                dayDiv.classList.add("itinerary-day");
+            // Xử lý đặt tour
+            document.getElementById("book-now").addEventListener("click", function(event) {
+                event.preventDefault();
 
-                const dayTitle = document.createElement("h4");
-                dayTitle.textContent = day.day;
-                dayDiv.appendChild(dayTitle);
+                if (!tourData) {
+                    alert("Tour không tồn tại!");
+                    return;
+                }
 
-                const activitiesList = document.createElement("ul");
-                day.activities.forEach(activity => {
-                    const li = document.createElement("li");
-                    li.textContent = activity;
-                    activitiesList.appendChild(li);
+                Swal.fire({
+                    title: "Xác nhận đặt tour",
+                    html: `
+                        <p>Bạn muốn đặt tour "<strong>${tourData.title}</strong>" với giá <strong>${tourData.price}</strong>?</p>
+                        <input type="text" id="user-name" placeholder="Nhập tên của bạn" required>
+                        <input type="email" id="user-email" placeholder="Nhập email của bạn" required>
+                        <input type="tel" id="user-phone" placeholder="Nhập số điện thoại" required>
+                    `,
+                    imageUrl: tourData.image && isValidURL(tourData.image) ? tourData.image : null,
+                    imageWidth: 400,
+                    imageAlt: "Ảnh tour",
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Hủy",
+                    preConfirm: () => {
+                        const name = document.getElementById("user-name").value;
+                        const email = document.getElementById("user-email").value;
+                        const phone = document.getElementById("user-phone").value;
+                        if (!name || !email || !phone) {
+                            Swal.showValidationMessage("Vui lòng nhập đầy đủ tên, email và số điện thoại!");
+                        }
+                        return { name, email, phone };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const tourImage = tourData.image && isValidURL(tourData.image) ? tourData.image : null;
+                        console.log("Lưu image vào localStorage:", tourImage);
+
+                        localStorage.setItem("selectedTour", JSON.stringify({
+                            product_id: tourData.id,
+                            title: tourData.title,
+                            price: tourData.price,
+                            image: tourImage,
+                            name: result.value.name,
+                            email: result.value.email,
+                            phone: result.value.phone
+                        }));
+
+                        window.location.href = "payment.html";
+                    }
                 });
-
-                dayDiv.appendChild(activitiesList);
-                itineraryContainer.appendChild(dayDiv);
             });
-        } else {
-            itineraryContainer.innerHTML = "<p>Không có lịch trình chi tiết.</p>";
-        }
 
-        // Thư viện ảnh
-        const galleryDiv = document.getElementById("tour-gallery");
-        const galleryError = document.getElementById("gallery-error");
-        let gallery = [];
-        if (tour.gallery && Array.isArray(tour.gallery)) {
-            gallery = tour.gallery;
-        }
-
-        let hasError = false;
-        if (gallery.length > 0) {
-            gallery.forEach(imgSrc => {
-                if (isValidURL(imgSrc)) {
-                    const img = document.createElement("img");
-                    img.classList.add("lazyload");
-                    img.setAttribute('data-src', imgSrc);
-                    img.alt = "Ảnh tour";
-                    img.onerror = () => {
-                        console.error(`Không tải được ảnh: ${imgSrc}`);
-                        img.style.display = "none"; // Ẩn ảnh nếu không tải được
-                        hasError = true;
-                        galleryError.style.display = "block";
-                    };
-                    galleryDiv.appendChild(img);
+            // Hàm kiểm tra URL hợp lệ
+            function isValidURL(string) {
+                try {
+                    new URL(string);
+                    return true;
+                } catch (_) {
+                    return false;
                 }
-            });
-        } else {
-            galleryDiv.innerHTML = "<p>Không có ảnh trong thư viện.</p>";
-        }
-    }
-
-    // Xử lý đặt tour
-    document.getElementById("book-now").addEventListener("click", function(event) {
-        event.preventDefault();
-
-        if (!tourData) {
-            alert("Tour không tồn tại!");
-            return;
-        }
-
-        Swal.fire({
-            title: "Xác nhận đặt tour",
-            html: `
-                <p>Bạn muốn đặt tour "<strong>${tourData.title}</strong>" với giá <strong>${tourData.price}</strong>?</p>
-                <input type="text" id="user-name" placeholder="Nhập tên của bạn" required>
-                <input type="email" id="user-email" placeholder="Nhập email của bạn" required>
-                <input type="tel" id="user-phone" placeholder="Nhập số điện thoại" required>
-            `,
-            imageUrl: tourData.image && isValidURL(tourData.image) ? tourData.image : null,
-            imageWidth: 400,
-            imageAlt: "Ảnh tour",
-            showCancelButton: true,
-            confirmButtonText: "Xác nhận",
-            cancelButtonText: "Hủy",
-            preConfirm: () => {
-                const name = document.getElementById("user-name").value;
-                const email = document.getElementById("user-email").value;
-                const phone = document.getElementById("user-phone").value;
-                if (!name || !email || !phone) {
-                    Swal.showValidationMessage("Vui lòng nhập đầy đủ tên, email và số điện thoại!");
-                }
-                return { name, email, phone };
             }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const tourImage = tourData.image && isValidURL(tourData.image) ? tourData.image : null;
-                console.log("Lưu image vào localStorage:", tourImage);
 
-                localStorage.setItem("selectedTour", JSON.stringify({
-                    product_id: tourData.id,
-                    title: tourData.title,
-                    price: tourData.price,
-                    image: tourImage,
-                    name: result.value.name,
-                    email: result.value.email,
-                    phone: result.value.phone
-                }));
-
-                window.location.href = "payment.html";
-            }
+            // Gọi hàm lấy chi tiết tour khi trang được tải
+            fetchTourDetails();
         });
-    });
-
-    // Hàm kiểm tra URL hợp lệ
-    function isValidURL(string) {
-        try {
-            new URL(string);
-            return true;
-        } catch (_) {
-            return false;
-        }
-    }
-
-    // Gọi hàm lấy chi tiết tour khi trang được tải
-    fetchTourDetails();
-});
     </script>
-    <!-- Thêm chatbox -->
-<button class="chatbot-toggler">
-    <span class="material-symbols-rounded"><img src="img/logo-KTX.png" alt="Chat"></span>
-    <span class="material-symbols-outlined">close</span>
-</button>
-<div class="chatbot">
-    <header class="chat-header">
-        <h2>Chatbot</h2>
-        <span class="close-btn material-symbols-outlined">close</span>
-    </header>
-    <ul class="chatbox">
-        <li class="chat incoming">
-            <span class="material-symbols-outlined">smart_toy</span>
-            <p>Hi there 👋<br>How can I help you today?</p>
-        </li>
-    </ul>
-    <div class="chat-input">
-        <textarea placeholder="Enter a message..." spellcheck="false" required></textarea>
-        <span id="send-btn" class="material-symbols-rounded">send</span>
-    </div>
-</div>
+    <script>
+        // Chèn chatbox vào trang
+        fetch('chatbox-component.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('chatbox-container').innerHTML = data;
+                // Sau khi chèn, tải lịch sử trò chuyện
+                loadChatHistory();
+                // Khôi phục trạng thái hiển thị của chatbox
+                const isChatbotOpen = localStorage.getItem('chatbotOpen') === 'true';
+                if (isChatbotOpen) {
+                    document.body.classList.add('show-chatbot');
+                }
+            });
+      </script>
+    <script src="script.js"></script> <!-- Di chuyển xuống cuối body -->
+    
 </body>
 </html>

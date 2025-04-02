@@ -140,6 +140,22 @@
         // Gọi hàm fetchTours khi trang được tải
         fetchTours();
     </script>
+    <script>
+        // Chèn chatbox vào trang
+        fetch('chatbox-component.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('chatbox-container').innerHTML = data;
+                // Sau khi chèn, tải lịch sử trò chuyện
+                loadChatHistory();
+                // Khôi phục trạng thái hiển thị của chatbox
+                const isChatbotOpen = localStorage.getItem('chatbotOpen') === 'true';
+                if (isChatbotOpen) {
+                    document.body.classList.add('show-chatbot');
+                }
+            });
+      </script>
     <script src="script.js"></script> <!-- Di chuyển xuống cuối body -->
+    
 </body>
 </html>

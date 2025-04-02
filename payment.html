@@ -93,6 +93,7 @@
     </div>
 
     <script>
+        // Hiển thị thông tin tour
         document.addEventListener("DOMContentLoaded", function() {
             const tourData = JSON.parse(localStorage.getItem("selectedTour"));
             if (!tourData || !tourData.product_id) {
@@ -107,7 +108,7 @@
             document.getElementById("tour-name").textContent = tourData.title || "Không có thông tin";
             
             // Định dạng giá tiền
-            const price = parseInt(tourData.price.replace(/\D/g, '')) || 0;
+            const price = parseInt(tourData.price?.replace(/\D/g, '') || '0');
             document.getElementById("tour-price").textContent = price.toLocaleString('vi-VN');
 
             // Hiển thị thông tin người dùng
@@ -123,8 +124,65 @@
                 console.error("Không tải được ảnh:", tourData.image);
                 this.src = defaultImage;
             };
+
+            // Xử lý chatbox
+            const chatbotToggler = document.querySelector(".chatbot-toggler");
+            const chatbot = document.querySelector(".chatbot");
+            const closeBtn = document.querySelector(".close-btn");
+            const sendBtn = document.getElementById("send-btn");
+            const chatInput = document.querySelector(".chat-input textarea");
+            const chatbox = document.querySelector(".chatbox");
+
+            if (chatbotToggler && chatbot) {
+                chatbotToggler.addEventListener("click", () => {
+                    chatbot.classList.toggle("active");
+                });
+            } else {
+                console.error("Không tìm thấy chatbotToggler hoặc chatbot");
+            }
+
+            if (closeBtn && chatbot) {
+                closeBtn.addEventListener("click", () => {
+                    chatbot.classList.remove("active");
+                });
+            } else {
+                console.error("Không tìm thấy closeBtn hoặc chatbot");
+            }
+
+            if (sendBtn && chatInput && chatbox) {
+                sendBtn.addEventListener("click", () => {
+                    const message = chatInput.value.trim();
+                    if (message) {
+                        const outgoingMsg = document.createElement("li");
+                        outgoingMsg.classList.add("chat", "outgoing");
+                        outgoingMsg.innerHTML = `<p>${message}</p>`;
+                        chatbox.appendChild(outgoingMsg);
+                        chatInput.value = "";
+                        chatbox.scrollTop = chatbox.scrollHeight;
+
+                        setTimeout(() => {
+                            const incomingMsg = document.createElement("li");
+                            incomingMsg.classList.add("chat", "incoming");
+                            incomingMsg.innerHTML = `<span class="material-symbols-outlined">smart_toy</span><p>Đang xử lý...</p>`;
+                            chatbox.appendChild(incomingMsg);
+                            chatbox.scrollTop = chatbox.scrollHeight;
+                        }, 600);
+                    }
+                });
+
+                // Thêm sự kiện Enter để gửi tin nhắn
+                chatInput.addEventListener("keypress", (e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        sendBtn.click();
+                    }
+                });
+            } else {
+                console.error("Không tìm thấy sendBtn, chatInput hoặc chatbox");
+            }
         });
 
+        // Hàm tạo đơn hàng
         async function createOrder() {
             const paymentButton = document.getElementById("payment-button");
             const qrCodeContainer = document.getElementById("qrcode-container");
@@ -205,7 +263,21 @@
                 paymentButton.textContent = "Thanh Toán";
             }
         }
+  // Chèn chatbox vào trang
+  fetch('chatbox-component.html')
+      .then(response => response.text())
+      .then(data => {
+          document.getElementById('chatbox-container').innerHTML = data;
+          // Sau khi chèn, tải lịch sử trò chuyện
+          loadChatHistory();
+          // Khôi phục trạng thái hiển thị của chatbox
+          const isChatbotOpen = localStorage.getItem('chatbotOpen') === 'true';
+          if (isChatbotOpen) {
+              document.body.classList.add('show-chatbot');
+          }
+      });
     </script>
-    <script src="script.js"></script> <!-- Di chuyển xuống cuối body -->
+    <!-- Bỏ script.js vì logic chatbox đã được di chuyển vào đây -->
+     
 </body>
 </html>
