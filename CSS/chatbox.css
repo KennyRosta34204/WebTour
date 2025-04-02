@@ -89,9 +89,12 @@ body.show-chatbot .chatbot {
     padding: 15px 20px 20px;
 }
 
-.chatbox .chat {
+/* Căn trái các tin nhắn */
+.chatbox li.chat {
     display: flex;
-    list-style: none;
+    align-items: flex-start; /* Căn trên cùng */
+    margin-bottom: 10px;
+    text-align: left; /* Căn trái nội dung */
 }
 
 .chatbox .incoming span {
@@ -190,3 +193,53 @@ body.show-chatbot .chatbot {
         height: 40px;
     }
 }
+/* Đảm bảo header của chatbox có màu xanh lá cây */
+.chat-header {
+    background-color: #28a745; /* Màu xanh lá cây */
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  
+  /* Tùy chỉnh nút "Xóa lịch sử" */
+  .clear-history-btn {
+    background-color: #ffffff; /* Nền trắng */
+    color: #28a745; /* Chữ màu xanh lá cây */
+    border: 1px solid #28a745; /* Viền xanh lá cây */
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  /* Hiệu ứng hover cho nút */
+  .clear-history-btn:hover {
+    background-color: #28a745; /* Nền xanh lá cây khi hover */
+    color: #ffffff; /* Chữ trắng khi hover */
+    border-color: #28a745; /* Viền xanh lá cây */
+  }
+  
+  /* Tùy chỉnh nút đóng (close) để đồng bộ */
+  .close-btn {
+    color: #ffffff; /* Màu trắng */
+    cursor: pointer;
+    font-size: 24px;
+    transition: color 0.3s ease;
+  }
+  
+  .close-btn:hover {
+    color: #f0f0f0; /* Màu trắng nhạt khi hover */
+  }
+  
+  /* Đảm bảo các phần tử trong header được căn chỉnh đẹp */
+  .chat-header div {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Khoảng cách giữa nút "Xóa lịch sử" và nút đóng */
+  }
