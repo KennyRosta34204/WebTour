@@ -69,11 +69,16 @@
         .close:hover {
             color: #333;
         }
+        .email-display {
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #333;
+        }
     </style>
 </head>
-<body>
+<body style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e'); background-size: cover; background-position: center; min-height: 100vh; display: flex; align-items: center;">
 
-<div class="register-container" style="margin-top: 20px; width: 450px; padding: 50px;">
+<div class="register-container" style="margin-top: 20px; width: 450px; padding: 50px; margin-left: auto; margin-right: auto;">
     <div class="register-box">
         <h2>Đăng nhập tài khoản</h2>
         <form id="login-form">
@@ -107,7 +112,9 @@
 
         <!-- Bổ sung phần "Chưa có tài khoản? Đăng ký ngay" ngay trên chữ "Hoặc" -->
         <p class="register-link" style="margin-top: 15px;">
-            Chưa có tài khoản? <a href="register.html" style="color: blue; text-decoration: underline;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Đăng ký ngay</a>.
+            Chưa có tài khoản? <a href="register.html" style="color: blue; text-decoration: underline;" 
+                                 onmouseover="this.style.textDecoration='underline'" 
+                                 onmouseout="this.style.textDecoration='underline'">Đăng ký ngay</a>.
         </p>
     </div>
 </div>
@@ -116,10 +123,21 @@
 <div id="forgot-password-modal" class="modal">
     <div class="modal-content">
         <span class="close">×</span>
-        <h2>Quên mật khẩu</h2>
-        <p>Nhập email của bạn để nhận mã đặt lại mật khẩu.</p>
-        <input type="email" id="forgot-email" placeholder="Nhập email" required>
-        <button id="send-reset-link">Gửi yêu cầu</button>
+        <div id="forgot-email-section">
+            <h2>Quên mật khẩu</h2>
+            <p>Nhập email của bạn để nhận mã xác nhận.</p>
+            <input type="email" id="forgot-email" placeholder="Nhập email" required>
+            <button id="send-reset-link">Gửi yêu cầu</button>
+        </div>
+        <div id="verify-code-section" style="display: none;">
+            <h2>Xác nhận mã</h2>
+            <div class="email-display">
+                Email: <span id="display-email"></span>
+            </div>
+            <p>Nhập mã xác nhận đã được gửi đến email của bạn.</p>
+            <input type="text" id="verification-code" placeholder="Nhập mã xác nhận" required>
+            <button id="verify-code-btn">Xác nhận mã</button>
+        </div>
     </div>
 </div>
 

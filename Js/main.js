@@ -1,6 +1,7 @@
 // Xử lý form đăng ký và đăng nhập
 const registerForm = document.getElementById('register-form');
 const loginForm = document.getElementById('login-form');
+const resetPasswordForm = document.getElementById('reset-password-form');
 
 if (registerForm) {
     registerForm.addEventListener('submit', async (e) => {
@@ -27,14 +28,34 @@ if (registerForm) {
                 }),
             });
 
-            const data = await response.json();
+            // Kiểm tra nếu phản hồi không hợp lệ
+            if (!response.ok) {
+                const text = await response.text();
+                let errorData;
+                try {
+                    errorData = JSON.parse(text);
+                } catch (parseError) {
+                    throw new Error(`HTTP error! Status: ${response.status}, Response: ${text}`);
+                }
+                throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+            }
+
+            // Kiểm tra nếu phản hồi rỗng hoặc không phải JSON
+            const text = await response.text();
+            if (!text) {
+                throw new Error('Phản hồi từ server rỗng');
+            }
+
+            // Thử parse JSON
+            const data = JSON.parse(text);
             if (data.status === 'success') {
                 alert('Đăng ký thành công! Đang chuyển hướng đến trang đăng nhập...');
                 window.location.href = 'login.html';
             } else {
-                alert(data.message);
+                alert(data.message || 'Đăng ký thất bại');
             }
         } catch (error) {
+            console.error('Lỗi khi đăng ký:', error);
             alert('Đăng ký thất bại: ' + error.message);
         }
     });
@@ -59,18 +80,32 @@ if (loginForm) {
                 }),
             });
 
-            const data = await response.json();
+            if (!response.ok) {
+                const text = await response.text();
+                let errorData;
+                try {
+                    errorData = JSON.parse(text);
+                } catch (parseError) {
+                    throw new Error(`HTTP error! Status: ${response.status}, Response: ${text}`);
+                }
+                throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+            }
+
+            const text = await response.text();
+            if (!text) {
+                throw new Error('Phản hồi từ server rỗng');
+            }
+
+            const data = JSON.parse(text);
             if (data.status === 'success') {
-                // Lưu user_id vào localStorage
                 localStorage.setItem('user_id', data.user.user_id);
-                // Lưu thông tin user vào localStorage
                 localStorage.setItem('user', JSON.stringify(data.user));
-                // Chuyển hướng ngay lập tức đến trang index.html
                 window.location.href = 'index.html';
             } else {
-                alert(data.message);
+                alert(data.message || 'Đăng nhập thất bại');
             }
         } catch (error) {
+            console.error('Lỗi khi đăng nhập:', error);
             alert('Đăng nhập thất bại: ' + error.message);
         }
     });
@@ -80,27 +115,33 @@ if (loginForm) {
     const forgotPasswordModal = document.getElementById('forgot-password-modal');
     const closeModal = document.querySelector('.close');
     const sendResetLinkButton = document.getElementById('send-reset-link');
+    const verifyCodeButton = document.getElementById('verify-code-btn');
+    const forgotEmailSection = document.getElementById('forgot-email-section');
+    const verifyCodeSection = document.getElementById('verify-code-section');
+    const displayEmail = document.getElementById('display-email');
 
     if (forgotPasswordLink && forgotPasswordModal) {
-        // Hiển thị modal khi bấm "Quên mật khẩu?"
         forgotPasswordLink.addEventListener('click', (e) => {
             e.preventDefault();
-            forgotWPasswordModal.style.display = 'flex';
+            forgotPasswordModal.style.display = 'flex';
+            forgotEmailSection.style.display = 'block';
+            verifyCodeSection.style.display = 'none';
         });
 
-        // Đóng modal khi bấm nút đóng
         closeModal.addEventListener('click', () => {
             forgotPasswordModal.style.display = 'none';
+            forgotEmailSection.style.display = 'block';
+            verifyCodeSection.style.display = 'none';
         });
 
-        // Đóng modal khi bấm ra ngoài modal
         window.addEventListener('click', (e) => {
             if (e.target === forgotPasswordModal) {
                 forgotPasswordModal.style.display = 'none';
+                forgotEmailSection.style.display = 'block';
+                verifyCodeSection.style.display = 'none';
             }
         });
 
-        // Xử lý gửi yêu cầu đặt lại mật khẩu
         sendResetLinkButton.addEventListener('click', async () => {
             const email = document.getElementById('forgot-email').value;
 
@@ -118,31 +159,165 @@ if (loginForm) {
                     body: JSON.stringify({ email }),
                 });
 
-                const data = await response.json();
+                if (!response.ok) {
+                    const text = await response.text();
+                    let errorData;
+                    try {
+                        errorData = JSON.parse(text);
+                    } catch (parseError) {
+                        throw new Error(`HTTP error! Status: ${response.status}, Response: ${text}`);
+                    }
+                    throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+                }
+
+                const text = await response.text();
+                if (!text) {
+                    throw new Error('Phản hồi từ server rỗng');
+                }
+
+                const data = JSON.parse(text);
                 if (data.status === 'success') {
-                    alert('Yêu cầu đặt lại mật khẩu đã được gửi! Vui lòng kiểm tra email của bạn.');
-                    forgotPasswordModal.style.display = 'none';
+                    alert('Mã xác nhận đã được gửi! Vui lòng kiểm tra email của bạn.');
+                    forgotEmailSection.style.display = 'none';
+                    verifyCodeSection.style.display = 'block';
+                    displayEmail.textContent = email;
                 } else {
-                    alert(data.message);
+                    alert(data.message || 'Gửi yêu cầu thất bại');
                 }
             } catch (error) {
+                console.error('Lỗi khi gửi yêu cầu đặt lại mật khẩu:', error);
                 alert('Có lỗi xảy ra: ' + error.message);
             }
         });
+
+        verifyCodeButton.addEventListener('click', async () => {
+            const email = document.getElementById('forgot-email').value;
+            const code = document.getElementById('verification-code').value;
+
+            if (!code) {
+                alert('Vui lòng nhập mã xác nhận!');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5500/auth/verify-code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, code }),
+                });
+
+                if (!response.ok) {
+                    const text = await response.text();
+                    let errorData;
+                    try {
+                        errorData = JSON.parse(text);
+                    } catch (parseError) {
+                        throw new Error(`HTTP error! Status: ${response.status}, Response: ${text}`);
+                    }
+                    throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+                }
+
+                const text = await response.text();
+                if (!text) {
+                    throw new Error('Phản hồi từ server rỗng');
+                }
+
+                const data = JSON.parse(text);
+                if (data.status === 'success') {
+                    alert('Xác nhận mã thành công! Đang chuyển hướng đến trang đặt lại mật khẩu...');
+                    forgotPasswordModal.style.display = 'none';
+                    window.location.href = `reset-password.html?token=${data.resetToken}`;
+                } else {
+                    alert(data.message || 'Xác nhận mã thất bại');
+                }
+            } catch (error) {
+                console.error('Lỗi khi xác nhận mã:', error);
+                alert('Xác nhận mã thất bại: ' + error.message);
+            }
+        });
     }
+}
+
+// Xử lý form đặt lại mật khẩu
+if (resetPasswordForm) {
+    resetPasswordForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const newPassword = document.getElementById('new-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+
+        if (!token) {
+            alert('Token không hợp lệ! Vui lòng thử lại.');
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            alert('Mật khẩu xác nhận không khớp!');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:5500/auth/reset-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token,
+                    newPassword,
+                    confirmPassword,
+                }),
+            });
+
+            if (!response.ok) {
+                const text = await response.text();
+                let errorData;
+                try {
+                    errorData = JSON.parse(text);
+                } catch (parseError) {
+                    throw new Error(`HTTP error! Status: ${response.status}, Response: ${text}`);
+                }
+                throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+            }
+
+            const text = await response.text();
+            if (!text) {
+                throw new Error('Phản hồi từ server rỗng');
+            }
+
+            const data = JSON.parse(text);
+            if (data.status === 'success') {
+                alert('Đặt lại mật khẩu thành công! Đang chuyển hướng đến trang đăng nhập...');
+                window.location.href = 'login.html';
+            } else {
+                alert(data.message || 'Đặt lại mật khẩu thất bại');
+            }
+        } catch (error) {
+            console.error('Lỗi khi đặt lại mật khẩu:', error);
+            alert('Đặt lại mật khẩu thất bại: ' + error.message);
+        }
+    });
 }
 
 // Kiểm tra trạng thái đăng nhập và gắn sự kiện đăng xuất khi tải trang
 document.addEventListener('DOMContentLoaded', () => {
     const user = JSON.parse(localStorage.getItem('user'));
 
-    // Kiểm tra trạng thái đăng nhập
     if (user) {
-        document.getElementById('nav-auth').style.display = 'none';
-        document.getElementById('nav-user').style.display = 'block';
-        document.getElementById('user-name').textContent = user.username;
+        const navAuth = document.getElementById('nav-auth');
+        const navUser = document.getElementById('nav-user');
+        const userName = document.getElementById('user-name');
 
-        // Gắn sự kiện cho nút đăng xuất
+        if (navAuth && navUser && userName) {
+            navAuth.style.display = 'none';
+            navUser.style.display = 'block';
+            userName.textContent = user.username;
+        }
+
         const logoutLink = document.getElementById('logout-link');
         if (logoutLink) {
             logoutLink.addEventListener('click', (e) => {
@@ -150,8 +325,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log("Nút Đăng xuất được bấm!");
                 localStorage.removeItem('user');
                 localStorage.removeItem('user_id');
-                document.getElementById('nav-auth').style.display = 'block';
-                document.getElementById('nav-user').style.display = 'none';
+                if (navAuth && navUser) {
+                    navAuth.style.display = 'block';
+                    navUser.style.display = 'none';
+                }
                 window.location.href = 'index.html';
             });
         } else {
