@@ -1551,54 +1551,325 @@ body {
 
 /* chatbox.css */
 
-/* Đảm bảo header của chatbox có màu xanh lá cây */
+/* Import Google font - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: #E3F2FD;
+}
+
+/* Nút toggler */
+.chatbot-toggler {
+    position: fixed;
+    bottom: 30px;
+    right: 35px;
+    outline: none;
+    border: none;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #4A90E2; /* Đổi màu toggler sang xanh dương nhạt */
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+body.show-chatbot .chatbot-toggler {
+    transform: rotate(90deg);
+}
+
+.chatbot-toggler span {
+    color: #fff;
+    position: absolute;
+    font-size: 24px;
+}
+
+.chatbot-toggler span img {
+    width: 30px;
+    height: 30px;
+}
+
+.chatbot-toggler span:last-child,
+body.show-chatbot .chatbot-toggler span:first-child {
+    opacity: 0;
+}
+
+body.show-chatbot .chatbot-toggler span:last-child {
+    opacity: 1;
+}
+
+/* Chatbox */
+.chatbot {
+    position: fixed;
+    bottom: 90px;
+    right: 35px;
+    width: 420px;
+    height: 500px;
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.5);
+    transform-origin: bottom right;
+    box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1), 0 32px 64px -48px rgba(0, 0, 0, 0.5);
+    transition: all 0.1s ease;
+    z-index: 999;
+}
+
+body.show-chatbot .chatbot {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+}
+
+/* Header của chatbox */
 .chat-header {
-  background-color: #28a745; /* Màu xanh lá cây */
-  color: white;
-  padding: 10px 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+    background-color: #4A90E2; /* Đổi màu header sang xanh dương nhạt */
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    cursor: move;
+}
+
+.chat-header h2 {
+    font-size: 1.8rem;
+    margin: 0;
+    flex: 1;
+    text-align: center;
 }
 
 /* Tùy chỉnh nút "Xóa lịch sử" */
 .clear-history-btn {
-  background-color: #ffffff; /* Nền trắng */
-  color: #28a745; /* Chữ màu xanh lá cây */
-  border: 1px solid #28a745; /* Viền xanh lá cây */
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.3s ease;
+    background-color: #ffffff;
+    color: #4A90E2; /* Đổi màu chữ nút sang xanh dương nhạt */
+    border: 1px solid #4A90E2; /* Đổi màu viền sang xanh dương nhạt */
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
-/* Hiệu ứng hover cho nút */
 .clear-history-btn:hover {
-  background-color: #28a745; /* Nền xanh lá cây khi hover */
-  color: #ffffff; /* Chữ trắng khi hover */
-  border-color: #28a745; /* Viền xanh lá cây */
+    background-color: #4A90E2; /* Đổi màu nền khi hover */
+    color: #ffffff;
+    border-color: #4A90E2;
 }
 
-/* Tùy chỉnh nút đóng (close) để đồng bộ */
+/* Tùy chỉnh nút đóng (close) */
 .close-btn {
-  color: #ffffff; /* Màu trắng */
-  cursor: pointer;
-  font-size: 24px;
-  transition: color 0.3s ease;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 24px;
+    transition: color 0.3s ease;
+    margin-right: 10px;
 }
 
 .close-btn:hover {
-  color: #f0f0f0; /* Màu trắng nhạt khi hover */
+    color: #f0f0f0;
 }
 
 /* Đảm bảo các phần tử trong header được căn chỉnh đẹp */
 .chat-header div {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Khoảng cách giữa nút "Xóa lịch sử" và nút đóng */
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
+/* Khu vực hiển thị tin nhắn */
+.chatbox {
+    overflow-y: auto;
+    height: calc(100% - 120px);
+    padding: 15px 20px 20px;
+}
+
+/* Thanh cuộn */
+.chatbox::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chatbox::-webkit-scrollbar-track {
+    background: #fff;
+    border-radius: 25px;
+}
+
+.chatbox::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 25px;
+}
+
+/* Căn trái các tin nhắn */
+.chatbox li.chat {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.chatbox .incoming span {
+    width: 32px;
+    height: 32px;
+    color: #fff;
+    cursor: default;
+    text-align: center;
+    line-height: 32px;
+    align-self: flex-end;
+    background: #4A90E2; /* Đổi màu biểu tượng bot sang xanh dương nhạt */
+    border-radius: 4px;
+    margin: 0 10px 7px 0;
+}
+
+.chatbox .chat p {
+    white-space: pre-wrap;
+    padding: 12px 16px;
+    border-radius: 10px 10px 0 10px;
+    max-width: 75%;
+    color: #fff;
+    font-size: 1.2rem;
+    background: #4A90E2; /* Đổi màu tin nhắn outgoing sang xanh dương nhạt */
+    display: block;
+}
+
+.chatbox .incoming p {
+    border-radius: 10px 10px 10px 0;
+    color: #000;
+    background: #F5F7FA; /* Đổi màu tin nhắn incoming sang trắng kem */
+}
+
+.chatbox .chat p.error {
+    color: #721c24;
+    background: #f8d7da;
+}
+
+.chatbox .outgoing {
+    margin: 5px 0;
+    justify-content: flex-end;
+}
+
+/* Định dạng cho phần tour */
+.tour-info {
+    background: #FFFFFF; /* Đổi màu nền tour sang trắng */
+    border: 1px solid #E0E0E0; /* Thêm viền nhẹ */
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Giảm độ đậm của bóng */
+    width: 100%;
+    display: block;
+}
+
+.tour-info h3 {
+    font-size: 1.4rem;
+    color: #4A90E2; /* Đổi màu tiêu đề tour sang xanh dương nhạt */
+    margin-bottom: 8px;
+}
+
+.tour-info p {
+    font-size: 1.2rem;
+    color: #333;
+    margin: 5px 0;
+}
+
+.tour-info img {
+    display: block;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 200px;
+    border-radius: 8px;
+}
+
+/* Khu vực nhập tin nhắn */
+.chat-input {
+    display: flex;
+    gap: 5px;
+    padding: 10px 20px;
+    border-top: 1px solid #ddd;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+}
+
+.chat-input textarea {
+    height: 55px;
+    width: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    max-height: 180px;
+    padding: 15px 15px 15px 0;
+    font-size: 1.2rem;
+}
+
+.chat-input textarea::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-input textarea::-webkit-scrollbar-track {
+    background: #fff;
+    border-radius: 25px;
+}
+
+.chat-input textarea::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 25px;
+}
+
+.chat-input span {
+    align-self: flex-end;
+    color: #4A90E2; /* Đổi màu nút gửi sang xanh dương nhạt */
+    cursor: pointer;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    visibility: hidden;
+    font-size: 1.5rem;
+}
+
+.chat-input textarea:valid ~ span {
+    visibility: visible;
+}
+
+/* Responsive */
+@media (max-width: 490px) {
+    .chatbot-toggler {
+        right: 20px;
+        bottom: 20px;
+    }
+    .chatbot {
+        right: 0;
+        bottom: 0;
+        height: 100%;
+        width: 100%;
+        border-radius: 0;
+    }
+    .chatbox {
+        height: calc(100% - 120px);
+        padding: 25px 15px 100px;
+    }
+    .chat-input {
+        padding: 5px 15px;
+    }
+    .chat-input textarea {
+        height: 40px;
+    }
+    .chat-header span {
+        display: block;
+    }
+}
