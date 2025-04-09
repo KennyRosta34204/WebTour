@@ -7,6 +7,7 @@ const initializeChatbox = () => {
     const chatbox = document.querySelector(".chatbox");
     const chatInput = document.querySelector(".chat-input textarea");
     const sendChatBtn = document.querySelector(".chat-input span");
+    const clearHistoryBtn = document.querySelector(".clear-history-btn");
 
     // Kiểm tra xem các phần tử cần thiết có tồn tại không
     if (!chatbotToggler || !closeBtn || !chatbox || !chatInput || !sendChatBtn) {
@@ -23,13 +24,13 @@ const initializeChatbox = () => {
         chatLi.classList.add("chat", className);
         let chatContent = className === "outgoing" ? `<p></p>` : `<span class="material-symbols-outlined">smart_toy</span><p></p>`;
         chatLi.innerHTML = chatContent;
-        chatLi.querySelector("p").textContent = message;
+        chatLi.querySelector("p").innerHTML = message; // Sử dụng innerHTML để hỗ trợ định dạng HTML từ server
         return chatLi;
     };
 
     // Hàm gọi API để tạo phản hồi từ chatbot
     const generateResponse = async (chatElement) => {
-        const API_URL = "http://127.0.0.1:5000/chat";
+        const API_URL = "http://localhost:5500/chat"; // Cập nhật URL để khớp với server
         const messageElement = chatElement.querySelector("p");
 
         const requestOptions = {
@@ -42,7 +43,7 @@ const initializeChatbox = () => {
             const response = await fetch(API_URL, requestOptions);
             const data = await response.json();
             if (response.ok) {
-                messageElement.textContent = data.response;
+                messageElement.innerHTML = data.response; // Sử dụng innerHTML để hiển thị HTML từ server
                 saveMessage("incoming", data.response);
             } else {
                 throw new Error(data.error || "Request failed");
@@ -69,12 +70,12 @@ const initializeChatbox = () => {
         chatbox.scrollTo(0, chatbox.scrollHeight);
         saveMessage("outgoing", userMessage);
 
-        setTimeout(() => {
-            const incomingChatLi = createChatLi("Thinking...", "incoming");
-            chatbox.appendChild(incomingChatLi);
-            chatbox.scrollTo(0, chatbox.scrollHeight);
-            generateResponse(incomingChatLi);
-        }, 600);
+        const incomingChatLi = createChatLi("Thinking...", "incoming");
+        chatbox.appendChild(incomingChatLi);
+        chatbox.scrollTo(0, chatbox.scrollHeight);
+
+        // Gọi API ngay lập tức thay vì dùng setTimeout
+        generateResponse(incomingChatLi);
     };
 
     // Điều chỉnh chiều cao textarea khi nhập
@@ -106,6 +107,11 @@ const initializeChatbox = () => {
         localStorage.setItem("chatbotOpen", "false");
     });
 
+    // Xóa lịch sử trò chuyện nếu có nút clear-history-btn
+    if (clearHistoryBtn) {
+        clearHistoryBtn.addEventListener("click", clearChatHistory);
+    }
+
     // Tải lịch sử khi khởi tạo
     loadChatHistory();
 };
@@ -113,7 +119,7 @@ const initializeChatbox = () => {
 // Hàm lưu tin nhắn vào localStorage
 const saveMessage = (sender, text) => {
     const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
-    chatHistory.push({ sender, text });
+    chatHistory.push({ sender, text, timestamp: new Date().toISOString() });
     localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
 };
 

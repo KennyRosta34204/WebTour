@@ -16,6 +16,49 @@ body {
     align-items: center;
 }
 
+/* Thanh điều hướng */
+.main-nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    z-index: 100;
+    border-radius: 5px;
+}
+
+.main-nav a {
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+    margin: 0 50px;
+    margin-left: 10px;
+    font-size: 17px;
+    font-family: Arial, sans-serif;
+    padding: 15px 10px;
+    border-radius: 0;
+    transition: border-radius 0.3s ease;
+}
+
+.main-nav a:hover {
+    background-color: #ff7d26;
+    color: black;
+    border-radius: 5px;
+}
+
+.main-nav i {
+    margin-left: auto;
+    margin-right: 20px;
+    font-size: 20px;
+    color: white;
+}
+
 /* Nút quay lại */
 .back-btn {
     position: fixed;
@@ -44,7 +87,7 @@ body {
     padding: 20px;
     text-align: center;
     border-radius: 15px;
-    margin: 20px auto;
+    margin: 60px auto 20px; /* Tăng margin-top lên 60px để đẩy xuống dưới .main-nav */
     width: 80%;
     max-width: 1000px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -52,6 +95,8 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
+    position: relative; /* Đảm bảo không bị ảnh hưởng bởi z-index của .main-nav */
+    z-index: 50; /* Thấp hơn z-index của .main-nav */
 }
 
 /* Bố cục trang chi tiết */
@@ -296,4 +341,31 @@ body {
 .swal2-image {
     border-radius: 10px;
     margin-bottom: 15px;
+}
+
+.suggestions-list {
+    list-style: none;
+    padding: 0;
+    max-width: 300px;
+    background: white;
+    border: 1px solid #ccc;
+    position: absolute;
+    z-index: 1000;
+}
+
+.suggestions-list li {
+    padding: 8px;
+    cursor: pointer;
+    color: black;
+}
+
+.suggestions-list li:hover {
+    background: #f0f0f0;
+}
+
+.tour-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
 }

@@ -3,41 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" type="image/png" href="img/logo-KTX.png">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
   <title>BookingTour</title>
-  <script src="js/main.js"></script>
 </head>
-<body>
-  
+<style>
+  /* CSS cho thông báo tùy chỉnh */
+  .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: none;
+    font-size: 16px;
+  }
 
+  .notification.show {
+    display: block;
+  }
+</style>  
+<body>
+  <!-- Thông báo tùy chỉnh -->
+  <div id="notification" class="notification">
+    Bạn đã đặt lịch tour thành công! 
+  </div>
   <div class="navigation">
     <input type="checkbox" class="navigation_checkbox" id="navigation_menu">
-
     <label for="navigation_menu" class="navigation_button">
-      
-    <span class="navigation_icon">&nbsp;</span>
-
+      <span class="navigation_icon">&nbsp;</span>
     </label>
-
-
     <div class="navigation_background">&nbsp;</div>
-
     <nav class="navigation_nav"> 
       <ul class="navigation_list">
         <li class="navigation_items" id="nav-auth">
           <a href="register.html" id="auth-link" class="navigation_links">Đăng nhập / Đăng ký</a>
-      </li>
-      <li id="nav-user" style="display: none;">
-        <span id="user-name"></span>
-        <a id="logout-link" href="#">Đăng xuất</a>
-    </li>
+        </li>
+        <li id="nav-user" style="display: none;">
+          <span id="user-name"></span>
+          <a id="logout-link" href="#">Đăng xuất</a>
+        </li>
         <li class="navigation_items"> <a href="#Home" class="navigation_links"><span></span>Trang chủ</a></li>
         <li class="navigation_items"> <a href="#About" class="navigation_links"><span></span>Giới thiệu</a></li>
         <li class="navigation_items"> 
@@ -46,453 +59,339 @@
         <li class="navigation_items"> <a href="#contact" class="navigation_links"><span></span>Liên hệ</a></li>
       </ul>
     </nav>
-
   </div>
-
-
 
   <header class="header" id="Home">
-
-   <div class="header_logo-box">
-     <img src="img/logo-vip1.png" alt="logo"  class="header_logo">
-   </div>
-
-   <div class="header_text-box">
-
-    <h1 class="Heading-Primary">
-
-      <span class="Heading-Primary--main"> KTX</span>
-
-      <span class="Heading-Primary--sub">Nơi mọi thứ bắt đầu</span>
-
-
-
-    </h1>
-
-    <a href="#" class="btn btn--white btn--animated">Trải nghiệm chuyến đi cùng chúng tôi</a>
-
-
-
-
-  </div>
-
-</header>
-
-<main>
-
-
-  <section class="section-about" id="About">
-
-
-    <div class="u-text-center  margin-bottom-big">
-      <h2 class="heading-secondary">
-        Khám phá thế giới theo cách của riêng bạn
-      </h2>
+    <div class="header_logo-box">
+      <img src="img/logo-vip1.png" alt="logo" class="header_logo">
     </div>
-
-
-    <div class="row">
-
-      <div class="col-1-of-2">
-
-        <h3 class="heading-teriatery margin-bottom-small">
-
-          BẠN SẼ PHẢI LÒNG DU LỊCH
-
-       </h3>
-
-       <p class="paragraph margin-bottom-medium">Hãy để chúng tôi đưa bạn đến những vùng đất mới, nơi bạn sẽ được trải nghiệm những điều kỳ diệu và khám phá những nền văn hóa độc đáo. Từ những bãi biển cát trắng trải dài đến những đỉnh núi hùng vĩ, từ những thành phố cổ kính đến những khu rừng nhiệt đới hoang sơ, mỗi chuyến đi đều là một cuộc phiêu lưu đầy cảm xúc.</p>
-
-      <h3 class="heading-teriatery  margin-bottom-small">
-
-        NHỮNG CHUYẾN ĐI CHƯA TỪNG CÓ
-
-      </h3>
-
-      <p class="paragraph margin-bottom-medium">Chúng tôi cam kết mang đến cho bạn những trải nghiệm du lịch tuyệt vời nhất, với các dịch vụ chất lượng cao, lịch trình linh hoạt và đội ngũ hướng dẫn viên chuyên nghiệp, nhiệt tình. Bạn sẽ được tận hưởng những khoảnh khắc đáng nhớ và tạo nên những kỷ niệm khó quên trong suốt hành trình.</p>
-
-      <a href="#" class="btn-text">Tìm hiểu thêm. &rarr;</a>
-
+    <div class="header_text-box">
+      <h1 class="Heading-Primary">
+        <span class="Heading-Primary--main"> KTX</span>
+        <span class="Heading-Primary--sub">Nơi mọi thứ bắt đầu</span>
+      </h1>
+      <a href="#" class="btn btn--white btn--animated">Trải nghiệm chuyến đi cùng chúng tôi</a>
     </div>
+  </header>
 
-
-
-    <div class="col-1-of-2">
-
-      <div class="composition">
-
-       <img srcset="img/hcm1.jpg 1000w,img/nat-1.jpg 300w" 
-        sizes="(max-width:900px)18vw,(max-width:600px)24vw,300px" 
-        alt="Photo 1"
-        class="composition_photo composition_photo--p1"
-         >
-       
-
-          <img srcset="img/hcm2.jpg 1000w,img/nat-2.jpg 300w" 
-        sizes="(max-width:900px)18vw,(max-width:600px)24vw,300px" 
-        alt="Photo 2"
-        class="composition_photo composition_photo--p2"  >
-
-          <img srcset="img/hcm3.jpg 1000w,img/nat-3.jpg 300w" 
-        sizes="(max-width:900px)18vw,(max-width:600px)24vw,300px" 
-        alt="Photo 3"
-        class="composition_photo composition_photo--p3"  >
-
-      
-
-     </div>                 
-
-   </div>
- </div>
- <div class="row"></div>
-</section>
-
-<section class="section-features">
-
-
-
-  <div class="row">
-    <div class="col-1-of-4">
-      <div class="feature-box">
-        <div class="feature-box_icon margin-bottom-medium">I</div>
-        <h3 class="heading-teriatery margin-bottom-medium ">
-          Khám phá Việt Nam.
-        </h3>
-        <p class="feature-box_text">Tìm hiểu về văn hóa, lịch sử</br>và con người Việt Nam,</br>một đất nước với nhiều di sản</br> và phong cảnh tuyệt đẹp.</p>
-      </div>
-    </div>
-
-
-    <div class="col-1-of-4">
-      <div class="feature-box">
-        <div class="feature-box_icon margin-bottom-medium">II</div>
-        <h3 class="heading-teriatery margin-bottom-medium ">
-          Ẩm thực Việt Nam.
-        </h3>
-        <p class="feature-box_text">Thưởng thức những món ăn</br>truyền thống đậm đà hương vị </br>như phở, bún chả, bánh mì</br>và nhiều món ngon khác.</p>
-      </div>
-    </div>
-
-
-    <div class="col-1-of-4">
-      <div class="feature-box">
-        <div class="feature-box_icon margin-bottom-medium">III</div>
-        <h3 class="heading-teriatery margin-bottom-medium ">
-          Điểm đến nổi bật.
-        </h3>
-        <p class="feature-box_text">Khám phá những điểm đến du</br>lịch nổi tiếng như Hạ Long, Hội An, Sapa, và nhiều nơi</br>khác tại Việt Nam.</br></p>
-      </div>
-    </div>
-
-    <div class="col-1-of-4">
-      <div class="feature-box">
-        <div class="feature-box_icon margin-bottom-medium">IV</div>
-        <h3 class="heading-teriatery margin-bottom-medium ">
-          Văn hóa và phong tục.
-        </h3>
-        <p class="feature-box_text">Hiểu thêm về các phong tục</br>tập quán, lễ hội và những giá</br>trị văn hóa độc đáo của</br>người Việt Nam.</p>
-      </div>
-    </div>
-  </div>
-
-</section>
-<section class="section-tours">
-
-  <div class="row">
-
-    <div class="u-text-center  margin-bottom-big">
-      <h2 class="heading-secondary ">
-        Các Tour Du Lịch Phổ Biến Nhất
-      </h2>
-    </div>
-    <div class="col-1-of-3">
-      <div class="card"> 
-
-
-       <div class="card_side card_side--front  card_side--front--1">
-
-         <div class="card-image card-image--1">
-           &nbsp;
-         </div>
-
-         <h4 class="card_heading">
-          <span class="card_heading-span card_heading-span--1">Vịnh Hạ Long</span> 
-
-        </h4>
-        <div class="card_details">
-          <ul>
-            <li>Tour 3 ngày</li>
-            <li>Tối đa 12 người</li>
-            <li>2 hướng dẫn viên</li>
-            <li>Nghỉ ngơi tại khách sạn 5 sao</li>
-            <li>Đánh giá:
-              <span class="stars">★★★★★</span>
-            </li>
-          </ul>
-       </div>
-     </div>
-     <div class="card_side card_side--back card_side--back--1 ">
-      <div class="card_cta">
-        <div class="card_price-box">
-          <p class="card_price-only">Chỉ</p>
-          <p class="card_price-value">6,500,000 VNĐ</p>
-        </div>
-      </div>
-
-      <div class="btn btn_card btn--white">Đặt ngay!</div>
-    </div>
-
-  </div>
-</div>
-<div class="col-1-of-3">
- <div class="card"> 
-
-
-   <div class="card_side card_side--front  card_side--front--2">
-
-     <div class="card-image card-image--2">
-       &nbsp;
-     </div>
-
-     <h4 class="card_heading">
-      <span class="card_heading-span card_heading-span--2">Rừng Thông Đà Lạt</span> 
-
-    </h4>
-    <div class="card_details">
-      <ul>
-        <li>Tour 2 ngày</li>
-        <li>Tối đa 10 người</li>
-        <li>1 hướng dẫn viên</li>
-        <li>Nghỉ ngơi tại khách sạn 4 sao</li>
-        <li>Đánh giá: 
-          <span class="stars">★★★★</span>
-        </li>
-      </ul>
-   </div>
- </div>
- <div class="card_side card_side--back card_side--back--2 ">
-  <div class="card_cta">
-    <div class="card_price-box">
-      <p class="card_price-only">Chỉ</p>
-      <p class="card_price-value">5,500,000 VNĐ</p>
-    </div>
-  </div>
-
-  <div class="btn btn_card btn--white">Đặt ngay!</div>
-</div>
-
-</div>
-</div>
-<div class="col-1-of-3">
- <div class="card"> 
-
-
-   <div class="card_side card_side--front  card_side--front--3">
-
-     <div class="card-image card-image--3">
-       &nbsp;
-     </div>
-
-     <h4 class="card_heading">
-      <span class="card_heading-span card_heading-span--3">Sa Pa</span> 
-
-    </h4>
-    <div class="card_details">
-     <ul>
-      <li>Tour 4 ngày</li>
-      <li>Tối đa 10 người</li>
-      <li>2 hướng dẫn viên</li>
-      <li>Nghỉ ngơi tại khách sạn 5 sao</li>
-      <li>Đánh giá: 
-        <span class="stars">★★★★★</span>
-      </li>
-     </ul>
-
-   </div>
- </div>
- <div class="card_side card_side--back card_side--back--3 ">
-  <div class="card_cta">
-    <div class="card_price-box">
-      <p class="card_price-only">Chỉ</p>
-      <p class="card_price-value">7,000,000 VNĐ</p>
-    </div>
-  </div>
-
-  <div class="btn btn_card btn--white">Đặt ngay!</div>
-</div>
-
-</div>
-
-
-</div>
-
-</div>
-<div class="u-text-center margin-bottom-small">
-  <a href="#" class="btn btn--green"> Khám phá các tour mới</a> 
-</div>    
-</section>
-
-<section class="section-story"> 
-  <div class="bg-video">
-    <video class="bg-video_content" autoplay>
-      <source src="img/SAIGON1.mp4" type="video/webm">
-        <source src="img/SAIGON.mp4" type="SAIGON/mp4">   
-          You,r browser does,nt support any vedio tag
-        </video>
-
+  <main>
+    <section class="section-about" id="About">
+      <div class="u-text-center margin-bottom-big">
+        <h2 class="heading-secondary">
+          Khám phá thế giới theo cách của riêng bạn
+        </h2>
       </div>
       <div class="row">
-       <div class="u-text-center ">
-        <h2 class="heading-secondary margin-top-big ">
-          Chúng tôi làm cho mọi người thực sự hạnh phúc.
-       </h2>
-     </div>
-     <div class="story margin-top-big">
-      <div class="story_shape">
-        <figure>
-          <img srcset="/img/nat-8.jpg 2000w,../img/nat-8-min.jpg 2000w" 
-          sizes="(max-width:900px)2vw,(max-width:600px)0.78vw,2000px"
-          class="story_img" 
-          alt="story"
-           width="100%" 
-           height="100%"
-            src="/img/nat-8.jpg" >
-          <figcaption class="story_caption">Mary smith</figcaption>
-        </figure>
+        <div class="col-1-of-2">
+          <h3 class="heading-teriatery margin-bottom-small">
+            BẠN SẼ PHẢI LÒNG DU LỊCH
+          </h3>
+          <p class="paragraph margin-bottom-medium">Hãy để chúng tôi đưa bạn đến những vùng đất mới, nơi bạn sẽ được trải nghiệm những điều kỳ diệu và khám phá những nền văn hóa độc đáo. Từ những bãi biển cát trắng trải dài đến những đỉnh núi hùng vĩ, từ những thành phố cổ kính đến những khu rừng nhiệt đới hoang sơ, mỗi chuyến đi đều là một cuộc phiêu lưu đầy cảm xúc.</p>
+          <h3 class="heading-teriatery margin-bottom-small">
+            NHỮNG CHUYẾN ĐI CHƯA TỪNG CÓ
+          </h3>
+          <p class="paragraph margin-bottom-medium">Chúng tôi cam kết mang đến cho bạn những trải nghiệm du lịch tuyệt vời nhất, với các dịch vụ chất lượng cao, lịch trình linh hoạt và đội ngũ hướng dẫn viên chuyên nghiệp, nhiệt tình. Bạn sẽ được tận hưởng những khoảnh khắc đáng nhớ và tạo nên những kỷ niệm khó quên trong suốt hành trình.</p>
+          <a href="#" class="btn-text">Tìm hiểu thêm. &rarr;</a>
+        </div>
+        <div class="col-1-of-2">
+          <div class="composition">
+            <img srcset="img/hcm1.jpg 1000w, img/nat-1.jpg 300w" 
+                 sizes="(max-width:900px) 18vw, (max-width:600px) 24vw, 300px" 
+                 alt="Photo 1"
+                 class="composition_photo composition_photo--p1">
+            <img srcset="img/hcm2.jpg 1000w, img/nat-2.jpg 300w" 
+                 sizes="(max-width:900px) 18vw, (max-width:600px) 24vw, 300px" 
+                 alt="Photo 2"
+                 class="composition_photo composition_photo--p2">
+            <img srcset="img/hcm3.jpg 1000w, img/nat-3.jpg 300w" 
+                 sizes="(max-width:900px) 18vw, (max-width:600px) 24vw, 300px" 
+                 alt="Photo 3"
+                 class="composition_photo composition_photo--p3">
+          </div>                 
+        </div>
       </div>
-      <div class="story_text">
-        <h1 class="heading-teriatery margin-bottom-small">Feedback</h1>
+      <div class="row"></div>
+    </section>
 
-        <p>
-          Đặt tour du lịch chưa bao giờ dễ dàng và hài lòng đến thế với Techsquad! Website thân thiện, đặt tour nhanh chóng, dịch vụ chu đáo từ A đến Z. Chuyến đi của tôi đã trở nên đáng nhớ hơn bao giờ hết nhờ Techsquad! </p>
-
+    <section class="section-features">
+      <div class="row">
+        <div class="col-1-of-4">
+          <div class="feature-box">
+            <div class="feature-box_icon margin-bottom-medium">I</div>
+            <h3 class="heading-teriatery margin-bottom-medium">
+              Khám phá Việt Nam.
+            </h3>
+            <p class="feature-box_text">Tìm hiểu về văn hóa, lịch sử<br>và con người Việt Nam,<br>một đất nước với nhiều di sản<br> và phong cảnh tuyệt đẹp.</p>
+          </div>
+        </div>
+        <div class="col-1-of-4">
+          <div class="feature-box">
+            <div class="feature-box_icon margin-bottom-medium">II</div>
+            <h3 class="heading-teriatery margin-bottom-medium">
+              Ẩm thực Việt Nam.
+            </h3>
+            <p class="feature-box_text">Thưởng thức những món ăn<br>truyền thống đậm đà hương vị<br>như phở, bún chả, bánh mì<br>và nhiều món ngon khác.</p>
+          </div>
+        </div>
+        <div class="col-1-of-4">
+          <div class="feature-box">
+            <div class="feature-box_icon margin-bottom-medium">III</div>
+            <h3 class="heading-teriatery margin-bottom-medium">
+              Điểm đến nổi bật.
+            </h3>
+            <p class="feature-box_text">Khám phá những điểm đến du<br>lịch nổi tiếng như Hạ Long, Hội An, Sapa, và nhiều nơi<br>khác tại Việt Nam.</p>
+          </div>
+        </div>
+        <div class="col-1-of-4">
+          <div class="feature-box">
+            <div class="feature-box_icon margin-bottom-medium">IV</div>
+            <h3 class="heading-teriatery margin-bottom-medium">
+              Văn hóa và phong tục.
+            </h3>
+            <p class="feature-box_text">Hiểu thêm về các phong tục<br>tập quán, lễ hội và những giá<br>trị văn hóa độc đáo của<br>người Việt Nam.</p>
+          </div>
+        </div>
       </div>
+    </section>
 
-
-    </div> 
-
-    <div class="story margin-top-big">
-      <div class="story_shape">
-        <figure>
-         <img srcset="../img/nat-9.jpg 2000w,../img/nat-9-min.jpg 583w" 
-          sizes="(max-width:900px)2vw,(max-width:600px)0.97vw,2000px"
-          class="story_img" 
-          alt="story"
-           width="100%" 
-          x height="100%"
-                         >
-          <figcaption class="story_caption">Jack Wilson</figcaption>
-        </figure>
+    <section class="section-tours">
+      <div class="row">
+        <div class="u-text-center margin-bottom-big">
+          <h2 class="heading-secondary">
+            Các Tour Du Lịch Phổ Biến Nhất
+          </h2>
+        </div>
+        <div class="col-1-of-3">
+          <div class="card"> 
+            <div class="card_side card_side--front card_side--front--1">
+              <div class="card-image card-image--1">
+                &nbsp;
+              </div>
+              <h4 class="card_heading">
+                <span class="card_heading-span card_heading-span--1">Vịnh Hạ Long</span> 
+              </h4>
+              <div class="card_details">
+                <ul>
+                  <li>Tour 3 ngày</li>
+                  <li>Tối đa 12 người</li>
+                  <li>2 hướng dẫn viên</li>
+                  <li>Nghỉ ngơi tại khách sạn 5 sao</li>
+                  <li>Đánh giá:
+                    <span class="stars">★★★★★</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="card_side card_side--back card_side--back--1">
+              <div class="card_cta">
+                <div class="card_price-box">
+                  <p class="card_price-only">Chỉ</p>
+                  <p class="card_price-value">6,500,000 VNĐ</p>
+                </div>
+              </div>
+              <div class="btn btn_card btn--white">Đặt ngay!</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-1-of-3">
+          <div class="card"> 
+            <div class="card_side card_side--front card_side--front--2">
+              <div class="card-image card-image--2">
+                &nbsp;
+              </div>
+              <h4 class="card_heading">
+                <span class="card_heading-span card_heading-span--2">Rừng Thông Đà Lạt</span> 
+              </h4>
+              <div class="card_details">
+                <ul>
+                  <li>Tour 2 ngày</li>
+                  <li>Tối đa 10 người</li>
+                  <li>1 hướng dẫn viên</li>
+                  <li>Nghỉ ngơi tại khách sạn 4 sao</li>
+                  <li>Đánh giá: 
+                    <span class="stars">★★★★</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="card_side card_side--back card_side--back--2">
+              <div class="card_cta">
+                <div class="card_price-box">
+                  <p class="card_price-only">Chỉ</p>
+                  <p class="card_price-value">5,500,000 VNĐ</p>
+                </div>
+              </div>
+              <div class="btn btn_card btn--white">Đặt ngay!</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-1-of-3">
+          <div class="card"> 
+            <div class="card_side card_side--front card_side--front--3">
+              <div class="card-image card-image--3">
+                &nbsp;
+              </div>
+              <h4 class="card_heading">
+                <span class="card_heading-span card_heading-span--3">Sa Pa</span> 
+              </h4>
+              <div class="card_details">
+                <ul>
+                  <li>Tour 4 ngày</li>
+                  <li>Tối đa 10 người</li>
+                  <li>2 hướng dẫn viên</li>
+                  <li>Nghỉ ngơi tại khách sạn 5 sao</li>
+                  <li>Đánh giá: 
+                    <span class="stars">★★★★★</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="card_side card_side--back card_side--back--3">
+              <div class="card_cta">
+                <div class="card_price-box">
+                  <p class="card_price-only">Chỉ</p>
+                  <p class="card_price-value">7,000,000 VNĐ</p>
+                </div>
+              </div>
+              <div class="btn btn_card btn--white">Đặt ngay!</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="story_text">
-        <h1 class="heading-teriatery margin-bottom-small">Feedback</h1>
+      <div class="u-text-center margin-bottom-small">
+        <a href="#" class="btn btn--green">Khám phá các tour mới</a> 
+      </div>    
+    </section>
 
-        <p>
-          Techsquad mang đến trải nghiệm đặt tour du lịch trực tuyến tuyệt vời. Website thân thiện, quy trình đặt tour đơn giản. Chất lượng dịch vụ xuất sắc, từ tư vấn đến hướng dẫn viên và các dịch vụ đi kèm. Chuyến đi của tôi thật sự đáng nhớ!</p>
-
+    <section class="section-story"> 
+      <div class="bg-video">
+        <video class="bg-video_content" autoplay>
+          <source src="img/SAIGON1.mp4" type="video/webm">
+          <source src="img/SAIGON.mp4" type="video/mp4">   
+          Your browser doesn't support any video tag
+        </video>
       </div>
+      <div class="row">
+        <div class="u-text-center">
+          <h2 class="heading-secondary margin-top-big">
+            Chúng tôi làm cho mọi người thực sự hạnh phúc.
+          </h2>
+        </div>
+        <div class="story margin-top-big">
+          <div class="story_shape">
+            <figure>
+              <img srcset="/img/nat-8.jpg 2000w, ../img/nat-8-min.jpg 2000w" 
+                   sizes="(max-width:900px) 2vw, (max-width:600px) 0.78vw, 2000px"
+                   class="story_img" 
+                   alt="story"
+                   width="100%" 
+                   height="100%"
+                   src="/img/nat-8.jpg">
+              <figcaption class="story_caption">Mary Smith</figcaption>
+            </figure>
+          </div>
+          <div class="story_text">
+            <h1 class="heading-teriatery margin-bottom-small">Feedback</h1>
+            <p>
+              Đặt tour du lịch chưa bao giờ dễ dàng và hài lòng đến thế với Techsquad! Website thân thiện, đặt tour nhanh chóng, dịch vụ chu đáo từ A đến Z. Chuyến đi của tôi đã trở nên đáng nhớ hơn bao giờ hết nhờ Techsquad!
+            </p>
+          </div>
+        </div> 
+        <div class="story margin-top-big">
+          <div class="story_shape">
+            <figure>
+              <img srcset="../img/nat-9.jpg 2000w, ../img/nat-9-min.jpg 583w" 
+                   sizes="(max-width:900px) 2vw, (max-width:600px) 0.97vw, 2000px"
+                   class="story_img" 
+                   alt="story"
+                   width="100%" 
+                   height="100%">
+              <figcaption class="story_caption">Jack Wilson</figcaption>
+            </figure>
+          </div>
+          <div class="story_text">
+            <h1 class="heading-teriatery margin-bottom-small">Feedback</h1>
+            <p>
+              Techsquad mang đến trải nghiệm đặt tour du lịch trực tuyến tuyệt vời. Website thân thiện, quy trình đặt tour đơn giản. Chất lượng dịch vụ xuất sắc, từ tư vấn đến hướng dẫn viên và các dịch vụ đi kèm. Chuyến đi của tôi thật sự đáng nhớ!
+            </p>
+          </div>
+        </div> 
+        <span class="story_media">
+          <div class="u-text-center margin-bottom-big">
+            <a href="#" class="btn-text">Đọc thêm những câu chuyện</a> 
+          </div>   
+        </span>
+      </div>
+    </section>
+  </main> 
 
-
-
-
-    </div> 
-<span class="story_media">
-    <div class="u-text-center margin-bottom-big">
-      <a href="#" class="btn-text">Đọc thêm những câu chuyện</a> 
-    </div>   
-  </span>
-  </div>
   <footer class="footer" id="contact">
     <div class="footer_logo-box">
-        <picture class="footer_logo">
-            <source srcset="img/logo-footer1.png 2x" media="(max-width:37.5rem)">
-            <img srcset="img/logo-KTX.png 2x" alt="Full logo">
-        </picture>
+      <picture class="footer_logo">
+        <source srcset="img/logo-footer1.png 2x" media="(max-width:37.5rem)">
+        <img srcset="img/logo-KTX.png 2x" alt="Full logo">
+      </picture>
     </div>
     <div class="row">
-        <div class="col-1-of-2">
-            <div class="footer_navigation">
-            </div>
-            <div class="contact-section"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-                <div class="contact-box">
-                    <h3>Liên hệ với chúng tôi</h3>
-                    <label>Tin nhắn:</label>
-                    <textarea placeholder="Nhập tin nhắn của bạn"></textarea>
-                    <div class="contact-info">
-                        <p><i class="fas fa-phone"></i>19001886</p>
-                        <p><i class="fas fa-envelope"></i>dulichvietnam@gmail.com</p>
-                        <p><i class="fas fa-map-marker-alt"></i> QL1A, Tan Chanh Hiep, Quận 12, TP HCM </p>
-                        <p>Chúng tôi sẽ trả lời bạn sớm nhất có thể</p>
-                    </div>
-                    <button>Gửi tin nhắn </button>
-                </div>
-            </div> </div>
-        <div class="col-1-of-2">
+      <div class="col-1-of-2">
+        <div class="footer_navigation">
+          <ul class="footer_list">
+            <li class="footer_item"><a href="#" class="footer_link">Company</a></li>
+            <li class="footer_item"><a href="#" class="footer_link">Contact us</a></li>
+            <li class="footer_item"><a href="#" class="footer_link">Careers</a></li>
+            <li class="footer_item"><a href="#" class="footer_link">Privacy policy</a></li>
+            <li class="footer_item"><a href="#" class="footer_link">Terms</a></li>
+          </ul>
         </div>
-    </div>
-</footer>
-
-  
-      <!-- Button gửi tin nhắn -->
-      <button>Gửi tin nhắn </button>
-  </div>
-
-</section>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-</main> 
-
-<footer class="footer">
-  <div class="footer_logo-box">
-    <picture class="footer_logo">
-      <source srcset="img/logo-footer1.png 2x" media="(max-width:37.5rem)">
-          <img srcset="img/logo-KTX.png 2x" alt="Full logo">
-    </picture>
-
-  
-  </div>
-  <div class="row">
-    <div class="col-1-of-2">
-      <div class="footer_navigation">
-        <ul class="footer_list">
-          <li class="footer_item"><a href="#" class="footer_link">Company</a></li>
-          <li class="footer_item"><a href="#" class="footer_link">Contact us</a></li>
-          <li class="footer_item"><a href="#" class="footer_link">Carrers</a></li>
-          <li class="footer_item"><a href="#" class="footer_link">Privacy policy</a></li>
-          <li class="footer_item"><a href="#" class="footer_link">Terms</a></li>
-        </ul>
+        <div class="contact-section">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+          <div class="contact-box">
+            <h3>Liên hệ với chúng tôi</h3>
+            <label>Tin nhắn:</label>
+            <textarea placeholder="Nhập tin nhắn của bạn"></textarea>
+            <div class="contact-info">
+              <p><i class="fas fa-phone"></i>19001886</p>
+              <p><i class="fas fa-envelope"></i><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c2a6b7aeaba1aab4aba7b6aca3af82a5afa3abaeeca1adaf">[email&#160;protected]</a></p>
+              <p><i class="fas fa-map-marker-alt"></i> QL1A, Tan Chanh Hiep, Quận 12, TP HCM </p>
+              <p>Chúng tôi sẽ trả lời bạn sớm nhất có thể</p>
+            </div>
+            <button>Gửi tin nhắn</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-1-of-2">
+        <p class="footer_copyright">
+          Built by <a href="#" class="footer_link">Ubaid Parvez</a> 
+          Copyright &copy; by Ubaid.
+        </p>
       </div>
     </div>
-    <div class="col-1-of-2">
-      <p class="footer_copyright">
-        Built by <a href="#" class="footer_link">Ubaid Parvez</a> 
-        Copyright &copy; by Ubaid. 
+  </footer>
 
-      </p>
-    </div>
-  </div>
-<script>
-  // Chèn chatbox vào trang
-  fetch('chatbox-component.html')
+  <!-- Thêm chatbox container -->
+  <div id="chatbox-container"></div>
+
+  <!-- Script để chèn và khởi tạo chatbox -->
+  <script src="script.js"></script>
+  <script>
+    // Chèn chatbox vào trang
+    fetch('chatbox-component.html')
       .then(response => response.text())
       .then(data => {
-          document.getElementById('chatbox-container').innerHTML = data;
-          // Sau khi chèn, tải lịch sử trò chuyện
-          loadChatHistory();
-          // Khôi phục trạng thái hiển thị của chatbox
-          const isChatbotOpen = localStorage.getItem('chatbotOpen') === 'true';
-          if (isChatbotOpen) {
-              document.body.classList.add('show-chatbot');
-          }
+        document.getElementById('chatbox-container').innerHTML = data;
+        // Sau khi chèn, tải lịch sử trò chuyện
+        loadChatHistory();
+        // Khôi phục trạng thái hiển thị của chatbox
+        const isChatbotOpen = localStorage.getItem('chatbotOpen') === 'true';
+        if (isChatbotOpen) {
+          document.body.classList.add('show-chatbot');
+        }
+      })
+      .catch(error => {
+        console.error('Lỗi khi tải chatbox-component.html:', error);
       });
-</script>
-<script src="script.js"></script>
+  </script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92a68b6a2ccd44d6',t:'MTc0MzY2MjExMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
-

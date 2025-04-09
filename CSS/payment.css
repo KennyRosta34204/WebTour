@@ -267,3 +267,69 @@ h2 {
     cursor: pointer;
     border-radius: 5px;
 }
+
+.suggestions-list {
+    list-style: none;
+    padding: 0;
+    max-width: 300px;
+    background: white; /* Nền trắng */
+    border: 1px solid #ccc;
+    position: absolute;
+    z-index: 1000;
+}
+
+.suggestions-list li {
+    padding: 8px;
+    cursor: pointer;
+    color: black; /* Chữ đen */
+}
+
+.suggestions-list li:hover {
+    background: #f0f0f0; /* Màu xám nhạt khi hover */
+}
+.tour-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+.main-nav {
+  position:absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  z-index: 100;
+  border-radius: 5px;
+}
+
+.main-nav a {
+  text-decoration: none;
+  font-weight: bold;
+  color: white;
+  margin: 0 50px;
+  margin-left: 10px;
+  font-size: 17px;
+  font-family: Arial, sans-serif;
+  padding: 15px 10px; /* Tăng padding-top và padding-bottom */
+  border-radius: 0;
+  transition: border-radius 0.3s ease;
+}
+
+.main-nav a:hover {
+  background-color: #ff7d26;
+  color: black;
+  border-radius: 5px;
+}
+.main-nav i { /* Định dạng icon */
+    margin-left: auto; /* Đẩy icon sang phải */
+    margin-right: 20px; /* Khoảng cách từ icon đến lề phải */
+    font-size: 20px; /* Kích thước icon */
+    color: white; /* Màu icon */
+}

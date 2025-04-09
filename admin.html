@@ -16,7 +16,7 @@
 
         /* Thanh sidebar */
         .sidebar {
-            width: 250px; /* Giảm chiều rộng sidebar */
+            width: 250px;
             height: 100vh;
             background: #007bff;
             color: white;
@@ -50,7 +50,7 @@
         .content {
             flex-grow: 1;
             padding: 20px;
-            background-color: #e0f2f7; /* Nền xanh nhạt hơn cho phần nội dung chính */
+            background-color: #e0f2f7;
         }
 
         .card {
@@ -194,10 +194,55 @@
             z-index: 1000;
             display: none;
         }
+
+        /* Form thêm/sửa tour */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            display: none;
+            width: 400px;
+        }
+
+        .modal h3 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal input, .modal textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .modal button {
+            width: 48%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal .btn-save {
+            background: #28a745;
+            color: white;
+        }
+
+        .modal .btn-cancel {
+            background: #dc3545;
+            color: white;
+        }
     </style>
 </head>
 <body>
-
     <div class="sidebar">
         <div class="text-center">
             <img src="img/logo-KTX.png" alt="Logo" class="img-fluid mb-2" style="max-width: 100px;">
@@ -215,6 +260,7 @@
     <div class="content">
         <button class="welcome-button">Chào mừng, Quản trị viên!</button>
 
+        <!-- Trang Tổng Quan -->
         <div id="dashboard">
             <h2>Trang Tổng Quan</h2>
             <div class="stats-container">
@@ -233,6 +279,7 @@
             </div>
         </div>
 
+        <!-- Quản lý Khách Hàng -->
         <div id="customers" class="hidden">
             <h2>Khách Hàng</h2>
             <div class="table-container">
@@ -248,12 +295,13 @@
                             <th>Trạng thái thanh toán</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="customers-table-body">
                     </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- Quản lý Đặt Tour -->
         <div id="tour-packages" class="hidden">
             <h2>Quản lý Đặt Tour</h2>
             <div class="table-container">
@@ -264,12 +312,13 @@
                             <th>Trạng thái thanh toán</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="bookings-table-body">
                     </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- Báo Cáo & Thống Kê -->
         <div id="orders" class="hidden">
             <h2>Báo Cáo & Thống Kê</h2>
             <div class="table-container">
@@ -281,40 +330,402 @@
                             <th>Tour phổ biến</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="reports-table-body">
                     </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- Quản lý Tour -->
         <div id="destinations" class="hidden">
             <h2>Quản lý Tour</h2>
+            <button class="btn btn-primary mb-3" onclick="showAddTourForm()">Thêm Tour Mới</button>
             <div class="table-container">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Thêm</th>
-                            <th>Sửa</th>
-                            <th>Xóa</th>
-                            <th>Cập nhật tour</th>
+                            <th>ID</th>
+                            <th>Tên Tour</th>
+                            <th>Giá</th>
+                            <th>Mô tả</th>
+                            <th>Link Ảnh</th>
+                            <th>Khách Sạn</th>
+                            <th>Phương Tiện</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tours-table-body">
                     </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- Form thêm tour -->
+        <div id="add-tour-modal" class="modal">
+            <h3>Thêm Tour Mới</h3>
+            <input type="text" id="add-tour-title" placeholder="Tên Tour">
+            <input type="text" id="add-tour-price" placeholder="Giá (VD: 4,200,000 VND)">
+            <textarea id="add-tour-description" placeholder="Mô tả" rows="4"></textarea>
+            <input type="text" id="add-tour-url" placeholder="Link ảnh">
+            <input type="text" id="add-tour-hotel" placeholder="Khách sạn">
+            <input type="text" id="add-tour-transport" placeholder="Phương tiện">
+            <button class="btn-save" onclick="addTour()">Lưu</button>
+            <button class="btn-cancel" onclick="closeAddTourForm()">Hủy</button>
+        </div>
+
+        <!-- Form sửa tour -->
+        <div id="edit-tour-modal" class="modal">
+            <h3>Sửa Tour</h3>
+            <input type="hidden" id="edit-tour-id">
+            <input type="text" id="edit-tour-title" placeholder="Tên Tour">
+            <input type="text" id="edit-tour-price" placeholder="Giá (VD: 4,200,000 VND)">
+            <textarea id="edit-tour-description" placeholder="Mô tả" rows="4"></textarea>
+            <input type="text" id="edit-tour-url" placeholder="Link ảnh">
+            <input type="text" id="edit-tour-hotel" placeholder="Khách sạn">
+            <input type="text" id="edit-tour-transport" placeholder="Phương tiện">
+            <button class="btn-save" onclick="updateTour()">Lưu</button>
+            <button class="btn-cancel" onclick="closeEditTourForm()">Hủy</button>
+        </div>
+
         <div class="overlay"></div>
+    </div>
 
-        <script>
-            function showContent(event, id) {
-                document.querySelectorAll('.content > div').forEach(div => div.classList.add('hidden'));
-                document.getElementById(id).classList.remove('hidden');
-                document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-                event.currentTarget.classList.add('active');
+    <script>
+        // Hàm chuyển đổi nội dung hiển thị
+        function showContent(event, id) {
+            document.querySelectorAll('.content > div').forEach(div => div.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Tải dữ liệu tương ứng khi chuyển tab
+            if (id === 'dashboard') loadDashboard();
+            if (id === 'customers') loadCustomers();
+            if (id === 'tour-packages') loadBookings();
+            if (id === 'orders') loadReports();
+            if (id === 'destinations') loadTours();
+        }
+
+        // Tải dữ liệu cho Trang tổng quan
+        async function loadDashboard() {
+            try {
+                const response = await fetch('http://localhost:5500/api/dashboard');
+                const data = await response.json();
+
+                if (data.error) {
+                    alert('Lỗi khi tải dữ liệu: ' + data.error);
+                    return;
+                }
+
+                document.getElementById('total-tours').textContent = data.total_tours;
+                document.getElementById('total-bookings').textContent = data.total_bookings;
+                document.getElementById('total-customers').textContent = data.total_customers;
+            } catch (error) {
+                alert('Lỗi khi tải dữ liệu Dashboard: ' + error.message);
             }
-        </script>
+        }
 
-    </body>
+        // Tải dữ liệu cho danh sách khách hàng
+        async function loadCustomers() {
+            try {
+                const response = await fetch('http://localhost:5500/api/customers');
+                const customers = await response.json();
+
+                if (customers.error) {
+                    alert('Lỗi khi tải dữ liệu khách hàng: ' + customers.error);
+                    return;
+                }
+
+                const tbody = document.getElementById('customers-table-body');
+                tbody.innerHTML = '';
+
+                customers.forEach(customer => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${customer.name || 'N/A'}</td>
+                        <td>${customer.email || 'N/A'}</td>
+                        <td>${customer.phone || 'N/A'}</td>
+                        <td>${customer.order_name || 'Chưa đặt tour'}</td>
+                        <td>${customer.booking_date || 'N/A'}</td>
+                        <td>${customer.departure_date || 'N/A'}</td>
+                        <td><span class="status ${customer.payment_status === 'SUCCESS' ? 'confirmed' : 'pending'}">${customer.payment_status || 'Chưa thanh toán'}</span></td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                alert('Lỗi khi tải dữ liệu khách hàng: ' + error.message);
+            }
+        }
+
+        // Tải dữ liệu cho danh sách đặt tour
+        async function loadBookings() {
+            try {
+                const response = await fetch('http://localhost:5500/api/bookings');
+                const bookings = await response.json();
+
+                if (bookings.error) {
+                    alert('Lỗi khi tải dữ liệu đặt tour: ' + bookings.error);
+                    return;
+                }
+
+                const tbody = document.getElementById('bookings-table-body');
+                tbody.innerHTML = '';
+
+                bookings.forEach(booking => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${booking.order_name}</td>
+                        <td><span class="status ${booking.payment_status === 'SUCCESS' ? 'confirmed' : 'pending'}">${booking.payment_status}</span></td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                alert('Lỗi khi tải dữ liệu đặt tour: ' + error.message);
+            }
+        }
+
+        // Tải dữ liệu cho báo cáo và thống kê
+        async function loadReports() {
+            try {
+                const response = await fetch('http://localhost:5500/api/reports');
+                const reports = await response.json();
+
+                if (reports.error) {
+                    alert('Lỗi khi tải dữ liệu báo cáo: ' + reports.error);
+                    return;
+                }
+
+                const tbody = document.getElementById('reports-table-body');
+                tbody.innerHTML = '';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${reports.total_revenue.toLocaleString('vi-VN')} VNĐ</td>
+                    <td>${reports.total_bookings}</td>
+                    <td>${reports.popular_tour}</td>
+                `;
+                tbody.appendChild(row);
+            } catch (error) {
+                alert('Lỗi khi tải dữ liệu báo cáo: ' + error.message);
+            }
+        }
+
+        // Tải dữ liệu cho danh sách tour (Đã cải thiện xử lý lỗi)
+        async function loadTours() {
+            try {
+                const response = await fetch('http://localhost:5500/api/tours');
+                const tours = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(tours.error || 'Lỗi không xác định từ server');
+                }
+
+                const tbody = document.getElementById('tours-table-body');
+                tbody.innerHTML = '';
+
+                tours.forEach(tour => {
+                    // Kiểm tra xem tour.id có tồn tại không
+                    if (!tour.id) {
+                        console.error('Tour không có ID:', tour);
+                        return;
+                    }
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${tour.id}</td>
+                        <td>${tour.title}</td>
+                        <td>${tour.price}</td>
+                        <td>${tour.description || 'N/A'}</td>
+                        <td>${tour.url || 'N/A'}</td>
+                        <td>${tour.hotel || 'N/A'}</td>
+                        <td>${tour.transport || 'N/A'}</td>
+                        <td>
+                            <button class="btn btn-warning" 
+                                    data-id="${tour.id}" 
+                                    data-title="${tour.title ? tour.title.replace(/"/g, '"') : ''}" 
+                                    data-price="${tour.price ? tour.price.replace(/"/g, '"') : ''}" 
+                                    data-description="${tour.description ? tour.description.replace(/"/g, '"') : ''}" 
+                                    data-url="${tour.url ? tour.url.replace(/"/g, '"') : ''}" 
+                                    data-hotel="${tour.hotel ? tour.hotel.replace(/"/g, '"') : ''}" 
+                                    data-transport="${tour.transport ? tour.transport.replace(/"/g, '"') : ''}" 
+                                    onclick="showEditTourFormFromButton(this)">Sửa</button>
+                            <button class="btn btn-danger" 
+                                    data-id="${tour.id}" 
+                                    onclick="deleteTourFromButton(this)">Xóa</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                alert('Lỗi khi tải dữ liệu tour: ' + error.message);
+                console.error('Chi tiết lỗi:', error);
+            }
+        }
+
+        // Hàm hỗ trợ cho nút "Sửa"
+        function showEditTourFormFromButton(button) {
+            const id = button.getAttribute('data-id');
+            const title = button.getAttribute('data-title');
+            const price = button.getAttribute('data-price');
+            const description = button.getAttribute('data-description');
+            const url = button.getAttribute('data-url');
+            const hotel = button.getAttribute('data-hotel');
+            const transport = button.getAttribute('data-transport');
+            showEditTourForm(id, title, price, description, url, hotel, transport);
+        }
+
+        // Hàm hỗ trợ cho nút "Xóa"
+        function deleteTourFromButton(button) {
+            const id = button.getAttribute('data-id');
+            if (!id) {
+                alert('Không tìm thấy ID của tour để xóa!');
+                console.error('Nút Xóa không có data-id:', button);
+                return;
+            }
+            deleteTour(id);
+        }
+
+        // Hiển thị form thêm tour
+        function showAddTourForm() {
+            document.getElementById('add-tour-modal').style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+        }
+
+        // Đóng form thêm tour
+        function closeAddTourForm() {
+            document.getElementById('add-tour-modal').style.display = 'none';
+            document.querySelector('.overlay').style.display = 'none';
+            document.getElementById('add-tour-title').value = '';
+            document.getElementById('add-tour-price').value = '';
+            document.getElementById('add-tour-description').value = '';
+            document.getElementById('add-tour-url').value = '';
+            document.getElementById('add-tour-hotel').value = '';
+            document.getElementById('add-tour-transport').value = '';
+        }
+
+        // Thêm tour mới
+        async function addTour() {
+            const title = document.getElementById('add-tour-title').value;
+            const price = document.getElementById('add-tour-price').value;
+            const description = document.getElementById('add-tour-description').value;
+            const url = document.getElementById('add-tour-url').value;
+            const hotel = document.getElementById('add-tour-hotel').value;
+            const transport = document.getElementById('add-tour-transport').value;
+
+            if (!title || !price) {
+                alert('Vui lòng điền ít nhất Tên Tour và Giá!');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5500/api/tours', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ title, price, description, url, hotel, transport })
+                });
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || 'Lỗi không xác định');
+                }
+
+                alert('Thêm tour thành công!');
+                closeAddTourForm();
+                loadTours(); // Tải lại danh sách tour
+            } catch (error) {
+                alert('Lỗi khi thêm tour: ' + error.message);
+            }
+        }
+
+        // Hiển thị form sửa tour
+        function showEditTourForm(id, title, price, description, url, hotel, transport) {
+            document.getElementById('edit-tour-id').value = id;
+            document.getElementById('edit-tour-title').value = title;
+            document.getElementById('edit-tour-price').value = price;
+            document.getElementById('edit-tour-description').value = description;
+            document.getElementById('edit-tour-url').value = url;
+            document.getElementById('edit-tour-hotel').value = hotel;
+            document.getElementById('edit-tour-transport').value = transport;
+            document.getElementById('edit-tour-modal').style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+        }
+
+        // Đóng form sửa tour
+        function closeEditTourForm() {
+            document.getElementById('edit-tour-modal').style.display = 'none';
+            document.querySelector('.overlay').style.display = 'none';
+        }
+
+        // Cập nhật tour
+        async function updateTour() {
+            const id = document.getElementById('edit-tour-id').value;
+            const title = document.getElementById('edit-tour-title').value;
+            const price = document.getElementById('edit-tour-price').value;
+            const description = document.getElementById('edit-tour-description').value;
+            const url = document.getElementById('edit-tour-url').value;
+            const hotel = document.getElementById('edit-tour-hotel').value;
+            const transport = document.getElementById('edit-tour-transport').value;
+
+            if (!id || !title || !price) {
+                alert('Vui lòng điền ít nhất Tên Tour và Giá!');
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:5500/api/tours/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ title, price, description, url, hotel, transport })
+                });
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || 'Lỗi không xác định');
+                }
+
+                alert('Sửa tour thành công!');
+                closeEditTourForm();
+                loadTours(); // Tải lại danh sách tour
+            } catch (error) {
+                alert('Lỗi khi sửa tour: ' + error.message);
+            }
+        }
+
+        // Xóa tour
+        async function deleteTour(id) {
+            if (!confirm('Bạn có chắc chắn muốn xóa tour này?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:5500/api/tours/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || 'Lỗi không xác định');
+                }
+
+                alert('Xóa tour thành công!');
+                loadTours(); // Tải lại danh sách tour
+            } catch (error) {
+                alert('Lỗi khi xóa tour: ' + error.message);
+            }
+        }
+
+        // Tải dữ liệu mặc định khi trang được tải
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDashboard(); // Tải dữ liệu cho trang tổng quan mặc định
+        });
+    </script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92d1f8cadf1bb0dc',t:'MTc0NDExNzQ4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
 </html>
