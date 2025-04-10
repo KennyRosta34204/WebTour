@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/KennyRosta34204/WebTour/issues"
   },
-  "homepage": "https://github.com/KennyRosta34204/WebTour#readme"
+  "homepage": "https://github.com/KennyRosta34204/WebTour#readme",
+  "dependencies": {
+    "node-cron": "^3.0.3"
+  }
 }

@@ -5,69 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thanh Toán ZaloPay</title>
     <link rel="stylesheet" href="css/payment.css">
-    <!-- Thêm Font Awesome để hiển thị icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Thêm thư viện qrcode để tạo mã QR -->
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
-    <link rel="stylesheet" href="css/chatbox.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <link rel="stylesheet" href="css/payment-chatbox.css">
     <style>
-        #payment-button {
-            background-color: #6a1b9a;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-            position: relative;
-        }
-        #payment-button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-        #qrcode-container {
-            margin-top: 20px;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: inline-block;
-        }
-        #qrcode-container h3 {
-            margin: 0 0 10px 0;
-            color: #333;
-        }
-        #qrcode-container p {
-            margin: 0 0 10px 0;
-            color: #666;
-            font-size: 14px;
-        }
-        #qrcode {
-            text-align: center;
-        }
-        #qrcode canvas {
-            max-width: 200px;
-        }
-        .loading-spinner {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #6a1b9a;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
+        #payment-button { background-color: #6a1b9a; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px; position: relative; }
+        #payment-button:disabled { background-color: #cccccc; cursor: not-allowed; }
+        #qrcode-container { margin-top: 20px; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); display: inline-block; }
+        #qrcode-container h3 { margin: 0 0 10px 0; color: #333; }
+        #qrcode-container p { margin: 0 0 10px 0; color: #666; font-size: 14px; }
+        #qrcode { text-align: center; }
+        #qrcode canvas { max-width: 200px; }
+        .loading-spinner { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 4px solid #f3f3f3; border-top: 4px solid #6a1b9a; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+        .status-message { margin-top: 20px; padding: 10px; border-radius: 5px; }
+        .status-message.success { background-color: #e0ffe0; color: #2e7d32; }
+        .status-message.error { background-color: #ffe0e0; color: #d32f2f; }
+        .status-message.info { background-color: #e0f7fa; color: #0277bd; }
     </style>
 </head>
 <body>
@@ -101,174 +57,188 @@
         <a id="open-zalopay" href="#" target="_blank">Mở ZaloPay để thanh toán (nếu không quét được mã QR)</a>
     </div>
 
+    <div id="status-message" class="status-message"></div>
+
     <div id="chatbox-container"></div>
 
+    <script src="script.js"></script>
+
     <script>
-        // Kiểm tra kết nối mạng
+        // Biến để theo dõi trạng thái yêu cầu
+        let isProcessing = false;
+        let pollingInterval = null;
+        let retryCount = 0;
+        const maxRetries = 5; // Số lần thử lại tối đa khi kiểm tra trạng thái
+
+        // Hàm kiểm tra kết nối mạng
         function checkNetwork() {
             return navigator.onLine;
         }
 
-        // Đảm bảo người dùng phải đăng nhập trước khi thanh toán
+        // Hàm hiển thị thông báo trạng thái
+        function showStatusMessage(message, type = 'info') {
+            const statusDiv = document.getElementById('status-message');
+            statusDiv.textContent = message;
+            statusDiv.className = `status-message ${type}`;
+        }
+
+        // Hàm chuyển hướng sau khi kiểm tra trang
+        async function redirectAfterCheck(url) {
+            const pageExists = await checkPageExists(url);
+            window.location.href = pageExists ? url : "/";
+        }
+
+        // Load thông tin tour và người dùng khi trang được tải
         document.addEventListener("DOMContentLoaded", function() {
-            // Kiểm tra trạng thái đăng nhập
             const user_id = localStorage.getItem("user_id");
             if (!user_id) {
-                alert("Bạn cần đăng nhập để thực hiện thanh toán!");
-                window.location.href = "login.html"; // Chuyển hướng đến trang đăng nhập
+                showStatusMessage("Bạn cần đăng nhập để thực hiện thanh toán!", "error");
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 2000);
                 return;
             }
 
-            // Tiếp tục hiển thị thông tin tour
-            const tourData = JSON.parse(localStorage.getItem("selectedTour"));
-            if (!tourData || !tourData.product_id) {
-                alert("Không có tour nào được chọn hoặc thiếu thông tin tour!");
-                window.location.href = "services.html"; // Chuyển hướng về trang danh sách tour
+            let tourData;
+            try {
+                const rawTourData = localStorage.getItem("selectedTour");
+                if (!rawTourData) {
+                    throw new Error("Không tìm thấy dữ liệu tour trong localStorage!");
+                }
+                tourData = JSON.parse(rawTourData);
+                if (!tourData || typeof tourData !== "object") {
+                    throw new Error("Dữ liệu tour không hợp lệ!");
+                }
+            } catch (error) {
+                console.error("❌ Lỗi khi đọc dữ liệu tour:", error.message);
+                showStatusMessage(error.message, "error");
+                setTimeout(() => {
+                    window.location.href = "services.html";
+                }, 2000);
                 return;
             }
 
-            console.log("Dữ liệu tourData:", tourData);
+            // Kiểm tra xem tourData có id hoặc product_id không
+            const tourId = tourData.id || tourData.product_id;
+            if (!tourId) {
+                console.error("❌ Dữ liệu tour thiếu id hoặc product_id:", tourData);
+                showStatusMessage("Dữ liệu tour thiếu thông tin ID. Vui lòng chọn lại tour!", "error");
+                setTimeout(() => {
+                    window.location.href = "services.html";
+                }, 2000);
+                return;
+            }
 
-            // Hiển thị thông tin tour
+            console.log("✅ Dữ liệu tourData:", tourData);
+
+            // Hiển thị thông tin tour và người dùng
             document.getElementById("tour-name").textContent = tourData.title || "Không có thông tin";
-            
-            // Định dạng giá tiền
             const price = parseInt(tourData.price?.replace(/\D/g, '') || '0');
             document.getElementById("tour-price").textContent = price.toLocaleString('vi-VN');
-
-            // Hiển thị thông tin người dùng
             document.getElementById("user-name").textContent = tourData.name || "Không có thông tin";
             document.getElementById("user-email").textContent = tourData.email || "Không có thông tin";
             document.getElementById("user-phone").textContent = tourData.phone || "Không có thông tin";
 
-            // Hiển thị hình ảnh tour
             const tourImage = document.getElementById("tour-image");
             const defaultImage = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80";
-            tourImage.src = tourData.image || defaultImage;
+            tourImage.src = tourData.url || tourData.image || defaultImage;
             tourImage.onerror = function() {
                 console.error("Không tải được ảnh:", tourData.image);
                 this.src = defaultImage;
             };
 
-            // Xử lý chatbox
-            const chatbotToggler = document.querySelector(".chatbot-toggler");
-            const chatbot = document.querySelector(".chatbot");
-            const closeBtn = document.querySelector(".close-btn");
-            const sendBtn = document.getElementById("send-btn");
-            const chatInput = document.querySelector(".chat-input textarea");
-            const chatbox = document.querySelector(".chatbox");
-
-            if (chatbotToggler && chatbot) {
-                chatbotToggler.addEventListener("click", () => {
-                    chatbot.classList.toggle("active");
-                });
-            } else {
-                console.error("Không tìm thấy chatbotToggler hoặc chatbot");
-            }
-
-            if (closeBtn && chatbot) {
-                closeBtn.addEventListener("click", () => {
-                    chatbot.classList.remove("active");
-                });
-            } else {
-                console.error("Không tìm thấy closeBtn hoặc chatbot");
-            }
-
-            if (sendBtn && chatInput && chatbox) {
-                sendBtn.addEventListener("click", () => {
-                    const message = chatInput.value.trim();
-                    if (message) {
-                        const outgoingMsg = document.createElement("li");
-                        outgoingMsg.classList.add("chat", "outgoing");
-                        outgoingMsg.innerHTML = `<p>${message}</p>`;
-                        chatbox.appendChild(outgoingMsg);
-                        chatInput.value = "";
-                        chatbox.scrollTop = chatbox.scrollHeight;
-
-                        setTimeout(() => {
-                            const incomingMsg = document.createElement("li");
-                            incomingMsg.classList.add("chat", "incoming");
-                            incomingMsg.innerHTML = `<span class="material-symbols-outlined">smart_toy</span><p>Đang xử lý...</p>`;
-                            chatbox.appendChild(incomingMsg);
-                            chatbox.scrollTop = chatbox.scrollHeight;
-                        }, 600);
-                    }
-                });
-
-                // Thêm sự kiện Enter để gửi tin nhắn
-                chatInput.addEventListener("keypress", (e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        sendBtn.click();
-                    }
-                });
-            } else {
-                console.error("Không tìm thấy sendBtn, chatInput hoặc chatbox");
+            // Kiểm tra nếu có app_trans_id từ trước (trường hợp người dùng quay lại trang)
+            const app_trans_id = localStorage.getItem("lastTransactionId");
+            if (app_trans_id) {
+                checkPaymentStatus(app_trans_id);
             }
         });
 
-        // Hàm tạo đơn hàng và xử lý thanh toán
         async function createOrder() {
+            // Ngăn gửi yêu cầu nếu đang xử lý
+            if (isProcessing) {
+                showStatusMessage("Đang xử lý giao dịch. Vui lòng chờ!", "info");
+                return;
+            }
+
             const paymentButton = document.getElementById("payment-button");
             const loadingSpinner = paymentButton.querySelector(".loading-spinner");
             const qrCodeContainer = document.getElementById("qrcode-container");
 
-            // Kiểm tra kết nối mạng
             if (!checkNetwork()) {
-                alert("Không có kết nối internet. Vui lòng kiểm tra kết nối và thử lại!");
+                showStatusMessage("Không có kết nối internet. Vui lòng kiểm tra kết nối và thử lại!", "error");
                 return;
             }
 
             paymentButton.disabled = true;
             paymentButton.textContent = "Đang xử lý...";
             loadingSpinner.style.display = "block";
+            isProcessing = true;
 
-            const tourData = JSON.parse(localStorage.getItem("selectedTour"));
-            if (!tourData) {
-                alert("Không có dữ liệu tour!");
+            let tourData;
+            try {
+                const rawTourData = localStorage.getItem("selectedTour");
+                if (!rawTourData) {
+                    throw new Error("Không tìm thấy dữ liệu tour trong localStorage!");
+                }
+                tourData = JSON.parse(rawTourData);
+                if (!tourData || typeof tourData !== "object") {
+                    throw new Error("Dữ liệu tour không hợp lệ!");
+                }
+            } catch (error) {
+                console.error("❌ Lỗi khi đọc dữ liệu tour:", error.message);
+                showStatusMessage(error.message, "error");
                 paymentButton.disabled = false;
                 paymentButton.textContent = "Thanh Toán";
                 loadingSpinner.style.display = "none";
+                isProcessing = false;
                 return;
             }
 
             try {
-                // Kiểm tra product_id
-                const product_id = tourData.product_id;
+                const product_id = tourData.id || tourData.product_id; // Hỗ trợ cả id và product_id
                 if (!product_id) {
-                    throw new Error("Không tìm thấy product_id trong dữ liệu tour");
+                    throw new Error("Không tìm thấy ID tour trong dữ liệu tour");
                 }
 
-                // Kiểm tra thông tin người dùng
                 const userInfo = {
                     name: tourData.name || "Khách hàng",
                     email: tourData.email || "khachhang@example.com",
                     phone: tourData.phone || "0123456789"
                 };
 
-                if (!userInfo.name || !userInfo.email || !userInfo.phone) {
-                    throw new Error("Thông tin người dùng không đầy đủ. Vui lòng kiểm tra lại!");
-                }
-
-                // Kiểm tra định dạng email
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(userInfo.email)) {
-                    throw new Error("Email không hợp lệ!");
-                }
-
-                // Kiểm tra định dạng số điện thoại
-                const phoneRegex = /^\d{10,15}$/;
-                if (!phoneRegex.test(userInfo.phone)) {
-                    throw new Error("Số điện thoại không hợp lệ (phải có 10-15 chữ số)!");
-                }
-
-                // Lấy user_id từ localStorage
                 const user_id = localStorage.getItem("user_id");
                 if (!user_id) {
                     throw new Error("Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục!");
                 }
 
-                console.log("📤 Gửi yêu cầu tạo đơn hàng:", { product_id, userInfo, user_id });
+                // Kiểm tra dữ liệu trước khi gửi
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(userInfo.email)) {
+                    throw new Error("Email không hợp lệ!");
+                }
+                const phoneRegex = /^\d{10,15}$/;
+                if (!phoneRegex.test(userInfo.phone)) {
+                    throw new Error("Số điện thoại không hợp lệ (phải có 10-15 chữ số)!");
+                }
+
+                console.log("📤 Dữ liệu gửi đi:", { product_id, userInfo, user_id });
+
+                // Kiểm tra trạng thái giao dịch trước khi gửi yêu cầu mới
+                const checkResponse = await fetch(`http://localhost:5500/check-transaction-status`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ user_id, product_id })
+                });
+
+                if (checkResponse.ok) {
+                    const checkResult = await checkResponse.json();
+                    if (checkResult.status === "PENDING") {
+                        throw new Error("Giao dịch đang được xử lý. Vui lòng thử lại sau 1-2 phút!");
+                    }
+                } else {
+                    console.warn("Không thể kiểm tra trạng thái giao dịch. Tiếp tục tạo đơn hàng...");
+                }
 
                 const response = await fetch("http://localhost:5500/create-order", {
                     method: "POST",
@@ -276,19 +246,29 @@
                     body: JSON.stringify({ product_id, userInfo, user_id })
                 });
 
+                const responseText = await response.text();
+                console.log("📩 Phản hồi từ server (text):", responseText);
+
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || "Lỗi không xác định từ server");
+                    let errorData;
+                    try {
+                        errorData = JSON.parse(responseText);
+                        if (errorData.details === "Transaction already in progress") {
+                            throw new Error("Giao dịch đang được xử lý. Vui lòng thử lại sau 1-2 phút!");
+                        }
+                        throw new Error(errorData.error || `Lỗi server: ${response.status}`);
+                    } catch (e) {
+                        throw new Error(`Lỗi server: ${response.status} - ${responseText}`);
+                    }
                 }
 
-                const result = await response.json();
-                console.log("📩 Phản hồi từ backend:", result);
+                const result = JSON.parse(responseText);
+                console.log("📩 Phản hồi từ server (JSON):", result);
 
                 if (result.order_url) {
                     console.log("✅ Tạo đơn hàng thành công! Hiển thị mã QR ZaloPay...");
-                    // Hiển thị mã QR
                     const qrCodeDiv = document.getElementById("qrcode");
-                    qrCodeDiv.innerHTML = ""; // Xóa mã QR cũ (nếu có)
+                    qrCodeDiv.innerHTML = "";
                     QRCode.toCanvas(result.order_url, { width: 200 }, function (error, canvas) {
                         if (error) {
                             console.error("Lỗi khi tạo mã QR:", error);
@@ -297,102 +277,137 @@
                         qrCodeDiv.appendChild(canvas);
                     });
 
-                    // Hiển thị container chứa mã QR
                     qrCodeContainer.style.display = "block";
-
-                    // Cập nhật liên kết mở ZaloPay
                     const openZaloPayLink = document.getElementById("open-zalopay");
                     openZaloPayLink.href = result.order_url;
-
-                    // Cập nhật nút thanh toán
                     paymentButton.textContent = "Thanh Toán Lại";
+                    showStatusMessage("Vui lòng quét mã QR để thanh toán!", "info");
 
-                    // Kiểm tra trạng thái thanh toán định kỳ
                     const app_trans_id = result.app_trans_id;
-                    checkPaymentStatus(app_trans_id);
+                    if (app_trans_id) {
+                        localStorage.setItem("lastTransactionId", app_trans_id);
+                        localStorage.setItem("lastOrderId", result.order_id); // Lưu order_id
+                        checkPaymentStatus(app_trans_id);
+                    } else {
+                        console.warn("Không tìm thấy app_trans_id trong phản hồi!");
+                        showStatusMessage("Không tìm thấy mã giao dịch. Vui lòng thử lại!", "error");
+                    }
                 } else {
-                    throw new Error(result.error || "Tạo đơn hàng thất bại!");
+                    throw new Error(result.error || "Tạo đơn hàng thất bại: Không có order_url!");
                 }
             } catch (error) {
-                console.error("❌ Lỗi hệ thống:", error.message);
-                alert(`Lỗi: ${error.message}`);
+                console.error("❌ Lỗi chi tiết:", error.stack);
+                showStatusMessage(error.message || "Không thể kết nối tới server. Vui lòng thử lại sau!", "error");
                 paymentButton.textContent = "Thanh Toán";
             } finally {
                 paymentButton.disabled = false;
                 loadingSpinner.style.display = "none";
+                isProcessing = false;
             }
         }
 
-        // Hàm kiểm tra trạng thái thanh toán
+        async function checkPageExists(url) {
+            try {
+                const response = await fetch(url, { method: "HEAD" });
+                return response.ok;
+            } catch (e) {
+                console.error("❌ Không thể kiểm tra trang:", e);
+                return false;
+            }
+        }
+
         async function checkPaymentStatus(app_trans_id) {
             let attempts = 0;
-            const maxAttempts = 30; // Tối đa 30 lần thử (60 giây)
+            const maxAttempts = 60; // 5 phút
+            const intervalTime = 5000; // 5 giây
 
-            const interval = setInterval(async () => {
+            // Dừng polling nếu đã có interval chạy
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
+
+            pollingInterval = setInterval(async () => {
                 attempts++;
                 console.log(`📋 Lần thử ${attempts}/${maxAttempts} - Kiểm tra trạng thái đơn hàng...`);
 
+                // Kiểm tra kết nối mạng trước khi gọi API
+                if (!checkNetwork()) {
+                    retryCount++;
+                    showStatusMessage(`Không có kết nối internet. Đang thử lại... (${retryCount}/${maxRetries})`, "error");
+                    if (retryCount >= maxRetries) {
+                        clearInterval(pollingInterval);
+                        pollingInterval = null;
+                        showStatusMessage("Không thể kiểm tra trạng thái do mất kết nối. Vui lòng kiểm tra lại sau!", "error");
+                        localStorage.setItem("paymentSuccess", "error");
+                        setTimeout(() => {
+                            redirectAfterCheck("/index.html");
+                        }, 2000);
+                    }
+                    return;
+                }
+
                 try {
-                    const response = await fetch(`http://localhost:5500/order-status/${app_trans_id}`);
+                    const response = await fetch(`http://localhost:5500/order-status/${app_trans_id}`, {
+                        method: "GET",
+                        headers: { "Content-Type": "application/json" }
+                    });
+
                     if (!response.ok) {
-                        throw new Error(`Không thể kiểm tra trạng thái đơn hàng: ${response.statusText}`);
+                        throw new Error(`Không thể kiểm tra trạng thái đơn hàng: ${response.status}`);
                     }
 
                     const data = await response.json();
-                    console.log("📋 Trạng thái đơn hàng:", data);
+                    console.log("📋 Trạng thái đơn hàng từ server:", data);
+                    retryCount = 0; // Reset số lần thử lại nếu thành công
+
+                    // Hiển thị trạng thái đơn hàng
+                    showStatusMessage(data.message || `Trạng thái đơn hàng: ${data.status}`, data.status === "SUCCESS" ? "success" : "info");
 
                     if (data.status === "SUCCESS") {
-                        clearInterval(interval); // Dừng kiểm tra định kỳ
-                        console.log("✅ Thanh toán thành công! Chuyển hướng về trang chủ...");
-                        // Lưu trạng thái thanh toán thành công vào localStorage
+                        clearInterval(pollingInterval);
+                        pollingInterval = null;
+                        console.log("✅ Thanh toán thành công!");
                         localStorage.setItem("paymentSuccess", "true");
-                        // Chuyển hướng về trang chủ
-                        window.location.href = "index.html";
+                        localStorage.setItem("lastTransactionId", app_trans_id);
+                        localStorage.setItem("lastOrderId", data.order_id); // Lưu order_id từ phản hồi
+                        localStorage.removeItem("selectedTour");
+                        showStatusMessage(data.message || "Thanh toán thành công! Cảm ơn bạn đã sử dụng dịch vụ.", "success");
+                        setTimeout(() => {
+                            redirectAfterCheck("/index.html");
+                        }, 2000);
                     } else if (data.status === "FAILED") {
-                        clearInterval(interval); // Dừng kiểm tra định kỳ
+                        clearInterval(pollingInterval);
+                        pollingInterval = null;
                         console.log("❌ Thanh toán thất bại!");
-                        alert("Thanh toán thất bại. Vui lòng thử lại!");
+                        showStatusMessage("Thanh toán thất bại. Vui lòng thử lại!", "error");
+                        localStorage.setItem("paymentSuccess", "false");
                     } else if (attempts >= maxAttempts) {
-                        clearInterval(interval); // Dừng kiểm tra nếu vượt quá số lần thử
-                        console.log("⏰ Hết thời gian chờ! Chuyển hướng thủ công về trang chủ...");
-                        alert("Không thể xác nhận trạng thái thanh toán. Bạn sẽ được chuyển về trang chủ.");
-                        // Lưu trạng thái thanh toán thành công vào localStorage (giả định thành công)
-                        localStorage.setItem("paymentSuccess", "true");
-                        window.location.href = "index.html";
+                        clearInterval(pollingInterval);
+                        pollingInterval = null;
+                        console.log("⏰ Hết thời gian chờ!");
+                        showStatusMessage("Hết thời gian xác nhận thanh toán. Vui lòng kiểm tra lại.", "error");
+                        localStorage.setItem("paymentSuccess", "pending");
+                        setTimeout(() => {
+                            redirectAfterCheck("/index.html");
+                        }, 2000);
                     }
-                    // Nếu trạng thái là PENDING, tiếp tục kiểm tra
                 } catch (error) {
                     console.error("❌ Lỗi khi kiểm tra trạng thái:", error.message);
-                    if (attempts >= maxAttempts) {
-                        clearInterval(interval); // Dừng kiểm tra nếu vượt quá số lần thử
-                        console.log("⏰ Hết thời gian chờ do lỗi! Chuyển hướng thủ công về trang chủ...");
-                        alert("Có lỗi xảy ra khi kiểm tra trạng thái thanh toán. Bạn sẽ được chuyển về trang chủ.");
-                        // Lưu trạng thái thanh toán thành công vào localStorage (giả định thành công)
-                        localStorage.setItem("paymentSuccess", "true");
-                        window.location.href = "index.html";
+                    retryCount++;
+                    if (retryCount >= maxRetries) {
+                        clearInterval(pollingInterval);
+                        pollingInterval = null;
+                        showStatusMessage("Không thể kiểm tra trạng thái đơn hàng sau nhiều lần thử. Vui lòng liên hệ hỗ trợ.", "error");
+                        localStorage.setItem("paymentSuccess", "error");
+                        setTimeout(() => {
+                            redirectAfterCheck("/index.html");
+                        }, 2000);
+                    } else {
+                        showStatusMessage(`Lỗi: ${error.message}. Đang thử lại... (${retryCount}/${maxRetries})`, "error");
                     }
                 }
-            }, 2000); // Kiểm tra mỗi 2 giây
+            }, intervalTime);
         }
-
-        // Chèn chatbox vào trang
-        fetch('chatbox-component.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('chatbox-container').innerHTML = data;
-                // Sau khi chèn, tải lịch sử trò chuyện
-                if (typeof loadChatHistory === 'function') {
-                    loadChatHistory();
-                }
-                // Khôi phục trạng thái hiển thị của chatbox
-                const isChatbotOpen = localStorage.getItem('chatbotOpen') === 'true';
-                if (isChatbotOpen) {
-                    document.body.classList.add('show-chatbot');
-                }
-            })
-            .catch(error => {
-                console.error("Lỗi khi tải chatbox-component.html:", error);
-            });
     </script>
 </body>
 </html>
