@@ -8,22 +8,23 @@
     <script src="https://kit.fontawesome.com/d63bdcadb6.js" crossorigin="anonymous"></script>
     <!-- Thêm thư viện lazysizes -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
-    <link rel="stylesheet" href="css/chatbox.css">
+    <!-- Liên kết đến Google Fonts cho biểu tượng -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <!-- Liên kết đến chatbox.css -->
+    <link rel="stylesheet" href="css/chatbox.css">
 </head>
 <body>
     <!-- Header -->
     <header class="header">
-    </a>
-    <nav class="navbar">
-        <nav class="main-nav">
-            <a href="index.html">Trang chủ</a>
-            <a href="about.html">Giới thiệu</a>
-            <a href="contact.html">Liên hệ</a>
-            <i class="fa-solid fa-user"></i>
-          </nav>
-        </a>
+        <nav class="navbar">
+            <nav class="main-nav">
+                <a href="index.html">Trang chủ</a>
+                <a href="about.html">Giới thiệu</a>
+                <a href="contact.html">Liên hệ</a>
+                <i class="fa-solid fa-user"></i>
+            </nav>
+        </nav>
         <h1 class="title">Khám Phá Các Tour Du Lịch Hấp Dẫn</h1>
         <p>Đặt tour ngay hôm nay để trải nghiệm những điểm đến tuyệt vời nhất!</p>
         <div class="search-bar">
@@ -41,6 +42,14 @@
     <footer class="footer">
         <p>© 2024 KTX. Tất cả các quyền được bảo lưu.</p>
     </footer>
+
+    <!-- Phần tử để chèn chatbox -->
+    <div id="chatbox-container"></div>
+
+    <!-- Bao gồm script.js -->
+    <script src="script.js"></script>
+
+    <!-- JavaScript để hiển thị danh sách tour -->
     <script>
         let allTours = [];
         const defaultImage = 'https://placehold.co/300x200?text=Ảnh+Tour+Du+Lịch';
@@ -95,22 +104,36 @@
         // Gọi hàm fetchTours khi trang được tải
         fetchTours();
     </script>
+
+    <!-- JavaScript để chèn và khởi tạo chatbox -->
     <script>
-        // Chèn chatbox vào trang
-        fetch('chatbox-component.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('chatbox-container').innerHTML = data;
-                // Sau khi chèn, tải lịch sử trò chuyện
-                loadChatHistory();
-                // Khôi phục trạng thái hiển thị của chatbox
-                const isChatbotOpen = localStorage.getItem('chatbotOpen') === 'true';
-                if (isChatbotOpen) {
-                    document.body.classList.add('show-chatbot');
-                }
-            });
-      </script>
-    <script src="script.js"></script> <!-- Di chuyển xuống cuối body -->
-    
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch('chatbox-component.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Không thể tải chatbox-component.html: ${response.statusText}`);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    const chatboxContainer = document.getElementById('chatbox-container');
+                    if (chatboxContainer) {
+                        chatboxContainer.innerHTML = data;
+                        // Gọi initializeChatbox sau khi chèn chatbox
+                        initializeChatbox();
+                        // Khôi phục trạng thái hiển thị của chatbox
+                        const isChatbotOpen = localStorage.getItem('chatbotOpen') === 'true';
+                        if (isChatbotOpen) {
+                            document.body.classList.add('show-chatbot');
+                        }
+                    } else {
+                        console.error("Không tìm thấy phần tử #chatbox-container trong DOM");
+                    }
+                })
+                .catch(error => {
+                    console.error("Lỗi khi tải chatbox-component.html:", error);
+                });
+        });
+    </script>
 </body>
 </html>

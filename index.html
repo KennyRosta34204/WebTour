@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+  
   <title>BookingTour</title>
 </head>
 <style>
@@ -34,7 +35,7 @@
 <body>
   <!-- Thông báo tùy chỉnh -->
   <div id="notification" class="notification">
-    Bạn đã đặt lịch tour thành công! 
+    Bạn đã đặt lịch tour thành công!
   </div>
   <div class="navigation">
     <input type="checkbox" class="navigation_checkbox" id="navigation_menu">
@@ -47,9 +48,9 @@
         <li class="navigation_items" id="nav-auth">
           <a href="register.html" id="auth-link" class="navigation_links">Đăng nhập / Đăng ký</a>
         </li>
-        <li id="nav-user" style="display: none;">
-          <span id="user-name"></span>
-          <a id="logout-link" href="#">Đăng xuất</a>
+        <li id="nav-user" style="display: none;" class="navigation_items">
+          <span id="user-name" class="navigation_links"></span>
+          <a id="logout-link" href="#" class="navigation_links">Đăng xuất</a>
         </li>
         <li class="navigation_items"> <a href="#Home" class="navigation_links"><span></span>Trang chủ</a></li>
         <li class="navigation_items"> <a href="#About" class="navigation_links"><span></span>Giới thiệu</a></li>
@@ -328,7 +329,7 @@
   <footer class="footer" id="contact">
     <div class="footer_logo-box">
       <picture class="footer_logo">
-        <source srcset="img/logo-footer1.png 2x" media="(max-width:37.5rem)">
+        <source srcset="img/logo-footer1.png @[2x]" media="(max-width:37.5rem)">
         <img srcset="img/logo-KTX.png 2x" alt="Full logo">
       </picture>
     </div>
@@ -374,24 +375,21 @@
   <!-- Script để chèn và khởi tạo chatbox -->
   <script src="script.js"></script>
   <script>
-    // Chèn chatbox vào trang
-    fetch('chatbox-component.html')
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('chatbox-container').innerHTML = data;
-        // Sau khi chèn, tải lịch sử trò chuyện
-        loadChatHistory();
-        // Khôi phục trạng thái hiển thị của chatbox
-        const isChatbotOpen = localStorage.getItem('chatbotOpen') === 'true';
-        if (isChatbotOpen) {
-          document.body.classList.add('show-chatbot');
-        }
-      })
-      .catch(error => {
-        console.error('Lỗi khi tải chatbox-component.html:', error);
-      });
+    // Hiển thị thông báo khi thanh toán thành công
+    document.addEventListener("DOMContentLoaded", function() {
+      const paymentSuccess = localStorage.getItem("paymentSuccess");
+      const notification = document.getElementById("notification");
+
+      if (paymentSuccess === "true") {
+        notification.textContent = "Bạn đã thanh toán thành công!";
+        notification.classList.add("show");
+        setTimeout(() => {
+          notification.classList.remove("show");
+          localStorage.removeItem("paymentSuccess"); // Xóa trạng thái sau khi hiển thị
+        }, 5000);
+      }
+    });
   </script>
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92a68b6a2ccd44d6',t:'MTc0MzY2MjExMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92d7f5541e2353aa',t:'MTc0NDE4MDI1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
