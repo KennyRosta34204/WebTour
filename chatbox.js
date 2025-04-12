@@ -99,3 +99,22 @@ function loadChatHistory() {
     // Cuộn xuống cuối chatbox
     chatBox.scrollTop = chatBox.scrollHeight;
 }
+
+function addMessageToChatbox(message, isIncoming = true, image = null, tourId = null) {
+    const chatBox = document.getElementById('chatBox');
+    const li = document.createElement('li');
+    li.className = `chat ${isIncoming ? 'incoming' : 'outgoing'}`;
+
+    let messageContent = `
+        ${isIncoming ? '<span class="material-symbols-outlined">smart_toy</span>' : ''}
+        <div class="message-content">
+            ${message ? `<p>${message}</p>` : ''} <!-- Hiển thị văn bản nếu có -->
+            ${image ? `<img src="${image}" alt="Tour Image">` : ''} <!-- Hiển thị hình ảnh nếu có -->
+            ${tourId ? `<a href="/tour-detail.html?id=${tourId}" class="tour-link visible">Xem chi tiết và đặt tour</a>` : ''} <!-- Hiển thị nút nếu có tourId -->
+        </div>
+    `;
+
+    li.innerHTML = messageContent;
+    chatBox.appendChild(li);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}

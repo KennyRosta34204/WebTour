@@ -20,6 +20,15 @@
   },
   "homepage": "https://github.com/KennyRosta34204/WebTour#readme",
   "dependencies": {
-    "node-cron": "^3.0.3"
+    "axios": "^1.8.4",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.0",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.10.0",
+    "valid-url": "^1.0.9"
   }
 }

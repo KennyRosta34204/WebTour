@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
     <!-- Liên kết đến chatbox.css -->
     <link rel="stylesheet" href="css/chatbox.css">
+    
 </head>
 <body>
     <nav class="main-nav">
@@ -21,7 +22,6 @@
         <a href="about.html">Giới thiệu</a>
         <a href="services.html">Dịch vụ</a>
         <a href="contact.html">Liên hệ</a>
-        <i class="fa-solid fa-user"></i>
     </nav>
 
     <header class="header">
@@ -89,12 +89,12 @@
 
                 // Cập nhật ảnh chính
                 const tourImage = document.getElementById("tour-image");
-                if (tour.image && isValidURL(tour.image)) {
-                    tourImage.setAttribute('data-src', tour.image);
+                if (tour.url && isValidURL(tour.url)) {
+                    tourImage.setAttribute('data-src', tour.url);
                     tourImage.classList.add("lazyload");
                 } else {
-                    tourImage.style.display = "none"; // Không hiển thị nếu URL không hợp lệ
-                    console.error(`Không tải được ảnh chính: ${tour.image}`);
+                    tourImage.style.display = "none";
+                    console.error(`Không tải được ảnh chính: ${tour.url}`);
                 }
 
                 // Cập nhật mô tả
@@ -108,39 +108,41 @@
                 document.getElementById("tour-hotel").textContent = tour.hotel || "Không có thông tin";
 
                 // Lịch trình chi tiết
-                const itineraryContainer = document.getElementById("tour-itinerary");
-                let itinerary = [];
-                if (tour.itinerary) {
-                    try {
-                        itinerary = typeof tour.itinerary === "string" ? JSON.parse(tour.itinerary) : tour.itinerary;
-                    } catch (error) {
-                        console.error("Lỗi khi parse itinerary:", error);
-                        itinerary = [];
-                    }
-                }
+const itineraryContainer = document.getElementById("tour-itinerary");
+let itinerary = [];
+if (tour.itinerary) {
+    try {
+        itinerary = typeof tour.itinerary === "string" ? JSON.parse(tour.itinerary) : tour.itinerary;
+    } catch (error) {
+        console.error("Lỗi khi parse itinerary:", error);
+        itinerary = [];
+    }
+}
 
-                if (itinerary.length > 0) {
-                    itinerary.forEach(day => {
-                        const dayDiv = document.createElement("div");
-                        dayDiv.classList.add("itinerary-day");
+if (itinerary.length > 0) {
+    itinerary.forEach(day => {
+        const dayDiv = document.createElement("div");
+        dayDiv.classList.add("itinerary-day");
 
-                        const dayTitle = document.createElement("h4");
-                        dayTitle.textContent = day.day;
-                        dayDiv.appendChild(dayTitle);
+        const dayTitle = document.createElement("h4");
+        dayTitle.textContent = `Ngày ${day.day}`;
+        dayDiv.appendChild(dayTitle);
 
-                        const activitiesList = document.createElement("ul");
-                        day.activities.forEach(activity => {
-                            const li = document.createElement("li");
-                            li.textContent = activity;
-                            activitiesList.appendChild(li);
-                        });
+        const activitiesList = document.createElement("ul");
+        // Tách chuỗi description thành mảng các hoạt động
+        const activities = day.description.split(',').map(activity => activity.trim());
+        activities.forEach(activity => {
+            const li = document.createElement("li");
+            li.textContent = activity;
+            activitiesList.appendChild(li);
+        });
 
-                        dayDiv.appendChild(activitiesList);
-                        itineraryContainer.appendChild(dayDiv);
-                    });
-                } else {
-                    itineraryContainer.innerHTML = "<p>Không có lịch trình chi tiết.</p>";
-                }
+        dayDiv.appendChild(activitiesList);
+        itineraryContainer.appendChild(dayDiv);
+    });
+} else {
+    itineraryContainer.innerHTML = "<p>Không có lịch trình chi tiết.</p>";
+}
 
                 // Thư viện ảnh
                 const galleryDiv = document.getElementById("tour-gallery");
@@ -160,7 +162,7 @@
                             img.alt = "Ảnh tour";
                             img.onerror = () => {
                                 console.error(`Không tải được ảnh: ${imgSrc}`);
-                                img.style.display = "none"; // Ẩn ảnh nếu không tải được
+                                img.style.display = "none";
                                 hasError = true;
                                 galleryError.style.display = "block";
                             };
@@ -189,7 +191,7 @@
                         <input type="email" id="user-email" placeholder="Nhập email của bạn" required>
                         <input type="tel" id="user-phone" placeholder="Nhập số điện thoại" required>
                     `,
-                    imageUrl: tourData.image && isValidURL(tourData.image) ? tourData.image : null,
+                    imageUrl: tourData.url && isValidURL(tourData.url) ? tourData.url : null,
                     imageWidth: 400,
                     imageAlt: "Ảnh tour",
                     showCancelButton: true,
@@ -206,7 +208,7 @@
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        const tourImage = tourData.image && isValidURL(tourData.image) ? tourData.image : null;
+                        const tourImage = tourData.url && isValidURL(tourData.url) ? tourData.url : null;
                         console.log("Lưu image vào localStorage:", tourImage);
 
                         localStorage.setItem("selectedTour", JSON.stringify({
