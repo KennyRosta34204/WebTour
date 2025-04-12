@@ -9,40 +9,18 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
-  
+  <!-- Thêm SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <title>BookingTour</title>
 </head>
-<style>
-  /* CSS cho thông báo tùy chỉnh */
-  .notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: #4CAF50;
-    color: white;
-    padding: 15px 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    display: none;
-    font-size: 16px;
-  }
-
-  .notification.show {
-    display: block;
-  }
-</style>  
 <body>
-  <!-- Thông báo tùy chỉnh -->
-  <div id="notification" class="notification">
-    Bạn đã đặt lịch tour thành công!
-  </div>
   <div class="navigation">
     <input type="checkbox" class="navigation_checkbox" id="navigation_menu">
     <label for="navigation_menu" class="navigation_button">
-      <span class="navigation_icon">&nbsp;</span>
+      <span class="navigation_icon"> </span>
     </label>
-    <div class="navigation_background">&nbsp;</div>
+    <div class="navigation_background"> </div>
     <nav class="navigation_nav"> 
       <ul class="navigation_list">
         <li class="navigation_items" id="nav-auth">
@@ -92,7 +70,7 @@
             NHỮNG CHUYẾN ĐI CHƯA TỪNG CÓ
           </h3>
           <p class="paragraph margin-bottom-medium">Chúng tôi cam kết mang đến cho bạn những trải nghiệm du lịch tuyệt vời nhất, với các dịch vụ chất lượng cao, lịch trình linh hoạt và đội ngũ hướng dẫn viên chuyên nghiệp, nhiệt tình. Bạn sẽ được tận hưởng những khoảnh khắc đáng nhớ và tạo nên những kỷ niệm khó quên trong suốt hành trình.</p>
-          <a href="#" class="btn-text">Tìm hiểu thêm. &rarr;</a>
+          <a href="#" class="btn-text">Tìm hiểu thêm. →</a>
         </div>
         <div class="col-1-of-2">
           <div class="composition">
@@ -166,7 +144,7 @@
           <div class="card"> 
             <div class="card_side card_side--front card_side--front--1">
               <div class="card-image card-image--1">
-                &nbsp;
+                 
               </div>
               <h4 class="card_heading">
                 <span class="card_heading-span card_heading-span--1">Vịnh Hạ Long</span> 
@@ -198,7 +176,7 @@
           <div class="card"> 
             <div class="card_side card_side--front card_side--front--2">
               <div class="card-image card-image--2">
-                &nbsp;
+                 
               </div>
               <h4 class="card_heading">
                 <span class="card_heading-span card_heading-span--2">Rừng Thông Đà Lạt</span> 
@@ -230,7 +208,7 @@
           <div class="card"> 
             <div class="card_side card_side--front card_side--front--3">
               <div class="card-image card-image--3">
-                &nbsp;
+                 
               </div>
               <h4 class="card_heading">
                 <span class="card_heading-span card_heading-span--3">Sa Pa</span> 
@@ -352,7 +330,7 @@
             <textarea placeholder="Nhập tin nhắn của bạn"></textarea>
             <div class="contact-info">
               <p><i class="fas fa-phone"></i>19001886</p>
-              <p><i class="fas fa-envelope"></i><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c2a6b7aeaba1aab4aba7b6aca3af82a5afa3abaeeca1adaf">[email&#160;protected]</a></p>
+              <p><i class="fas fa-envelope"></i><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c2a6b7aeaba1aab4aba7b6aca3af82a5afa3abaeeca1adaf">[email protected]</a></p>
               <p><i class="fas fa-map-marker-alt"></i> QL1A, Tan Chanh Hiep, Quận 12, TP HCM </p>
               <p>Chúng tôi sẽ trả lời bạn sớm nhất có thể</p>
             </div>
@@ -363,7 +341,7 @@
       <div class="col-1-of-2">
         <p class="footer_copyright">
           Built by <a href="#" class="footer_link">Ubaid Parvez</a> 
-          Copyright &copy; by Ubaid.
+          Copyright © by Ubaid.
         </p>
       </div>
     </div>
@@ -375,21 +353,55 @@
   <!-- Script để chèn và khởi tạo chatbox -->
   <script src="script.js"></script>
   <script>
-    // Hiển thị thông báo khi thanh toán thành công
-    document.addEventListener("DOMContentLoaded", function() {
-      const paymentSuccess = localStorage.getItem("paymentSuccess");
-      const notification = document.getElementById("notification");
+    // Kiểm tra tham số payment trong URL
+    const params = new URLSearchParams(window.location.search);
+    const paymentStatus = params.get("payment");
+    console.log("Payment status:", paymentStatus); // Debug
 
-      if (paymentSuccess === "true") {
-        notification.textContent = "Bạn đã thanh toán thành công!";
-        notification.classList.add("show");
-        setTimeout(() => {
-          notification.classList.remove("show");
-          localStorage.removeItem("paymentSuccess"); // Xóa trạng thái sau khi hiển thị
-        }, 5000);
-      }
+    if (paymentStatus === "success") {
+        Swal.fire({
+            icon: "success",
+            title: "Đặt tour thành công!",
+            text: "Bạn đã đặt tour thành công. Vui lòng kiểm tra Gmail để xem chi tiết!",
+            confirmButtonText: "Đóng",
+            confirmButtonColor: "#2ecc71",
+            timer: 5000,
+            timerProgressBar: true
+        }).then(() => {
+            window.history.replaceState({}, document.title, "index.html");
+        });
+    }
+
+    // Khởi tạo chatbox
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch('chatbox-component.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Không thể tải chatbox-component.html: ${response.statusText}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const chatboxContainer = document.getElementById('chatbox-container');
+                if (chatboxContainer) {
+                    chatboxContainer.innerHTML = data;
+                    initializeChatbox();
+                    const isChatbotOpen = localStorage.getItem('chatbotOpen') === 'true';
+                    if (isChatbotOpen) {
+                        document.body.classList.add('show-chatbot');
+                    }
+                } else {
+                    console.error("Không tìm thấy phần tử #chatbox-container trong DOM");
+                }
+            })
+            .catch(error => {
+                console.error("Lỗi khi tải chatbox-component.html:", error);
+            });
     });
   </script>
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92d7f5541e2353aa',t:'MTc0NDE4MDI1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  <script>
+    (function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92d7f5541e2353aa',t:'MTc0NDE4MDI1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+  </script>
+</body>
 </html>
