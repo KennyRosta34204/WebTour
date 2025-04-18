@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Bảng điều khiển người dùng</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+  <div class="user-dashboard">
+    <aside class="sidebar">
+      <div class="user-info">
+        <img src="https://cdn-icons-png.flaticon.com/512/9131/9131529.png" alt="Avatar" class="avatar">
+        <h2 class="username" id="sidebar-username">Tên Người Dùng</h2>
+      </div>
+      <ul class="navigation">
+        <li class="active"><a href="#profile" onclick="showSection('profile', this)">Thông tin cá nhân</a></li>
+        <li><a href="#bookings" onclick="showSection('bookings', this)">Lịch sử đặt Tour</a></li>
+        <li><a href="#reviewed" onclick="showSection('reviewed', this)">Tour đã đánh giá</a></li>
+        <li><a href="#settings" onclick="showSection('settings', this)">Cài đặt tài khoản</a></li>
+        <li><a href="#logout" onclick="logout()">Đăng xuất</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <section id="profile">
+        <h2>Thông tin cá nhân</h2>
+        <div class="info-card">
+          <div class="info-box-horizontal">
+            <p><strong>Họ và Tên:</strong> <span id="profile-name">Tên Người Dùng</span></p>
+            <p><strong>Số điện thoại:</strong> <span id="profile-phone">Chưa cập nhật</span></p>
+            <p><strong>Email:</strong> <span id="profile-email">Chưa cập nhật</span></p>
+            <p><strong>Ngày tạo tài khoản:</strong> <span id="profile-created">Chưa cập nhật</span></p>
+          </div>
+          <form class="edit-form" id="edit-profile-form" style="display: none;">
+            <div>
+              <label for="edit-name">Họ và Tên</label>
+              <input type="text" id="edit-name" name="name" required>
+              <span class="error" id="edit-name-error" style="display: none;">Vui lòng nhập họ và tên</span>
+            </div>
+            <div>
+              <label for="edit-phone">Số điện thoại</label>
+              <input type="tel" id="edit-phone" name="phone" pattern="[0-9]{10,11}" required>
+              <span class="error" id="edit-phone-error" style="display: none;">Vui lòng nhập số điện thoại hợp lệ (10-11 số)</span>
+            </div>
+            <div>
+              <label for="edit-email">Email</label>
+              <input type="email" id="edit-email" name="email" required>
+              <span class="error" id="edit-email-error" style="display: none;">Vui lòng nhập email hợp lệ</span>
+            </div>
+            <div class="button-container">
+              <button type="submit" class="btn">Lưu</button>
+              <button type="button" class="btn btn-red" onclick="cancelEdit()">Hủy</button>
+            </div>
+          </form>
+        </div>
+        <div class="button-container">
+          <button class="btn" onclick="showEditForm()">Chỉnh sửa thông tin</button>
+        </div>
+      </section>
+
+      <section id="bookings" style="display: none;">
+        <h2>Lịch sử đặt Tour</h2>
+        <div class="info-card" id="bookings-list">
+          <p>Chưa có lịch sử đặt tour.</p>
+        </div>
+        <div class="button-container">
+          <a href="index.html#section-tours" class="btn">Đặt Tour ngay</a>
+        </div>
+      </section>
+
+      <section id="reviewed" style="display: none;">
+        <h2>Tour đã đánh giá</h2>
+        <div class="info-card" id="reviewed-list">
+          <p>Chưa có tour nào được đánh giá.</p>
+        </div>
+      </section>
+
+      <section id="settings" style="display: none;">
+        <h2>Cài đặt tài khoản</h2>
+        <div class="info-card">
+          <p>Chức năng đang phát triển. Vui lòng quay lại sau!</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Xóa trạng thái chatbot khi vào profile.html
+    localStorage.setItem('chatbotOpen', 'false');
+    document.body.classList.remove('show-chatbot');
+
+    // Hàm hiển thị lỗi với SweetAlert2
+    function displayError(title, message) {
+      Swal.fire({
+        icon: "error",
+        title: title,
+        text: message,
+        confirmButtonText: "Đóng",
+        confirmButtonColor: "#ef4444",
+      });
+    }
+
+    // Hàm hiển thị thông báo thành công với SweetAlert2
+    function displaySuccess(title, message) {
+      Swal.fire({
+        icon: "success",
+        title: title,
+        text: message,
+        confirmButtonText: "Đóng",
+        confirmButtonColor: "#3b82f6",
+      });
+    }
+
+    // Hàm cập nhật giao diện với dữ liệu người dùng
+    const updateUserProfileUI = (userData) => {
+      document.getElementById("sidebar-username").textContent = userData.username || "Tên Người Dùng";
+      document.getElementById("profile-name").textContent = userData.username || "Tên Người Dùng";
+      document.getElementById("profile-email").textContent = userData.email || "Chưa cập nhật";
+      document.getElementById("profile-phone").textContent = userData.phone || "Chưa cập nhật";
+      document.getElementById("profile-created").textContent = userData.created_at
+        ? new Date(userData.created_at).toLocaleDateString("vi-VN")
+        : "Chưa cập nhật";
+      document.getElementById("edit-name").value = userData.username || "";
+      document.getElementById("edit-email").value = userData.email || "";
+      document.getElementById("edit-phone").value = userData.phone || "";
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Kiểm tra trạng thái đăng nhập
+      const user = JSON.parse(localStorage.getItem("user"));
+      const userId = localStorage.getItem("user_id");
+      if (!user || !userId) {
+        displayError("Chưa đăng nhập", "Vui lòng đăng nhập để truy cập bảng điều khiển!");
+        setTimeout(() => {
+          window.location.href = "register.html";
+        }, 2000);
+        return;
+      }
+
+      // Cập nhật giao diện với dữ liệu từ localStorage trước
+      updateUserProfileUI(user);
+
+      // Tải thông tin từ API
+      async function fetchUserInfo() {
+        try {
+          const response = await fetch(`http://localhost:5500/api/user?user_id=${userId}`, {
+            headers: {
+              "Content-Type": "application/json",
+              "X-User-Id": userId
+            }
+          });
+          const contentType = response.headers.get("content-type");
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Lỗi ${response.status}: ${errorText || "Không thể lấy thông tin người dùng"}`);
+          }
+          if (!contentType || !contentType.includes("application/json")) {
+            const text = await response.text();
+            throw new Error(`Phản hồi không phải JSON: ${text}`);
+          }
+          const data = await response.json();
+          if (data.status === "success") {
+            const userData = data.user;
+            localStorage.setItem("user", JSON.stringify(userData));
+            updateUserProfileUI(userData);
+          } else {
+            throw new Error("Dữ liệu trả về không hợp lệ");
+          }
+        } catch (error) {
+          console.error("Lỗi khi tải thông tin:", error);
+          displayError("Không thể tải thông tin", "Hệ thống đang gặp vấn đề. Vui lòng kiểm tra server hoặc thử lại sau.");
+        }
+      }
+
+      // Tải lịch sử đặt tour
+      async function fetchOrders() {
+        try {
+          const response = await fetch(`http://localhost:5500/api/orders?user_id=${userId}`, {
+            headers: {
+              "Content-Type": "application/json",
+              "X-User-Id": userId
+            }
+          });
+          const contentType = response.headers.get("content-type");
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Lỗi ${response.status}: ${errorText || "Không thể lấy lịch sử đặt tour"}`);
+          }
+          if (!contentType || !contentType.includes("application/json")) {
+            const text = await response.text();
+            throw new Error(`Phản hồi không phải JSON: ${text}`);
+          }
+          const data = await response.json();
+          const bookingsList = document.getElementById("bookings-list");
+          if (data.status === "success" && data.orders.length > 0) {
+            bookingsList.innerHTML = "";
+            data.orders.forEach((order) => {
+              const orderDiv = document.createElement("div");
+              orderDiv.classList.add("info-box-horizontal");
+              orderDiv.innerHTML = `
+                <p><strong>Tour:</strong> ${order.tour_name || order.tour_title || "Không xác định"}</p>
+                <p><strong>Ngày đặt:</strong> ${order.created_at ? new Date(order.created_at).toLocaleDateString("vi-VN") : "Không xác định"}</p>
+                <p><strong>Trạng thái:</strong> ${order.payment_status || order.status || "Không xác định"}</p>
+                <p><strong>Tổng tiền:</strong> ${(order.amount || order.total_price || 0).toLocaleString("vi-VN")} VNĐ</p>
+              `;
+              bookingsList.appendChild(orderDiv);
+            });
+          } else {
+            bookingsList.innerHTML = "<p>Chưa có lịch sử đặt tour.</p>";
+          }
+        } catch (error) {
+          console.error("Lỗi khi tải lịch sử đặt tour:", error);
+          displayError("Không thể tải lịch sử đặt tour", "Hệ thống đang gặp vấn đề. Vui lòng kiểm tra server hoặc thử lại sau.");
+        }
+      }
+
+      // Gọi các hàm khi trang được tải
+      fetchUserInfo();
+      fetchOrders();
+    });
+
+    // Hàm hiển thị section
+    function showSection(sectionId, element) {
+      document.querySelectorAll(".main-content section").forEach((section) => {
+        section.style.display = "none";
+      });
+      document.getElementById(sectionId).style.display = "block";
+
+      document.querySelectorAll(".navigation li").forEach((li) => {
+        li.classList.remove("active");
+      });
+      element.parentElement.classList.add("active");
+    }
+
+    // Hàm hiển thị form chỉnh sửa
+    function showEditForm() {
+      document.querySelector(".info-box-horizontal").style.display = "none";
+      document.querySelector(".edit-form").style.display = "flex";
+      const user = JSON.parse(localStorage.getItem("user"));
+      document.getElementById("edit-name").value = user.username || "";
+      document.getElementById("edit-email").value = user.email || "";
+      document.getElementById("edit-phone").value = user.phone || "";
+    }
+
+    // Hàm hủy chỉnh sửa
+    function cancelEdit() {
+      document.querySelector(".info-box-horizontal").style.display = "flex";
+      document.querySelector(".edit-form").style.display = "none";
+      const user = JSON.parse(localStorage.getItem("user"));
+      document.getElementById("edit-name").value = user.username || "";
+      document.getElementById("edit-email").value = user.email || "";
+      document.getElementById("edit-phone").value = user.phone || "";
+    }
+
+    // Xử lý form chỉnh sửa
+    document.getElementById("edit-profile-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("edit-name").value.trim();
+      const phone = document.getElementById("edit-phone").value.trim();
+      const email = document.getElementById("edit-email").value.trim();
+      const userId = localStorage.getItem("user_id");
+
+      // Kiểm tra dữ liệu đầu vào
+      let isValid = true;
+      if (!name) {
+        document.getElementById("edit-name-error").style.display = "block";
+        isValid = false;
+      } else {
+        document.getElementById("edit-name-error").style.display = "none";
+      }
+      if (!phone.match(/^[0-9]{10,11}$/)) {
+        document.getElementById("edit-phone-error").style.display = "block";
+        isValid = false;
+      } else {
+        document.getElementById("edit-phone-error").style.display = "none";
+      }
+      if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        document.getElementById("edit-email-error").style.display = "block";
+        isValid = false;
+      } else {
+        document.getElementById("edit-email-error").style.display = "none";
+      }
+
+      if (!isValid) return;
+
+      try {
+        const response = await fetch(`http://localhost:5500/api/user/${userId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-User-Id": userId
+          },
+          body: JSON.stringify({ username: name, phone, email })
+        });
+        const contentType = response.headers.get("content-type");
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Lỗi ${response.status}: ${errorText || "Cập nhật thất bại"}`);
+        }
+        if (!contentType || !contentType.includes("application/json")) {
+          const text = await response.text();
+          throw new Error(`Phản hồi không phải JSON: ${text}`);
+        }
+        const data = await response.json();
+        if (data.status === "success") {
+          // Cập nhật localStorage với thông tin mới
+          const updatedUser = { ...JSON.parse(localStorage.getItem("user")), username: name, phone, email };
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+
+          // Cập nhật giao diện
+          updateUserProfileUI(updatedUser);
+
+          // Ẩn form và hiện thông tin
+          document.querySelector(".info-box-horizontal").style.display = "flex";
+          document.querySelector(".edit-form").style.display = "none";
+
+          displaySuccess("Cập nhật thành công!", "Thông tin cá nhân đã được cập nhật.");
+        } else {
+          throw new Error("Phản hồi từ server không hợp lệ");
+        }
+      } catch (error) {
+        console.error("Lỗi khi cập nhật:", error);
+        displayError("Cập nhật thất bại", error.message || "Không thể cập nhật thông tin. Vui lòng kiểm tra server hoặc thử lại!");
+      }
+    });
+
+    // Hàm đăng xuất
+    function logout() {
+      localStorage.removeItem("user");
+      localStorage.removeItem("user_id");
+      localStorage.removeItem("lastTransactionId");
+      localStorage.removeItem("lastOrderId");
+      localStorage.removeItem("paymentSuccess");
+      localStorage.removeItem("chatbotOpen");
+      displaySuccess("Đăng xuất thành công", "Bạn đã đăng xuất khỏi hệ thống.");
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
