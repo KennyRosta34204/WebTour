@@ -1,0 +1,219 @@
+.info-box-horizontal {
+    background-color: #e2e8f0;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    font-size: 16px;
+    color: #111827;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+  }
+
+  .info-box-horizontal p {
+    margin: 0;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f6f9;
+    color: #333;
+    display: flex;
+    height: 100vh;
+  }
+
+  .user-dashboard {
+    display: flex;
+    width: 100%;
+  }
+
+  .sidebar {
+    width: 250px;
+    background: #007bff;
+    color: white;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .user-info {
+    text-align: center;
+  }
+
+  .user-info .avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #0f0241;
+  }
+
+  .user-info .username {
+    margin-top: 10px;
+    font-size: 18px;
+  }
+
+  .navigation {
+    list-style: none;
+    padding: 0;
+  }
+
+  .navigation li {
+    margin: 10px 0;
+  }
+
+  .navigation li a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 15px;
+    display: block;
+    border-radius: 8px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  .navigation li.active a, 
+  .navigation li a:hover {
+    background: #3f42d2cb;
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+  .main-content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+    background-color: #f8fafc;
+  }
+
+  .main-content h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+    color: #0f172a;
+  }
+
+  .main-content p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #01070f;
+    margin-bottom: 10px;
+  }
+
+  .btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 14px 28px;
+    background-color: #3b82f6;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 17px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;
+  }
+
+  .btn:hover {
+    background-color: #2563eb;
+  }
+
+  .btn-red {
+    background-color: #ef4444;
+  }
+
+  .btn-red:hover {
+    background-color: #dc2626;
+  }
+
+  .info-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .info-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .info-card p {
+    margin-bottom: 15px;
+  }
+
+  .info-card .info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+
+  .info-card .info-row p {
+    margin: 0;
+    width: 23%;
+    text-align: center;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    gap: 10px;
+  }
+
+  .edit-form {
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .edit-form input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    width: 100%;
+  }
+
+  .edit-form .error {
+    color: #ef4444;
+    font-size: 14px;
+    display: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    .sidebar {
+      display: none;
+    }
+
+    .main-content {
+      padding: 20px;
+    }
+  }
+
+  .info-box {
+    background-color: #909aae;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #111827;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }

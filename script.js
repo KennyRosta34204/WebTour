@@ -1,6 +1,4 @@
-// script.js
 
-// Hàm kiểm tra trạng thái đăng nhập và cập nhật giao diện
 const updateAuthUI = () => {
     const navAuth = document.querySelector("#nav-auth");
     const navUser = document.querySelector("#nav-user");
@@ -9,7 +7,6 @@ const updateAuthUI = () => {
 
     const user = JSON.parse(localStorage.getItem("user"));
 
-    // Kiểm tra sự tồn tại của navAuth và navUser trước khi thao tác
     if (navAuth && navUser) {
         if (user) {
             navAuth.style.display = "none";
@@ -33,12 +30,12 @@ const updateAuthUI = () => {
             localStorage.removeItem("lastTransactionId");
             localStorage.removeItem("lastOrderId");
             localStorage.removeItem("paymentSuccess");
+            localStorage.removeItem("chatbotOpen");
             window.location.href = "index.html";
         });
     }
 };
 
-// Hàm xử lý đăng nhập (dành cho login.html)
 const handleLogin = () => {
     const loginForm = document.querySelector("#loginForm");
     if (loginForm) {
@@ -53,11 +50,16 @@ const handleLogin = () => {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ username, password }),
                 });
+
+                if (!response.ok) {
+                    throw new Error(`Đăng nhập thất bại: ${response.status} - ${response.statusText}`);
+                }
+
                 const data = await response.json();
 
                 if (data.status === "success") {
                     localStorage.setItem("user", JSON.stringify(data.user));
-                    localStorage.setItem("user_id", data.user.user_id); // Lưu user_id
+                    localStorage.setItem("user_id", data.user.user_id);
                     window.location.href = "index.html";
                 } else {
                     alert(data.message);
@@ -70,13 +72,12 @@ const handleLogin = () => {
     }
 };
 
-// Hàm fetchTourDetail để lấy chi tiết tour
 function fetchTourDetail(tourId) {
     console.log(`🔍 Đang lấy chi tiết tour với ID: ${tourId}`);
     fetch(`/tour/${tourId}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Không thể lấy chi tiết tour: ${response.statusText}`);
+                throw new Error(`Không thể lấy chi tiết tour: ${response.status} - ${response.statusText}`);
             }
             return response.json();
         })
@@ -118,7 +119,8 @@ function fetchTourDetail(tourId) {
         });
 }
 
-// Hàm khởi tạo chatbox
+let isHistoryCleared = false;
+
 const initializeChatbox = () => {
     const chatbotToggler = document.querySelector(".chatbot-toggler");
     const closeBtn = document.querySelector(".close-btn");
@@ -133,100 +135,110 @@ const initializeChatbox = () => {
 
     let userMessage = null;
     const inputInitHeight = chatInput.scrollHeight;
+    const API_URL = "http://localhost:5500/api/chatbot";
 
-    const createChatLi = (message, className, image = null) => {
+    const createChatLi = (message, className, suggestions = []) => {
         const chatLi = document.createElement("li");
         chatLi.classList.add("chat", className);
-        let chatContent = className === "outgoing" ? `<p></p>` : `<span class="material-symbols-outlined">smart_toy</span><p></p>`;
-        chatLi.innerHTML = chatContent;
-        chatLi.querySelector("p").innerHTML = message;
-        if (image) {
-            const img = document.createElement("img");
-            img.src = image;
-            img.style.maxWidth = "100%";
-            img.style.marginTop = "10px";
-            img.style.borderRadius = "5px";
-            img.alt = "Hình ảnh địa điểm du lịch";
-            img.onerror = () => {
-                console.error("Không thể tải hình ảnh:", image);
-                img.remove();
-                chatLi.querySelector("p").innerHTML += "<br><i>(Không thể tải hình ảnh)</i>";
-            };
-            img.onload = () => {
-                console.log("Hình ảnh đã tải thành công:", image);
-            };
-            chatLi.appendChild(img);
+    
+        const messageContent = document.createElement("div");
+        messageContent.classList.add("message-content");
+    
+        if (className === "incoming") {
+            const botIcon = document.createElement("span");
+            botIcon.classList.add("material-symbols-outlined");
+            botIcon.textContent = "smart_toy";
+            chatLi.appendChild(botIcon);
         }
+    
+        const textContent = document.createElement("div");
+        textContent.classList.add("text-content");
+        const messageP = document.createElement("p");
+        messageP.innerHTML = message.replace(/\n/g, "<br>");
+        textContent.appendChild(messageP);
+        messageContent.appendChild(textContent);
+    
+        if (suggestions.length > 0 && className === "incoming") {
+            const tourContainer = document.createElement("div");
+            tourContainer.classList.add("tour-suggestions");
+    
+            suggestions.forEach(suggestion => {
+                const tourDiv = document.createElement("div");
+                tourDiv.classList.add("tour-item");
+                tourDiv.innerHTML = `
+                    <img src="${suggestion.image || 'https://via.placeholder.com/200x150'}" alt="${suggestion.title || 'Tour'}" style="width: 100%; max-width: 200px; border-radius: 8px; margin: 10px 0;">
+                    <h4>${suggestion.title || 'Tour'}</h4>
+                    <p>${suggestion.intro || 'Không có mô tả'}</p> <!-- Hiển thị văn bản giới thiệu -->
+                    <p><a href="${suggestion.link || '#'}" style="color: #007bff; text-decoration: none;">Xem chi tiết và đặt tour</a></p>
+                    <p>Giá: ${suggestion.price || 'Liên hệ'}</p>
+                `;
+                const link = tourDiv.querySelector("a");
+                link.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    console.log("Chuyển hướng đến:", suggestion.link);
+                    window.location.href = suggestion.link;
+                });
+                tourContainer.appendChild(tourDiv);
+            });
+    
+            messageContent.appendChild(tourContainer);
+        }
+    
+        chatLi.appendChild(messageContent);
         return chatLi;
     };
 
     const generateResponse = async (chatElement) => {
-        const API_URL = "http://localhost:5500/chat";
-        const messageElement = chatElement.querySelector("p");
-    
+        const messageElement = chatElement.querySelector(".text-content p");
+
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: userMessage }),
+            body: JSON.stringify({ question: userMessage }),
         };
-    
+
         try {
             const response = await fetch(API_URL, requestOptions);
-            const data = await response.json();
-            console.log("Phản hồi từ API /chat:", data);
-    
-            if (response.ok) {
-                // Giả sử API trả về thông tin tour bao gồm tourId
-                // Nếu API chưa trả về tourId, bạn cần sửa server.js (xem Bước 2)
-                const tourId = data.tourId || 1; // Mặc định là 1 nếu API chưa trả về tourId
-    
-                // Hiển thị phản hồi từ chatbot
-                let responseHTML = data.response;
-    
-                // Thêm liên kết "Xem chi tiết và đặt tour"
-                responseHTML += `
-                    <p>
-                        <a href="tour-detail.html?id=${tourId}" style="color: #007bff; text-decoration: none;">
-                            Xem chi tiết và đặt tour
-                        </a>
-                    </p>
-                `;
-    
-                messageElement.innerHTML = responseHTML;
-    
-                // Hiển thị hình ảnh nếu có
-                if (data.image) {
-                    const img = document.createElement("img");
-                    img.src = data.image;
-                    img.style.maxWidth = "100%";
-                    img.style.marginTop = "10px";
-                    img.style.borderRadius = "5px";
-                    img.alt = "Hình ảnh địa điểm du lịch";
-    
-                    img.onerror = () => {
-                        console.error("Không thể tải hình ảnh:", data.image);
-                        img.remove();
-                        messageElement.innerHTML += "<br><i>(Không thể tải hình ảnh)</i>";
-                    };
-    
-                    img.onload = () => {
-                        console.log("Hình ảnh đã tải thành công:", data.image);
-                    };
-    
-                    chatElement.appendChild(img);
-                } else {
-                    console.log("Không có hình ảnh trong phản hồi từ API.");
+            if (!response.ok) {
+                if (response.status === 400) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || "Yêu cầu không hợp lệ");
+                } else if (response.status === 405) {
+                    throw new Error("Phương thức không được hỗ trợ. Kiểm tra server có hỗ trợ POST cho /api/chatbot không.");
+                } else if (response.status === 500) {
+                    throw new Error("Lỗi server. Vui lòng kiểm tra log server.");
                 }
-    
-                saveMessage("incoming", responseHTML, data.image);
-            } else {
-                throw new Error(data.error || "Request failed");
+                throw new Error(`Server responded with status: ${response.status}`);
             }
+
+            const data = await response.json();
+            console.log("Phản hồi từ API /api/chatbot:", data);
+
+            // Xóa dòng "Đang xử lý..." và cập nhật lại nội dung
+            const parentLi = messageElement.closest("li.chat.incoming");
+            parentLi.remove(); // Xóa tin nhắn "Đang xử lý..."
+
+            // Tạo tin nhắn mới với phản hồi từ server
+            const newChatLi = createChatLi(data.response, "incoming", data.suggestions || []);
+            chatbox.appendChild(newChatLi);
+            chatbox.scrollTo(0, chatbox.scrollHeight);
+
+            saveMessage("incoming", data.response, null, data.suggestions || []);
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Lỗi khi gọi API /api/chatbot:", error);
             messageElement.classList.add("error");
-            messageElement.textContent = "Oops! Something went wrong. Please try again.";
-            saveMessage("incoming", "Oops! Something went wrong. Please try again.");
+            let errorMessage = "Không thể kết nối đến server. Vui lòng thử lại sau.";
+            if (error.message.includes("Failed to fetch")) {
+                errorMessage = "Không thể kết nối đến server. Vui lòng kiểm tra xem server có đang chạy trên cổng 5500 không.";
+            } else if (error.message.includes("400")) {
+                errorMessage = "Tin nhắn không hợp lệ. Vui lòng thử lại.";
+            } else if (error.message.includes("405")) {
+                errorMessage = "Phương thức không được hỗ trợ. Kiểm tra server có hỗ trợ POST cho /api/chatbot không.";
+            } else if (error.message.includes("500")) {
+                errorMessage = "Lỗi server. Vui lòng kiểm tra log server.";
+            }
+            messageElement.textContent = errorMessage;
+            saveMessage("incoming", errorMessage);
         } finally {
             chatbox.scrollTo(0, chatbox.scrollHeight);
         }
@@ -234,16 +246,20 @@ const initializeChatbox = () => {
 
     const handleChat = () => {
         userMessage = chatInput.value.trim();
-        if (!userMessage) return;
+        if (!userMessage) {
+            console.warn("Tin nhắn không được để trống");
+            return;
+        }
 
         chatInput.value = "";
         chatInput.style.height = `${inputInitHeight}px`;
 
-        chatbox.appendChild(createChatLi(userMessage, "outgoing"));
+        const outgoingChatLi = createChatLi(userMessage, "outgoing");
+        chatbox.appendChild(outgoingChatLi);
         chatbox.scrollTo(0, chatbox.scrollHeight);
         saveMessage("outgoing", userMessage);
 
-        const incomingChatLi = createChatLi("Thinking...", "incoming");
+        const incomingChatLi = createChatLi("Đang xử lý...", "incoming");
         chatbox.appendChild(incomingChatLi);
         chatbox.scrollTo(0, chatbox.scrollHeight);
 
@@ -273,26 +289,15 @@ const initializeChatbox = () => {
         document.body.classList.remove("show-chatbot");
         localStorage.setItem("chatbotOpen", "false");
     });
-
-    // Gán sự kiện cho nút "Xóa lịch sử" trong chatbox-component.html
-    const clearHistoryBtn = document.querySelector(".clear-history-btn");
-    if (clearHistoryBtn) {
-        clearHistoryBtn.addEventListener("click", clearChatHistory);
-    } else {
-        console.warn("Không tìm thấy nút 'Xóa lịch sử' trong DOM!");
-    }
-
-    loadChatHistory();
 };
 
-// Hàm lưu tin nhắn vào localStorage
-const saveMessage = (sender, text, image = null) => {
+const saveMessage = (sender, text, image = null, suggestions = null) => {
+    // Loại bỏ kiểm tra isHistoryCleared để luôn lưu tin nhắn mới
     const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
-    chatHistory.push({ sender, text, image, timestamp: new Date().toISOString() });
+    chatHistory.push({ sender, text, image, suggestions, timestamp: new Date().toISOString() });
     localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
 };
 
-// Hàm tải lịch sử trò chuyện từ localStorage
 const loadChatHistory = () => {
     const chatbox = document.querySelector(".chatbox");
     if (!chatbox) {
@@ -301,87 +306,140 @@ const loadChatHistory = () => {
     }
 
     const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
-    chatbox.innerHTML = `
-        <li class="chat incoming">
-            <span class="material-symbols-outlined">smart_toy</span>
-            <p>Hi there 👋<br>How can I help you today?</p>
-        </li>
-    `;
 
-    chatHistory.forEach((message) => {
-        const messageLi = document.createElement("li");
-        messageLi.classList.add("chat", message.sender);
-        const chatContent =
-            message.sender === "outgoing"
-                ? `<p>${message.text}</p>`
-                : `<span class="material-symbols-outlined">smart_toy</span><p>${message.text}</p>`;
-        messageLi.innerHTML = chatContent;
-        if (message.image) {
-            const img = document.createElement("img");
-            img.src = message.image;
-            img.style.maxWidth = "100%";
-            img.style.marginTop = "10px";
-            img.style.borderRadius = "5px";
-            img.alt = "Hình ảnh địa điểm du lịch";
-            img.onerror = () => {
-                console.error("Không thể tải hình ảnh từ lịch sử:", message.image);
-                img.remove();
-                messageLi.querySelector("p").innerHTML += "<br><i>(Không thể tải hình ảnh)</i>";
-            };
-            messageLi.appendChild(img);
-        }
-        chatbox.appendChild(messageLi);
-    });
+    if (chatHistory.length === 0) {
+        chatbox.innerHTML = `
+            <li class="chat incoming">
+                <span class="material-symbols-outlined">smart_toy</span>
+                <div class="message-content">
+                    <div class="text-content">
+                        <p>Xin chào! Tôi là chatbot du lịch của AI Tour. Tôi có thể giúp bạn tìm kiếm các tour du lịch tại Việt Nam, gợi ý địa điểm, ẩm thực, phương tiện di chuyển, và nhiều hơn nữa. Bạn muốn khám phá nơi nào?</p>
+                    </div>
+                </div>
+            </li>
+        `;
+    } else {
+        chatbox.innerHTML = "";
+        chatHistory.forEach((message) => {
+            const chatLi = document.createElement("li");
+            chatLi.classList.add("chat", message.sender);
+
+            const messageContent = document.createElement("div");
+            messageContent.classList.add("message-content");
+
+            if (message.sender === "incoming") {
+                const botIcon = document.createElement("span");
+                botIcon.classList.add("material-symbols-outlined");
+                botIcon.textContent = "smart_toy";
+                chatLi.appendChild(botIcon);
+            }
+
+            const textContent = document.createElement("div");
+            textContent.classList.add("text-content");
+            const messageP = document.createElement("p");
+            messageP.innerHTML = message.text.replace(/\n/g, "<br>");
+            textContent.appendChild(messageP);
+            messageContent.appendChild(textContent);
+
+            if (message.suggestions && message.suggestions.length > 0) {
+                const tourContainer = document.createElement("div");
+                tourContainer.classList.add("tour-suggestions");
+                message.suggestions.forEach(suggestion => {
+                    const tourDiv = document.createElement("div");
+                    tourDiv.classList.add("tour-item");
+                    tourDiv.innerHTML = `
+                        <img src="${suggestion.image || 'https://via.placeholder.com/200x150'}" alt="${suggestion.title || 'Tour'}" style="width: 100%; max-width: 200px; border-radius: 8px; margin: 10px 0;">
+                        <p><a href="${suggestion.link || '#'}" style="color: #007bff; text-decoration: none;">Xem chi tiết và đặt tour</a></p>
+                        <p>Giá: ${suggestion.price || 'Liên hệ'}</p>
+                    `;
+                    tourContainer.appendChild(tourDiv);
+                });
+                messageContent.appendChild(tourContainer);
+            }
+
+            chatLi.appendChild(messageContent);
+            chatbox.appendChild(chatLi);
+        });
+    }
 
     chatbox.scrollTo(0, chatbox.scrollHeight);
 };
 
-// Hàm xóa lịch sử trò chuyện
 const clearChatHistory = () => {
-    localStorage.removeItem("chatHistory");
+    // Không cần isHistoryCleared vì saveMessage đã được sửa
+    try {
+        localStorage.removeItem("chatHistory");
+        if (localStorage.getItem("chatHistory") === null) {
+            console.log("✅ Đã xóa chatHistory trong localStorage");
+        } else {
+            console.error("❌ Không thể xóa chatHistory trong localStorage");
+            return;
+        }
+    } catch (error) {
+        console.error("❌ Lỗi khi xóa chatHistory trong localStorage:", error);
+        return;
+    }
+
     const chatbox = document.querySelector(".chatbox");
     if (chatbox) {
+        console.log("Trước khi cập nhật chatbox:", chatbox.innerHTML);
         chatbox.innerHTML = `
             <li class="chat incoming">
                 <span class="material-symbols-outlined">smart_toy</span>
-                <p>Hi there 👋<br>How can I help you today?</p>
+                <div class="message-content">
+                    <div class="text-content">
+                        <p>Lịch sử trò chuyện đã được xóa thành công!</p>
+                    </div>
+                </div>
+            </li>
+            <li class="chat incoming">
+                <span class="material-symbols-outlined">smart_toy</span>
+                <div class="message-content">
+                    <div class="text-content">
+                        <p>Xin chào! Tôi là chatbot du lịch của AI Tour. Tôi có thể giúp bạn tìm kiếm các tour du lịch tại Việt Nam, gợi ý địa điểm, ẩm thực, phương tiện di chuyển, và nhiều hơn nữa. Bạn muốn khám phá nơi nào?</p>
+                    </div>
+                </div>
             </li>
         `;
+        console.log("Sau khi cập nhật chatbox:", chatbox.innerHTML);
         chatbox.scrollTo(0, chatbox.scrollHeight);
     } else {
         console.error("Không tìm thấy chatbox để xóa lịch sử!");
     }
 };
 
-// Hàm khởi tạo chatbox sau khi chèn
 const initChatboxAfterLoad = () => {
-    // Kiểm tra xem chatbox đã được chèn chưa
+    // Xóa điều kiện giới hạn chỉ khởi tạo trên index.html
+    // hoặc điều chỉnh để áp dụng cho các trang mong muốn
     const existingChatbot = document.querySelector(".chatbot");
-    if (existingChatbot) {
-        console.log("Chatbox đã tồn tại, bỏ qua việc chèn lại.");
-        initializeChatbox();
-        const isChatbotOpen = localStorage.getItem("chatbotOpen") === "true";
-        if (isChatbotOpen) {
-            document.body.classList.add("show-chatbot");
-        }
-        return;
-    }
+    const existingToggler = document.querySelector(".chatbot-toggler");
+    if (existingChatbot) existingChatbot.remove();
+    if (existingToggler) existingToggler.remove();
 
     fetch("chatbox-component.html")
         .then((response) => {
             if (!response.ok) {
-                throw new Error(`Không thể tải chatbox-component.html: ${response.statusText}`);
+                throw new Error(`Không thể tải chatbox-component.html: ${response.status} - ${response.statusText}`);
             }
             return response.text();
         })
         .then((data) => {
-            const existingToggler = document.querySelector(".chatbot-toggler");
-            if (existingToggler) existingToggler.remove();
-
             document.body.insertAdjacentHTML("beforeend", data);
             console.log("Chatbox loaded successfully");
 
             initializeChatbox();
+            loadChatHistory();
+
+            const clearHistoryBtn = document.querySelector(".clear-history-btn");
+            if (clearHistoryBtn) {
+                clearHistoryBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    clearChatHistory();
+                    console.log("Lịch sử trò chuyện đã được xóa!");
+                });
+            } else {
+                console.warn("Không tìm thấy nút 'Xóa lịch sử' trong DOM sau khi chèn chatbox!");
+            }
 
             const isChatbotOpen = localStorage.getItem("chatbotOpen") === "true";
             if (isChatbotOpen) {
@@ -394,13 +452,11 @@ const initChatboxAfterLoad = () => {
         });
 };
 
-// Gọi các hàm khi DOM sẵn sàng
 document.addEventListener("DOMContentLoaded", () => {
     updateAuthUI();
     handleLogin();
     initChatboxAfterLoad();
 
-    // Kiểm tra trạng thái thanh toán và hiển thị thông báo
     const paymentSuccess = localStorage.getItem("paymentSuccess");
     const lastOrderId = localStorage.getItem("lastOrderId");
     const notification = document.getElementById("notification");

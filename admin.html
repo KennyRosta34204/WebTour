@@ -6,6 +6,7 @@
     <title>Admin Quản lý Tour du lịch</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Định dạng tổng thể cho trang */
         body {
@@ -94,27 +95,63 @@
             font-size: 1.1rem;
         }
 
-        .status {
-            padding: 5px 10px;
-            border-radius: 10px;
+        /* Cải thiện hiển thị trạng thái thanh toán */
+        .status-select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
             font-weight: bold;
-            color: black;
-            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        .status.confirmed {
-            background: #28a745;
+        .status-select option[value="SUCCESS"] {
+            background-color: #28a745;
             color: white;
         }
 
-        .status.pending {
-            background: #ffc107;
+        .status-select option[value="PENDING"] {
+            background-color: #ffc107;
             color: black;
         }
 
-        .status.completed {
-            background: #3f42d2cb;
+        .status-select option[value="FAILED"] {
+            background-color: #dc3545;
             color: white;
+        }
+
+        /* Áp dụng màu sắc cho dropdown dựa trên giá trị đã chọn */
+        .status-select.success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .status-select.pending {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .status-select.failed {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .status-select:hover {
+            opacity: 0.9;
+        }
+
+        .save-btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #4A90E2;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .save-btn:hover {
+            background-color: #357ABD;
         }
 
         .hidden {
@@ -254,6 +291,7 @@
             <li><a href="#" onclick="showContent(event, 'destinations')"> <i class="fas fa-map-marker-alt"></i> Quản lý Tour</a></li>
             <li><a href="#" onclick="showContent(event, 'tour-packages')"> <i class="fas fa-box"></i> Quản lý Đặt Tour</a></li>
             <li><a href="#" onclick="showContent(event, 'orders')"> <i class="fas fa-shopping-cart"></i> Báo Cáo & Thống Kê</a></li>
+            <!-- <li><a href="#" onclick="showContent(event, 'contact-messages')"> <i class="fas fa-envelope"></i> Tin nhắn liên hệ</a></li> -->
         </ul>
     </div>
 
@@ -266,15 +304,19 @@
             <div class="stats-container">
                 <div class="stat-card tours">
                     <h3>Tổng số tour</h3>
-                    <p id="total-tours">0</p>
+                    <p id="total-tours">Đang tải...</p>
                 </div>
                 <div class="stat-card bookings">
                     <h3>Tổng số đặt tour</h3>
-                    <p id="total-bookings">0</p>
+                    <p id="total-bookings">Đang tải...</p>
                 </div>
                 <div class="stat-card customers">
                     <h3>Tổng số khách hàng</h3>
-                    <p id="total-customers">0</p>
+                    <p id="total-customers">Đang tải...</p>
+                </div>
+                <div class="stat-card revenue">
+                    <h3>Tổng doanh thu</h3>
+                    <p id="total-revenue">Đang tải...</p>
                 </div>
             </div>
         </div>
@@ -296,6 +338,7 @@
                         </tr>
                     </thead>
                     <tbody id="customers-table-body">
+                        <tr><td colspan="7">Đang tải...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -308,11 +351,17 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Danh sách đơn đặt tour</th>
+                            <th>ID</th>
+                            <th>Tên đơn hàng</th>
+                            <th>Số tiền</th>
                             <th>Trạng thái thanh toán</th>
+                            <th>Ngày tạo</th>
+                            <th>Tên khách hàng</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody id="bookings-table-body">
+                        <tr><td colspan="7">Đang tải...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -321,18 +370,13 @@
         <!-- Báo Cáo & Thống Kê -->
         <div id="orders" class="hidden">
             <h2>Báo Cáo & Thống Kê</h2>
-            <div class="table-container">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Doanh thu</th>
-                            <th>Lượng đặt chỗ</th>
-                            <th>Tour phổ biến</th>
-                        </tr>
-                    </thead>
-                    <tbody id="reports-table-body">
-                    </tbody>
-                </table>
+            <div class="card">
+                <h3>Doanh thu theo tháng</h3>
+                <canvas id="revenue-chart" width="400" height="200"></canvas>
+            </div>
+            <div class="card">
+                <h3>Số lượng đặt tour theo tháng</h3>
+                <canvas id="bookings-chart" width="400" height="200"></canvas>
             </div>
         </div>
 
@@ -355,6 +399,28 @@
                         </tr>
                     </thead>
                     <tbody id="tours-table-body">
+                        <tr><td colspan="8">Đang tải...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tin nhắn liên hệ -->
+        <div id="contact-messages" class="hidden">
+            <h2>Tin nhắn liên hệ</h2>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Nội dung tin nhắn</th>
+                            <th>Thời gian gửi</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contact-messages-table-body">
+                        <tr><td colspan="5">Đang tải...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -363,10 +429,10 @@
         <!-- Form thêm tour -->
         <div id="add-tour-modal" class="modal">
             <h3>Thêm Tour Mới</h3>
-            <input type="text" id="add-tour-title" placeholder="Tên Tour">
-            <input type="text" id="add-tour-price" placeholder="Giá (VD: 4,200,000 VND)">
+            <input type="text" id="add-tour-title" placeholder="Tên Tour" required>
+            <input type="text" id="add-tour-price" placeholder="Giá (VD: 4200000)" required>
             <textarea id="add-tour-description" placeholder="Mô tả" rows="4"></textarea>
-            <input type="text" id="add-tour-url" placeholder="Link ảnh">
+            <input type="url" id="add-tour-url" placeholder="Link ảnh">
             <input type="text" id="add-tour-hotel" placeholder="Khách sạn">
             <input type="text" id="add-tour-transport" placeholder="Phương tiện">
             <button class="btn-save" onclick="addTour()">Lưu</button>
@@ -377,10 +443,10 @@
         <div id="edit-tour-modal" class="modal">
             <h3>Sửa Tour</h3>
             <input type="hidden" id="edit-tour-id">
-            <input type="text" id="edit-tour-title" placeholder="Tên Tour">
-            <input type="text" id="edit-tour-price" placeholder="Giá (VD: 4,200,000 VND)">
+            <input type="text" id="edit-tour-title" placeholder="Tên Tour" required>
+            <input type="text" id="edit-tour-price" placeholder="Giá (VD: 4200000)" required>
             <textarea id="edit-tour-description" placeholder="Mô tả" rows="4"></textarea>
-            <input type="text" id="edit-tour-url" placeholder="Link ảnh">
+            <input type="url" id="edit-tour-url" placeholder="Link ảnh">
             <input type="text" id="edit-tour-hotel" placeholder="Khách sạn">
             <input type="text" id="edit-tour-transport" placeholder="Phương tiện">
             <button class="btn-save" onclick="updateTour()">Lưu</button>
@@ -398,29 +464,43 @@
             document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
             event.currentTarget.classList.add('active');
 
-            // Tải dữ liệu tương ứng khi chuyển tab
             if (id === 'dashboard') loadDashboard();
             if (id === 'customers') loadCustomers();
             if (id === 'tour-packages') loadBookings();
             if (id === 'orders') loadReports();
             if (id === 'destinations') loadTours();
+            if (id === 'contact-messages') loadContactMessages();
+        }
+
+        // Hàm định dạng ngày tháng
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                return 'Không xác định';
+            }
+            return date.toLocaleString('vi-VN', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
         }
 
         // Tải dữ liệu cho Trang tổng quan
         async function loadDashboard() {
             try {
                 const response = await fetch('http://localhost:5500/api/dashboard');
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 const data = await response.json();
 
-                if (data.error) {
-                    alert('Lỗi khi tải dữ liệu: ' + data.error);
-                    return;
-                }
-
-                document.getElementById('total-tours').textContent = data.total_tours;
-                document.getElementById('total-bookings').textContent = data.total_bookings;
-                document.getElementById('total-customers').textContent = data.total_customers;
+                document.getElementById('total-tours').textContent = data.totalTours || 0;
+                document.getElementById('total-bookings').textContent = data.totalBookings || 0;
+                document.getElementById('total-customers').textContent = data.totalCustomers || 0;
+                document.getElementById('total-revenue').textContent = (data.totalRevenue || 0).toLocaleString('vi-VN') + ' VNĐ';
             } catch (error) {
+                console.error('Lỗi khi tải dữ liệu Dashboard:', error);
                 alert('Lỗi khi tải dữ liệu Dashboard: ' + error.message);
             }
         }
@@ -429,30 +509,43 @@
         async function loadCustomers() {
             try {
                 const response = await fetch('http://localhost:5500/api/customers');
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 const customers = await response.json();
-
-                if (customers.error) {
-                    alert('Lỗi khi tải dữ liệu khách hàng: ' + customers.error);
-                    return;
-                }
 
                 const tbody = document.getElementById('customers-table-body');
                 tbody.innerHTML = '';
 
+                if (customers.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7">Không có dữ liệu khách hàng</td></tr>';
+                    return;
+                }
+
                 customers.forEach(customer => {
+                    const statusClass = customer.payment_status === 'SUCCESS' ? 'success' :
+                                       customer.payment_status === 'FAILED' ? 'failed' : 'pending';
+                    const statusText = customer.payment_status === 'SUCCESS' ? 'Thành công' :
+                                      customer.payment_status === 'FAILED' ? 'Thất bại' : 'Đang chờ';
+
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${customer.name || 'N/A'}</td>
                         <td>${customer.email || 'N/A'}</td>
                         <td>${customer.phone || 'N/A'}</td>
                         <td>${customer.order_name || 'Chưa đặt tour'}</td>
-                        <td>${customer.booking_date || 'N/A'}</td>
-                        <td>${customer.departure_date || 'N/A'}</td>
-                        <td><span class="status ${customer.payment_status === 'SUCCESS' ? 'confirmed' : 'pending'}">${customer.payment_status || 'Chưa thanh toán'}</span></td>
+                        <td>${formatDate(customer.booking_date)}</td>
+                        <td>${customer.departure_date ? formatDate(customer.departure_date) : 'N/A'}</td>
+                        <td>
+                            <select class="status-select ${statusClass}">
+                                <option value="PENDING" ${customer.payment_status === 'PENDING' ? 'selected' : ''}>Đang chờ</option>
+                                <option value="SUCCESS" ${customer.payment_status === 'SUCCESS' ? 'selected' : ''}>Thành công</option>
+                                <option value="FAILED" ${customer.payment_status === 'FAILED' ? 'selected' : ''}>Thất bại</option>
+                            </select>
+                        </td>
                     `;
                     tbody.appendChild(row);
                 });
             } catch (error) {
+                console.error('Lỗi khi tải dữ liệu khách hàng:', error);
                 alert('Lỗi khi tải dữ liệu khách hàng: ' + error.message);
             }
         }
@@ -461,25 +554,88 @@
         async function loadBookings() {
             try {
                 const response = await fetch('http://localhost:5500/api/bookings');
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 const bookings = await response.json();
-
-                if (bookings.error) {
-                    alert('Lỗi khi tải dữ liệu đặt tour: ' + bookings.error);
-                    return;
-                }
 
                 const tbody = document.getElementById('bookings-table-body');
                 tbody.innerHTML = '';
 
+                if (bookings.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7">Không có dữ liệu đặt tour</td></tr>';
+                    return;
+                }
+
                 bookings.forEach(booking => {
+                    const statusClass = booking.payment_status === 'SUCCESS' ? 'success' :
+                                        booking.payment_status === 'FAILED' ? 'failed' : 'pending';
+
                     const row = document.createElement('tr');
                     row.innerHTML = `
+                        <td>${booking.id}</td>
                         <td>${booking.order_name}</td>
-                        <td><span class="status ${booking.payment_status === 'SUCCESS' ? 'confirmed' : 'pending'}">${booking.payment_status}</span></td>
+                        <td>${booking.amount.toLocaleString('vi-VN')} VNĐ</td>
+                        <td>
+                            <select class="status-select ${statusClass}" data-id="${booking.id}">
+                                <option value="PENDING" ${booking.payment_status === 'PENDING' ? 'selected' : ''}>Đang chờ</option>
+                                <option value="SUCCESS" ${booking.payment_status === 'SUCCESS' ? 'selected' : ''}>Thành công</option>
+                                <option value="FAILED" ${booking.payment_status === 'FAILED' ? 'selected' : ''}>Thất bại</option>
+                            </select>
+                        </td>
+                        <td>${formatDate(booking.booking_date)}</td>
+                        <td>${booking.customer_name}</td>
+                        <td>
+                            <button class="btn btn-primary save-btn" data-id="${booking.id}">Lưu</button>
+                        </td>
                     `;
                     tbody.appendChild(row);
                 });
+
+                // Gắn sự kiện click cho các nút "Lưu"
+                document.querySelectorAll('.save-btn').forEach(button => {
+                    button.addEventListener('click', async function () {
+                        const bookingId = this.getAttribute('data-id');
+                        const select = document.querySelector(`.status-select[data-id="${bookingId}"]`);
+                        const newStatus = select.value;
+
+                        try {
+                            const response = await fetch(`http://localhost:5500/api/bookings/${bookingId}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ payment_status: newStatus }),
+                            });
+
+                            const result = await response.json();
+                            if (response.ok) {
+                                alert('Cập nhật trạng thái thành công!');
+                                loadBookings(); // Tải lại danh sách
+                            } else {
+                                console.error('Phản hồi lỗi từ API:', result);
+                                alert('Lỗi khi cập nhật trạng thái: ' + (result.error || 'Không xác định'));
+                            }
+                        } catch (error) {
+                            console.error('Lỗi khi cập nhật trạng thái:', error);
+                            alert('Đã có lỗi xảy ra khi cập nhật trạng thái: ' + error.message);
+                        }
+                    });
+                });
+
+                // Cập nhật màu sắc của dropdown khi trạng thái thay đổi
+                document.querySelectorAll('.status-select').forEach(select => {
+                    select.addEventListener('change', function () {
+                        this.classList.remove('success', 'pending', 'failed');
+                        if (this.value === 'SUCCESS') {
+                            this.classList.add('success');
+                        } else if (this.value === 'PENDING') {
+                            this.classList.add('pending');
+                        } else if (this.value === 'FAILED') {
+                            this.classList.add('failed');
+                        }
+                    });
+                });
             } catch (error) {
+                console.error('Lỗi khi tải dữ liệu đặt tour:', error);
                 alert('Lỗi khi tải dữ liệu đặt tour: ' + error.message);
             }
         }
@@ -488,43 +644,84 @@
         async function loadReports() {
             try {
                 const response = await fetch('http://localhost:5500/api/reports');
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 const reports = await response.json();
 
-                if (reports.error) {
-                    alert('Lỗi khi tải dữ liệu báo cáo: ' + reports.error);
-                    return;
-                }
+                const months = reports.map(item => item.month);
+                const revenues = reports.map(item => item.revenue);
+                const bookingCounts = reports.map(item => item.booking_count);
 
-                const tbody = document.getElementById('reports-table-body');
-                tbody.innerHTML = '';
+                // Biểu đồ doanh thu (Line Chart)
+                const revenueChart = new Chart(document.getElementById('revenue-chart'), {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Doanh thu (VNĐ)',
+                            data: revenues,
+                            borderColor: 'blue',
+                            fill: false,
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toLocaleString('vi-VN') + ' VNĐ';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
 
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${reports.total_revenue.toLocaleString('vi-VN')} VNĐ</td>
-                    <td>${reports.total_bookings}</td>
-                    <td>${reports.popular_tour}</td>
-                `;
-                tbody.appendChild(row);
+                // Biểu đồ số lượng đặt tour (Bar Chart)
+                const bookingsChart = new Chart(document.getElementById('bookings-chart'), {
+                    type: 'bar',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Số lượng đặt tour',
+                            data: bookingCounts,
+                            backgroundColor: 'green'
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        }
+                    }
+                });
             } catch (error) {
+                console.error('Lỗi khi tải dữ liệu báo cáo:', error);
                 alert('Lỗi khi tải dữ liệu báo cáo: ' + error.message);
             }
         }
 
-        // Tải dữ liệu cho danh sách tour (Đã cải thiện xử lý lỗi)
+        // Tải dữ liệu cho danh sách tour
         async function loadTours() {
             try {
                 const response = await fetch('http://localhost:5500/api/tours');
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 const tours = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(tours.error || 'Lỗi không xác định từ server');
-                }
 
                 const tbody = document.getElementById('tours-table-body');
                 tbody.innerHTML = '';
 
+                if (tours.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8">Không có dữ liệu tour</td></tr>';
+                    return;
+                }
+
                 tours.forEach(tour => {
-                    // Kiểm tra xem tour.id có tồn tại không
                     if (!tour.id) {
                         console.error('Tour không có ID:', tour);
                         return;
@@ -534,7 +731,7 @@
                     row.innerHTML = `
                         <td>${tour.id}</td>
                         <td>${tour.title}</td>
-                        <td>${tour.price}</td>
+                        <td>${tour.price.toLocaleString('vi-VN')} VNĐ</td>
                         <td>${tour.description || 'N/A'}</td>
                         <td>${tour.url || 'N/A'}</td>
                         <td>${tour.hotel || 'N/A'}</td>
@@ -543,7 +740,7 @@
                             <button class="btn btn-warning" 
                                     data-id="${tour.id}" 
                                     data-title="${tour.title ? tour.title.replace(/"/g, '"') : ''}" 
-                                    data-price="${tour.price ? tour.price.replace(/"/g, '"') : ''}" 
+                                    data-price="${tour.price || ''}" 
                                     data-description="${tour.description ? tour.description.replace(/"/g, '"') : ''}" 
                                     data-url="${tour.url ? tour.url.replace(/"/g, '"') : ''}" 
                                     data-hotel="${tour.hotel ? tour.hotel.replace(/"/g, '"') : ''}" 
@@ -557,10 +754,89 @@
                     tbody.appendChild(row);
                 });
             } catch (error) {
+                console.error('Lỗi khi tải dữ liệu tour:', error);
                 alert('Lỗi khi tải dữ liệu tour: ' + error.message);
-                console.error('Chi tiết lỗi:', error);
             }
         }
+
+        // Tải dữ liệu cho danh sách tin nhắn liên hệ
+        async function loadContactMessages() {
+    try {
+        const response = await fetch('http://localhost:3000/api/contact-messages');
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const messages = await response.json();
+
+        const tbody = document.getElementById('contact-messages-table-body');
+        tbody.innerHTML = '';
+
+        if (messages.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5">Không có tin nhắn liên hệ</td></tr>';
+            return;
+        }
+
+        messages.forEach((message, index) => {
+            const statusClass = message.status === 'RESOLVED' ? 'success' : 'pending';
+            const statusText = message.status === 'RESOLVED' ? 'Đã xử lý' : 'Chưa xử lý';
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${message.message}</td>
+                <td>${formatDate(message.created_at)}</td>
+                <td>
+                    <select class="status-select ${statusClass}" data-id="${message.id}">
+                        <option value="PENDING" ${message.status === 'PENDING' ? 'selected' : ''}>Chưa xử lý</option>
+                        <option value="RESOLVED" ${message.status === 'RESOLVED' ? 'selected' : ''}>Đã xử lý</option>
+                    </select>
+                </td>
+                <td>
+                    <button class="save-btn" data-id="${message.id}">Lưu</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        // Gắn sự kiện cho các nút "Lưu"
+        document.querySelectorAll('.save-btn').forEach(button => {
+            button.addEventListener('click', async function () {
+                const messageId = this.getAttribute('data-id');
+                const select = document.querySelector(`.status-select[data-id="${messageId}"]`);
+                const newStatus = select.value;
+
+                try {
+                    const response = await fetch(`http://localhost:3000/api/contact-messages/${messageId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ status: newStatus }),
+                    });
+
+                    const result = await response.json();
+                    if (response.ok) {
+                        alert('Cập nhật trạng thái tin nhắn thành công!');
+                        loadContactMessages(); // Tải lại danh sách
+                    } else {
+                        throw new Error(result.error || 'Lỗi khi cập nhật trạng thái');
+                    }
+                } catch (error) {
+                    console.error('Lỗi khi cập nhật trạng thái:', error);
+                    alert('Lỗi khi cập nhật trạng thái: ' + error.message);
+                }
+            });
+        });
+
+        // Cập nhật màu sắc của dropdown khi trạng thái thay đổi
+        document.querySelectorAll('.status-select').forEach(select => {
+            select.addEventListener('change', function () {
+                this.classList.remove('success', 'pending');
+                this.classList.add(this.value === 'RESOLVED' ? 'success' : 'pending');
+            });
+        });
+    } catch (error) {
+        console.error('Lỗi khi tải dữ liệu tin nhắn:', error);
+        alert('Lỗi khi tải dữ liệu tin nhắn: ' + error.message);
+    }
+}
 
         // Hàm hỗ trợ cho nút "Sửa"
         function showEditTourFormFromButton(button) {
@@ -605,15 +881,22 @@
 
         // Thêm tour mới
         async function addTour() {
-            const title = document.getElementById('add-tour-title').value;
-            const price = document.getElementById('add-tour-price').value;
-            const description = document.getElementById('add-tour-description').value;
-            const url = document.getElementById('add-tour-url').value;
-            const hotel = document.getElementById('add-tour-hotel').value;
-            const transport = document.getElementById('add-tour-transport').value;
+            const title = document.getElementById('add-tour-title').value.trim();
+            const price = document.getElementById('add-tour-price').value.trim();
+            const description = document.getElementById('add-tour-description').value.trim();
+            const url = document.getElementById('add-tour-url').value.trim();
+            const hotel = document.getElementById('add-tour-hotel').value.trim();
+            const transport = document.getElementById('add-tour-transport').value.trim();
 
             if (!title || !price) {
                 alert('Vui lòng điền ít nhất Tên Tour và Giá!');
+                return;
+            }
+
+            // Kiểm tra định dạng giá (chỉ chấp nhận số)
+            const priceValue = parseInt(price.replace(/[^0-9]/g, ''));
+            if (isNaN(priceValue) || priceValue <= 0) {
+                alert('Giá phải là một số hợp lệ và lớn hơn 0!');
                 return;
             }
 
@@ -623,18 +906,28 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ title, price, description, url, hotel, transport })
+                    body: JSON.stringify({ 
+                        title, 
+                        price: priceValue, 
+                        description: description || null, 
+                        url: url || null, 
+                        hotel: hotel || null, 
+                        transport: transport || null 
+                    })
                 });
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 const result = await response.json();
 
-                if (!response.ok) {
-                    throw new Error(result.error || 'Lỗi không xác định');
+                if (result.error) {
+                    alert('Lỗi khi thêm tour: ' + result.error);
+                    return;
                 }
 
                 alert('Thêm tour thành công!');
                 closeAddTourForm();
-                loadTours(); // Tải lại danh sách tour
+                loadTours();
             } catch (error) {
+                console.error('Lỗi khi thêm tour:', error);
                 alert('Lỗi khi thêm tour: ' + error.message);
             }
         }
@@ -661,15 +954,22 @@
         // Cập nhật tour
         async function updateTour() {
             const id = document.getElementById('edit-tour-id').value;
-            const title = document.getElementById('edit-tour-title').value;
-            const price = document.getElementById('edit-tour-price').value;
-            const description = document.getElementById('edit-tour-description').value;
-            const url = document.getElementById('edit-tour-url').value;
-            const hotel = document.getElementById('edit-tour-hotel').value;
-            const transport = document.getElementById('edit-tour-transport').value;
+            const title = document.getElementById('edit-tour-title').value.trim();
+            const price = document.getElementById('edit-tour-price').value.trim();
+            const description = document.getElementById('edit-tour-description').value.trim();
+            const url = document.getElementById('edit-tour-url').value.trim();
+            const hotel = document.getElementById('edit-tour-hotel').value.trim();
+            const transport = document.getElementById('edit-tour-transport').value.trim();
 
             if (!id || !title || !price) {
                 alert('Vui lòng điền ít nhất Tên Tour và Giá!');
+                return;
+            }
+
+            // Kiểm tra định dạng giá (chỉ chấp nhận số)
+            const priceValue = parseInt(price.replace(/[^0-9]/g, ''));
+            if (isNaN(priceValue) || priceValue <= 0) {
+                alert('Giá phải là một số hợp lệ và lớn hơn 0!');
                 return;
             }
 
@@ -679,18 +979,28 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ title, price, description, url, hotel, transport })
+                    body: JSON.stringify({ 
+                        title, 
+                        price: priceValue, 
+                        description: description || null, 
+                        url: url || null, 
+                        hotel: hotel || null, 
+                        transport: transport || null 
+                    })
                 });
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 const result = await response.json();
 
-                if (!response.ok) {
-                    throw new Error(result.error || 'Lỗi không xác định');
+                if (result.error) {
+                    alert('Lỗi khi sửa tour: ' + result.error);
+                    return;
                 }
 
                 alert('Sửa tour thành công!');
                 closeEditTourForm();
-                loadTours(); // Tải lại danh sách tour
+                loadTours();
             } catch (error) {
+                console.error('Lỗi khi sửa tour:', error);
                 alert('Lỗi khi sửa tour: ' + error.message);
             }
         }
@@ -708,24 +1018,26 @@
                         'Content-Type': 'application/json'
                     }
                 });
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 const result = await response.json();
 
-                if (!response.ok) {
-                    throw new Error(result.error || 'Lỗi không xác định');
+                if (result.error) {
+                    alert('Lỗi khi xóa tour: ' + result.error);
+                    return;
                 }
 
                 alert('Xóa tour thành công!');
-                loadTours(); // Tải lại danh sách tour
+                loadTours();
             } catch (error) {
+                console.error('Lỗi khi xóa tour:', error);
                 alert('Lỗi khi xóa tour: ' + error.message);
             }
         }
 
         // Tải dữ liệu mặc định khi trang được tải
         document.addEventListener('DOMContentLoaded', () => {
-            loadDashboard(); // Tải dữ liệu cho trang tổng quan mặc định
+            loadDashboard();
         });
     </script>
-    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92d1f8cadf1bb0dc',t:'MTc0NDExNzQ4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>

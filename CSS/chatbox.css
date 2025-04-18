@@ -45,7 +45,7 @@ body.show-chatbot .chatbot-toggler span:last-child {
     position: fixed;
     bottom: 90px;
     right: 20px;
-    width: 420px;
+    width: 500px;
     background: #fff;
     border-radius: 15px;
     overflow: hidden;
@@ -55,7 +55,6 @@ body.show-chatbot .chatbot-toggler span:last-child {
     transform-origin: bottom right;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
-
 }
 
 body.show-chatbot .chatbot {
@@ -78,7 +77,7 @@ body.show-chatbot .chatbot {
 }
 
 .chat-header h2 {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     margin: 0;
     flex: 1;
     text-align: center;
@@ -159,9 +158,16 @@ body.show-chatbot .chatbot {
 
 .chatbox .incoming .message-content {
     display: flex;
-    flex-direction: column; /* Văn bản ở trên, hình ảnh và nút ở dưới */
+    flex-direction: column; /* Văn bản, hình ảnh, và nút xếp theo cột */
     max-width: 85%;
-    gap: 8px; /* Khoảng cách giữa văn bản, hình ảnh, và nút */
+    gap: 8px; /* Khoảng cách giữa các phần tử */
+}
+
+.chatbox .incoming .text-content {
+    display: flex;
+    flex-direction: column; /* Văn bản hiển thị theo cột */
+    align-items: flex-start;
+    max-width: 100%;
 }
 
 .chatbox .incoming p {
@@ -180,18 +186,25 @@ body.show-chatbot .chatbot {
     margin: 0;
 }
 
+/* Hình ảnh và nút bên dưới văn bản */
+.chatbox .incoming .media-content {
+    display: flex;
+    flex-direction: column; /* Hình ảnh và nút xếp dọc */
+    gap: 8px; /* Khoảng cách giữa hình ảnh và nút */
+    align-items: flex-start;
+}
+
 /* Hình ảnh trong tin nhắn */
-.chatbox .incoming .message-content img {
+.chatbox .incoming .media-content img {
     max-width: 100%;
-    width: 180px;
-    max-height: 120px;
+    width: 200px; /* Tăng kích thước hình ảnh để đẹp hơn */
+    max-height: 140px;
     object-fit: cover;
-    border-radius: 6px;
-    align-self: flex-start;
+    border-radius: 8px;
     transition: opacity 0.3s ease;
 }
 
-.chatbox .incoming .message-content img:hover {
+.chatbox .incoming .media-content img:hover {
     opacity: 0.9;
 }
 
@@ -237,7 +250,6 @@ body.show-chatbot .chatbot {
     font-size: 0.85rem;
     font-weight: 500;
     transition: background-color 0.3s ease;
-    align-self: flex-start;
 }
 
 .tour-link.visible {
@@ -326,7 +338,7 @@ body.show-chatbot .chatbot {
     .chatbox .chat p.error {
         font-size: 0.9rem;
     }
-    .chatbox .incoming .message-content img {
+    .chatbox .incoming .media-content img {
         width: 150px;
         max-height: 100px;
     }
